@@ -1,0 +1,10 @@
+.git
+bin/
+obj/
+temp/
+main.cpp
+*.cbp
+*.layout
+*.depend
+temp*
+build/
