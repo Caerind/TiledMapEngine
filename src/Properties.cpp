@@ -8,13 +8,13 @@ Properties::Properties()
 ////////////////////////////////////////////////////////////
 int Properties::getInt(std::string const& name)
 {
-    return toNumber(mProperties[name]);
+    return toNumber<int>(mProperties[name]);
 }
 
 ////////////////////////////////////////////////////////////
 float Properties::getFloat(std::string const& name)
 {
-    return toNumber(mProperties[name]);;
+    return toNumber<float>(mProperties[name]);;
 }
 
 ////////////////////////////////////////////////////////////
@@ -80,12 +80,12 @@ void Properties::setProperties(std::map<std::string,std::string> properties)
 ////////////////////////////////////////////////////////////
 bool Properties::toBool(std::string const& value)
 {
-    (value == "true") ? return true : return false;
+    return (value == "true");
 }
 
 ////////////////////////////////////////////////////////////
 std::string Properties::toString(bool boolean)
 {
-    (boolean) ? return "true" : return "false";
+    return (boolean) ? "true" : "false";
 }
 

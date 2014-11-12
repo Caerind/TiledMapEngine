@@ -1,6 +1,7 @@
 #include "../include/Layer.hpp"
+#include "../include/Map.hpp"
 
-Layer::Layer()
+Layer::Layer(Map* map)
 {
     //ctor
 }

@@ -119,14 +119,7 @@ void Image::setHeight(int height)
 ////////////////////////////////////////////////////////////
 std::string Image::getFormat(std::string const& filename)
 {
-    if (filename.rfind(".") != std::string::npos)
-    {
-        return filename.substr(filename.rfind(".")+1,filename.size());
-    }
-    else
-    {
-        return "";
-    }
+    return (filename.rfind(".") != std::string::npos) ? filename.substr(filename.rfind(".")+1,filename.size()) : "";
 }
 
 ////////////////////////////////////////////////////////////

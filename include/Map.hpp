@@ -10,7 +10,9 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
 
+#include "Layer.hpp"
 #include "Properties.hpp"
+#include "Tileset.hpp"
 
 class Manager;
 

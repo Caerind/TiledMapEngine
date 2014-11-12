@@ -16,7 +16,7 @@ void Manager::update(sf::Time dt)
     }
 }
 
-void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates())
+void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
     for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
@@ -29,7 +29,7 @@ bool Manager::loadMap(std::string const& filename)
 {
     if (mMaps.find(filename) == mMaps.end())
     {
-        Map::Ptr map = std::make_shared<Map>(new Map(this));
+        Map::Ptr map = std::shared_ptr<Map>(new Map(this));
         if (map->loadFromFile(filename))
         {
             mMaps[filename] = map;
@@ -100,4 +100,4 @@ std::shared_ptr<sf::Texture> Manager::getTexture(std::string const& filename)
         }
     }
 }
-/*
+*/
