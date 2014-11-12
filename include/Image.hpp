@@ -14,8 +14,6 @@ To Do :
 
 -Understand Data
 -Conversion sf::Color <-> std::string(Trans)
--Get Format from Source
--Get Width & Height from Image
 
 */
 
@@ -36,6 +34,8 @@ class Image
     public:
         Image();
 
+        bool load(std::string const& filename = "");
+
         TexturePtr getTexture() const;
         std::string getFormat() const;
         std::string getSource() const;
@@ -49,6 +49,10 @@ class Image
         void setTrans(std::string const& trans);
         void setWidth(int width);
         void setHeight(int height);
+
+    public:
+        static std::string getFormat(std::string const& filename);
+        static sf::Color getColor(std::string const& hexColor);
 
     private:
         TexturePtr mTexture;
