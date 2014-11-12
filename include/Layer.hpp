@@ -49,6 +49,7 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
         int getHeight() const;
         float getOpacity() const;
         bool isVisible() const;
+        Tile getTile(int x, int y) const;
 
         void setName(std::string const& name);
         void setX(int x);
@@ -57,6 +58,7 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
         void setHeight(int height);
         void setOpacity(float opacity);
         void setVisible(bool visible);
+        void setTile(int x, int y, Tile tile);
 
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

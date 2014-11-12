@@ -58,6 +58,12 @@ bool Layer::isVisible() const
 }
 
 ////////////////////////////////////////////////////////////
+Layer::Tile Layer::getTile(int x, int y) const
+{
+    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y] : Tile();
+}
+
+////////////////////////////////////////////////////////////
 void Layer::setName(std::string const& name)
 {
     mName = name;
@@ -101,6 +107,15 @@ void Layer::setOpacity(float opacity)
 void Layer::setVisible(bool visible)
 {
     mVisible = visible;
+}
+
+////////////////////////////////////////////////////////////
+void Layer::setTile(int x, int y, Tile tile)
+{
+    if (x >= 0 && x < mWidth && y >= 0 && y < mHeight)
+    {
+        mTiles[x][y] = tile;
+    }
 }
 
 ////////////////////////////////////////////////////////////
