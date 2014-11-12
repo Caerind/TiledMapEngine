@@ -8,14 +8,30 @@ Manager::~Manager()
 {
 }
 
+void Manager::update(sf::Time dt)
+{
+    for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
+    {
+        itr->second->update(dt);
+    }
+}
+
+void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates())
+{
+    states.transform *= getTransform();
+    for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
+    {
+        itr->second->render(layer,target,states);
+    }
+}
+
 bool Manager::loadMap(std::string const& filename)
 {
     if (mMaps.find(filename) == mMaps.end())
     {
-        Map::Ptr map = std::make_shared<Map>(new Map());
+        Map::Ptr map = std::make_shared<Map>(new Map(this));
         if (map->loadFromFile(filename))
         {
-            map->setManager(this);
             mMaps[filename] = map;
             return true;
         }
@@ -24,15 +40,6 @@ bool Manager::loadMap(std::string const& filename)
     else
     {
         return true;
-    }
-}
-
-void Manager::addMap(Map::Ptr map)
-{
-    if (map != nullptr)
-    {
-        map->setManager(this);
-        mMaps[map->getFilename()] = map;
     }
 }
 
