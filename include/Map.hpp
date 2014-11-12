@@ -9,69 +9,60 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
-#include <SFML/System/Vector2.hpp>
 
 #include "Properties.hpp"
 
-
 class Manager;
 
-class Map : public sf::Transformable
+class Map : public Properties, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<Map> Ptr;
 
     public:
+        Map();
         Map(Manager* manager);
         ~Map();
 
         bool loadFromFile(std::string const& filename);
-        //bool saveToFile(std::string const& filename = "");
 
         void update(sf::Time dt);
         void render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
-        // Getters
-        std::string getFilename() const;
         float getVersion() const;
         std::string getOrientation() const;
-        sf::Vector2i getSize() const;
-        sf::Vector2i getTileSize() const;
-        TileLayer::Ptr getTileLayer(std::string const& name) const;
-        ImageLayer::Ptr getImageLayer(std::string const& name) const;
-        ObjectLayer::Ptr getObjectLayer(std::string const& name) const;
-        Tileset::Ptr getTileset(std::string const& name) const;
-        Properties& getProperties();
+        int getWidth() const;
+        int getHeight() const;
+        int getTileWidth() const;
+        int getTileHeight() const;
+        std::string getBackgroundColor() const;
+        std::string getRenderOrder() const;
 
-        // Setters
-        void setFilename(std::string const& filename);
         void setVersion(float version);
         void setOrientation(std::string const& orientation);
-        void setSize(sf::Vector2i size);
-        void setTileSize(sf::Vector2i tileSize);
-        void setTileLayer(TileLayer::Ptr layer);
-        void setImageLayer(ImageLayer::Ptr layer);
-        void setObjectLayer(Objectlayer::Ptr layer);
-        void setProperties();
-        void setProperty();
+        void setWidth(int width);
+        void setHeight(int height);
+        void setTileWidth(int tileWidth);
+        void setTileHeight(int tileHeight);
+        void setBackgroundColor(std::string const& backgroundColor);
+        void setRenderOrder(std::string const& renderOrder);
 
     private:
         Manager* mManager;
 
-        std::string mFilename;
+        float mVersion; // The TMX format version, generally 1.0.
+        std::string mOrientation; // Map orientation. Tiled supports "orthogonal", "isometric" and "staggered" (since 0.9) at the moment.
+        int mWidth; // The map width in tiles.
+        int mHeight; // The map height in tiles.
+        int mTileWidth; // The width of a tile.
+        int mTileHeight; // The height of a tile.
+        std::string mBackgroundColor; // The background color of the map. (since 0.9, optional)
+        std::string mRenderOrder; // The order in which tiles on tile layers are rendered. Valid values are right-down (the default), right-up, left-down and left-up. In all cases, the map is drawn row-by-row. (since 0.10, but only supported for orthogonal maps at the moment)
 
-        float mVersion;
-        std::string mOrientation;
-
-        sf::Vector2i mSize;
-        sf::Vector2i mTileSize;
-
-        std::map<std::string,TileLayer::Ptr> mTileLayers;
-        std::map<std::string,ImageLayer::Ptr> mImageLayers;
-        std::map<std::string,ObjectLayer::Ptr> mObjectLayers;
         std::map<std::string,Tileset::Ptr> mTilesets;
-
-        Properties mProperties;
+        std::map<std::string,Layer::Ptr> mLayers;
+        //std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
+        //std::map<std::string,ImageLayer::Ptr> mImageLayers;
 };
 
 #endif // TME_MAP_HPP
