@@ -1,5 +1,5 @@
-#ifndef TME_PROPERTIES_H
-#define TME_PROPERTIES_H
+#ifndef TME_PROPERTIES_HPP
+#define TME_PROPERTIES_HPP
 
 #include <map>
 #include <string>
@@ -29,4 +29,4 @@ class Properties
         std::map<std::string,std::string> mProperties;
 };
 
-#endif // TME_PROPERTIES_H
+#endif // TME_PROPERTIES_HPP
