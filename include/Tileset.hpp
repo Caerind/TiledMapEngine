@@ -14,6 +14,31 @@ class Tileset
     public:
         typedef std::shared_ptr<Tileset> Ptr;
 
+        struct TileOffset
+        {
+
+
+        };
+
+        struct Tile
+        {
+            Tile();
+
+
+
+            Properties mProperties;
+        };
+
+        struct TerrainTypes
+        {
+
+        };
+
+        struct Terrain
+        {
+
+        };
+
     public:
         Tileset(Map* map);
 
