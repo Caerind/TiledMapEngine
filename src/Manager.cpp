@@ -55,6 +55,7 @@ Map::Ptr Manager::getMap(std::string const& filename)
     }
 }
 
+/*
 bool Manager::loadTexture(std::string const& filename)
 {
     if (mTextures.find(filename) == mTextures.end())
@@ -99,3 +100,4 @@ std::shared_ptr<sf::Texture> Manager::getTexture(std::string const& filename)
         }
     }
 }
+/*
