@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
 /*
@@ -21,8 +22,8 @@ To Do :
 class Image
 {
     public:
-        std::shared_ptr<Image> Ptr;
-        std::shared_ptr<sf::Texture> TexturePtr;
+        typedef std::shared_ptr<Image> Ptr;
+        typedef std::shared_ptr<sf::Texture> TexturePtr;
 
         /*
         struct Data

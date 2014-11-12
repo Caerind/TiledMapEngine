@@ -1,31 +1,26 @@
 #include "../include/Image.hpp"
 
 ////////////////////////////////////////////////////////////
-Image::Image()
+Image::Image() : mTexture(nullptr)
 {
-    mTexture = nullptr;
-    mFormat = "";
-    mSource = "";
-    mTrans = "";
-    mWidth = 0;
-    mHeight = 0;
 }
 
 ////////////////////////////////////////////////////////////
 bool Image::load(std::string const& filename)
 {
-    if (filename == "")
+    std::string file = filename;
+    if (file == "")
     {
-        filename = mSource;
+        file = mSource;
     }
 
     sf::Image img;
-    if (!img.loadFromFile(filename))
+    if (!img.loadFromFile(file))
     {
         return false;
     }
-    mFormat = Image::getFormat(filename);
-    mSource = filename;
+    mFormat = Image::getFormat(file);
+    mSource = file;
 
     if (mTrans != "")
     {
@@ -35,7 +30,7 @@ bool Image::load(std::string const& filename)
     mWidth = static_cast<int>(img.getSize().x);
     mHeight = static_cast<int>(img.getSize().y);
 
-    mTexture = std::make_shared<sf::Texture>(new sf::Texture());
+    mTexture = std::shared_ptr<sf::Texture>(new sf::Texture());
     if (mTexture == nullptr)
     {
         return false;
@@ -50,7 +45,7 @@ bool Image::load(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-TexturePtr Image::getTexture() const
+Image::TexturePtr Image::getTexture() const
 {
     return mTexture;
 }
@@ -126,7 +121,7 @@ std::string Image::getFormat(std::string const& filename)
 {
     if (filename.rfind(".") != std::string::npos)
     {
-        return filename.substr(filename.rfind(".")+1;filename.size());
+        return filename.substr(filename.rfind(".")+1,filename.size());
     }
     else
     {
@@ -135,7 +130,7 @@ std::string Image::getFormat(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-sf::Color Image::getColor(std::string const& hexColor);
+sf::Color Image::getColor(std::string const& hexColor)
 {
     return sf::Color::Transparent;
 }

@@ -38,14 +38,7 @@ std::map<std::string,std::string> Properties::getProperties() const
 ////////////////////////////////////////////////////////////
 bool Properties::hasProperty(std::string const& name) const
 {
-    if (mProperties.find(name) != mProperties.end())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return mProperties.find(name) != mProperties.end();
 }
 
 ////////////////////////////////////////////////////////////
@@ -87,26 +80,12 @@ void Properties::setProperties(std::map<std::string,std::string> properties)
 ////////////////////////////////////////////////////////////
 bool Properties::toBool(std::string const& value)
 {
-    if (value == "true")
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    (value == "true") ? return true : return false;
 }
 
 ////////////////////////////////////////////////////////////
 std::string Properties::toString(bool boolean)
 {
-    if (boolean)
-    {
-        return "true";
-    }
-    else
-    {
-        return "false";
-    }
+    (boolean) ? return "true" : return "false";
 }
 
