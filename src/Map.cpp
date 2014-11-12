@@ -1,10 +1,167 @@
 #include "../include/Map.hpp"
-#include "../include/Manager.hpp"
 
-Map::Map()
+////////////////////////////////////////////////////////////
+Map::Map() : mManager(nullptr)
 {
 }
 
+////////////////////////////////////////////////////////////
+Map::Map(Manager* manager) : mManager(manager)
+{
+}
+
+////////////////////////////////////////////////////////////
 Map::~Map()
 {
 }
+
+////////////////////////////////////////////////////////////
+bool Map::loadFromFile(std::string const& filename)
+{
+    return true;
+}
+
+////////////////////////////////////////////////////////////
+void Map::update(sf::Time dt)
+{
+}
+
+////////////////////////////////////////////////////////////
+void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states))
+{
+    unsigned int i = 0;
+    for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)
+    {
+    	if (layer == i)
+    	{
+    		target.draw(*(itr->second));
+    	}
+    }
+}
+
+////////////////////////////////////////////////////////////
+float Map::getVersion() const
+{
+    return mVersion;
+}
+
+////////////////////////////////////////////////////////////
+std::string Map::getOrientation() const
+{
+    return mOrientation;
+}
+
+////////////////////////////////////////////////////////////
+int Map::getWidth() const
+{
+    return mWidth;
+}
+
+////////////////////////////////////////////////////////////
+int Map::getHeight() const
+{
+    return mHeight;
+}
+
+////////////////////////////////////////////////////////////
+int Map::getTileWidth() const
+{
+    return mTileWidth;
+}
+
+////////////////////////////////////////////////////////////
+int Map::getTileHeight() const
+{
+    return mTileHeight;
+}
+
+////////////////////////////////////////////////////////////
+std::string Map::getBackgroundColor() const
+{
+    return mBackgroundColor;
+}
+
+////////////////////////////////////////////////////////////
+std::string Map::getRenderOrder() const
+{
+    return mRenderOrder;
+}
+
+////////////////////////////////////////////////////////////
+Tileset::Ptr Map::getTileset(std::string const& name)
+{
+    return (mTilesets.find(name) != mTilesets.end()) ? mTilesets[name] : nullptr;
+}
+
+////////////////////////////////////////////////////////////
+Layer::Ptr Map::getLayer(std::string const& name)
+{
+    return (mLayers.find(name) != mLayers.end()) ? mLayers[name] : nullptr;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setVersion(float version)
+{
+    mVersion = version;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setOrientation(std::string const& orientation)
+{
+    mOrientation = orientation;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setWidth(int width)
+{
+    mWidth = width;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setHeight(int height)
+{
+    mHeight = height;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setTileWidth(int tileWidth)
+{
+    mTileWidth = tileWidth;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setTileHeight(int tileHeight)
+{
+    mTileHeight = tileHeight;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setBackgroundColor(std::string const& backgroundColor)
+{
+    mBackgroundColor = backgroundColor;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setRenderOrder(std::string const& renderOrder)
+{
+    mRenderOrder = renderOrder;
+}
+
+////////////////////////////////////////////////////////////
+void Map::setTileset(Tileset::Ptr tileset)
+{
+    if (tileset != nullptr)
+    {
+    	mTilesets[tileset->getName()] = tileset;
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::setLayer(Layer::Ptr layer)
+{
+    if (layer != nullptr)
+    {
+    	mLayers[layer->getName()] = layer;
+    }
+}
+

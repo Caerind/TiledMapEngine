@@ -1,13 +1,16 @@
 #include "../include/Manager.hpp"
 
+////////////////////////////////////////////////////////////
 Manager::Manager()
 {
 }
 
+////////////////////////////////////////////////////////////
 Manager::~Manager()
 {
 }
 
+////////////////////////////////////////////////////////////
 void Manager::update(sf::Time dt)
 {
     for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
@@ -16,6 +19,7 @@ void Manager::update(sf::Time dt)
     }
 }
 
+////////////////////////////////////////////////////////////
 void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
@@ -25,6 +29,7 @@ void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderSta
     }
 }
 
+////////////////////////////////////////////////////////////
 bool Manager::loadMap(std::string const& filename)
 {
     if (mMaps.find(filename) == mMaps.end())
@@ -43,6 +48,7 @@ bool Manager::loadMap(std::string const& filename)
     }
 }
 
+////////////////////////////////////////////////////////////
 Map::Ptr Manager::getMap(std::string const& filename)
 {
     if (mMaps.find(filename) != mMaps.end())
@@ -56,6 +62,7 @@ Map::Ptr Manager::getMap(std::string const& filename)
 }
 
 /*
+////////////////////////////////////////////////////////////
 bool Manager::loadTexture(std::string const& filename)
 {
     if (mTextures.find(filename) == mTextures.end())
@@ -74,6 +81,7 @@ bool Manager::loadTexture(std::string const& filename)
     }
 }
 
+////////////////////////////////////////////////////////////
 void Manager::addTexture(std::shared_ptr<sf::Texture> texture, std::string const& filename)
 {
     if (texture != nullptr && filename != "")
@@ -82,6 +90,7 @@ void Manager::addTexture(std::shared_ptr<sf::Texture> texture, std::string const
     }
 }
 
+////////////////////////////////////////////////////////////
 std::shared_ptr<sf::Texture> Manager::getTexture(std::string const& filename)
 {
     if (mTextures.find(filename) != mTextures.end())
