@@ -34,7 +34,7 @@ class Properties
         static std::string toString(T number);
         static std::string toString(bool boolean);
 
-    private:
+    protected:
         std::map<std::string,std::string> mProperties;
 };
 

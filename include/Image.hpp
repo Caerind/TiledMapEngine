@@ -55,7 +55,7 @@ class Image
         static std::string getFormat(std::string const& filename);
         static sf::Color getColor(std::string const& hexColor);
 
-    private:
+    protected:
         TexturePtr mTexture;
 
         std::string mFormat; // Used for embedded images, in combination with a data child element. Valid values are file extensions like png, gif, jpg, bmp, etc. (since 0.9.0)

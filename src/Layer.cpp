@@ -3,5 +3,8 @@
 
 Layer::Layer(Map* map)
 {
-    //ctor
+    if (map != nullptr)
+    {
+        mMap = map;
+    }
 }

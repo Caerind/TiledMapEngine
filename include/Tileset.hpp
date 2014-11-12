@@ -95,8 +95,8 @@ class Tileset : public Image, public Properties
         void setFirstGid(int first);
         //void setSource(std::string const& source);
         void setName(std::string const& name);
-        void setWidth(int width);
-        void setHeight(int height);
+        void setTileWidth(int width);
+        void setTileHeight(int height);
         void setSpacing(int spacing);
         void setMargin(int margin);
         //void setTileOffset(TileOffset offset);
@@ -108,8 +108,8 @@ class Tileset : public Image, public Properties
         int mFirstGid; // The first global tile ID of this tileset (this global ID maps to the first tile in this tileset).
         //std::string mSource; // If this tileset is stored in an external TSX (Tile Set XML) file, this attribute refers to that file. That TSX file has the same structure as the <tileset> element described here. (There is the firstgid attribute missing and this source attribute is also not there. These two attributes are kept in the TMX map, since they are map specific.)
         std::string mName; // The name of this tileset.
-        int mWidth; // The (maximum) width of the tiles in this tileset.
-        int mHeight; // The (maximum) height of the tiles in this tileset.
+        int mTileWidth; // The (maximum) width of the tiles in this tileset.
+        int mTileHeight; // The (maximum) height of the tiles in this tileset.
         int mSpacing; // The spacing in pixels between the tiles in this tileset (applies to the tileset image).
         int mMargin; // The margin around the tiles in this tileset (applies to the tileset image).
         //TileOffset mTileOffset;
