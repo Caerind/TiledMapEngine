@@ -115,6 +115,7 @@ void Layer::setTile(int x, int y, Tile tile)
     if (x >= 0 && x < mWidth && y >= 0 && y < mHeight)
     {
         mTiles[x][y] = tile;
+        // Update it
     }
 }
 
@@ -131,21 +132,21 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 ////////////////////////////////////////////////////////////
 void Layer::resize()
 {
-    while (mTiles.size() < mWidth)
+    while (mTiles.size() < static_cast<unsigned int>(mWidth))
     {
         mTiles.push_back(std::vector<Layer::Tile>(mHeight));
     }
-    while (mTiles.size() > mWidth)
+    while (mTiles.size() > static_cast<unsigned int>(mWidth))
     {
         mTiles.pop_back();
     }
-    for (unsigned int x = 0; x < mWidth; x++)
+    for (unsigned int x = 0; x < static_cast<unsigned int>(mWidth); x++)
     {
-        while (mTiles[x].size() < mHeight)
+        while (mTiles[x].size() < static_cast<unsigned int>(mHeight))
         {
             mTiles[x].push_back(Layer::Tile());
         }
-        while (mTiles[x].size() > mHeight)
+        while (mTiles[x].size() > static_cast<unsigned int>(mHeight))
         {
             mTiles[x].pop_back();
         }
@@ -153,4 +154,3 @@ void Layer::resize()
 
     mLayer.resize(mWidth * mHeight * 4);
 }
-

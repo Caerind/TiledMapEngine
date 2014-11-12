@@ -20,6 +20,7 @@ To Do :
 
 -Opacity
 -How to access texture
+-Update texture coords
 
 */
 
