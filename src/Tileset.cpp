@@ -30,12 +30,8 @@ void Tileset::Tile::setProbability(float probability)
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::Tileset(Map* map)
+Tileset::Tileset(Map* map) : mMap(map)
 {
-    if (map != nullptr)
-    {
-        mMap = map;
-    }
 }
 
 ////////////////////////////////////////////////////////////

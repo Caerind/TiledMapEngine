@@ -14,6 +14,15 @@
 
 #include "Properties.hpp"
 
+/*
+
+To Do :
+
+-Opacity
+-How to access texture
+
+*/
+
 class Map;
 
 class Layer : public Properties, public sf::Transformable, public sf::Drawable
@@ -51,6 +60,8 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
 
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+        void resize();
 
     private:
         Map* mMap;

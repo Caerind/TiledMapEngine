@@ -39,6 +39,8 @@ class Map : public Properties, public sf::Transformable
         int getTileHeight() const;
         std::string getBackgroundColor() const;
         std::string getRenderOrder() const;
+        Tileset::Ptr getTileset(std::string const& name);
+        Layer::Ptr getLayer(std::string const& name);
 
         void setVersion(float version);
         void setOrientation(std::string const& orientation);
@@ -48,6 +50,8 @@ class Map : public Properties, public sf::Transformable
         void setTileHeight(int tileHeight);
         void setBackgroundColor(std::string const& backgroundColor);
         void setRenderOrder(std::string const& renderOrder);
+        void setTileset(Tileset::Ptr tileset);
+        void setLayer(Layer::Ptr layer);
 
     private:
         Manager* mManager;
