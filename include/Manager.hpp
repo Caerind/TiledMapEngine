@@ -11,6 +11,8 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
 
+#include "Map.hpp"
+
 class Manager : public sf::Transformable
 {
     public:
