@@ -25,8 +25,36 @@ class Properties
         void setProperty(std::string const& name, bool value);
         void setProperties(std::map<std::string,std::string> properties);
 
+    public:
+        template <typename T>
+        static T toNumber(std::string const& value);
+        static bool toBool(std::string const& value);
+
+        template <typename T>
+        static std::string toString(T number);
+        static std::string toString(bool boolean);
+
     private:
         std::map<std::string,std::string> mProperties;
 };
+
+////////////////////////////////////////////////////////////
+template <typename T>
+T Properties::toNumber(std::string const& value)
+{
+    T number;
+    std::istringstream iss(value);
+    iss >> number;
+    return number;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+std::string Properties::toString(T number)
+{
+    std::ostringstream oss;
+    oss << number;
+    return oss.str();
+}
 
 #endif // TME_PROPERTIES_HPP
