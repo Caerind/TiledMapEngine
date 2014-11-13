@@ -19,7 +19,7 @@
 To Do :
 
 -Opacity
--How to access texture
+-How to access tileset
 -Update texture coords
 
 */

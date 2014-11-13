@@ -14,6 +14,17 @@
 #include "Properties.hpp"
 #include "Tileset.hpp"
 
+/*
+
+To Do :
+
+-Parser
+-Decompression(&Compression) & Decoding(&Encoding)
+-Background Color
+-RenderOrder?
+
+*/
+
 class Manager;
 
 class Map : public Properties, public sf::Transformable
@@ -52,6 +63,12 @@ class Map : public Properties, public sf::Transformable
         void setRenderOrder(std::string const& renderOrder);
         void setTileset(Tileset::Ptr tileset);
         void setLayer(Layer::Ptr layer);
+
+    private:
+        bool parseMap();
+        bool parseTileset(); // Including Image
+        bool parseLayer(); // Including Tiles
+        bool parseProperties();
 
     private:
         Manager* mManager;
