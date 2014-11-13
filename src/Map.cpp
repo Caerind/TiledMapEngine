@@ -27,7 +27,7 @@ void Map::update(sf::Time dt)
 }
 
 ////////////////////////////////////////////////////////////
-void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states))
+void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     unsigned int i = 0;
     for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)

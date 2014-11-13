@@ -12,6 +12,14 @@
 
 #include "Map.hpp"
 
+/*
+
+To Do :
+
+-How to share Image ?
+
+*/
+
 class Manager : public sf::Transformable
 {
     public:

@@ -2,6 +2,7 @@
 #define TME_IMAGE_HPP
 
 #include <memory>
+#include <sstream>
 #include <string>
 
 #include <SFML/Graphics/Color.hpp>
@@ -14,7 +15,6 @@
 To Do :
 
 -Understand Data
--Conversion sf::Color <-> std::string(Trans)
 
 */
 
@@ -54,6 +54,7 @@ class Image
     public:
         static std::string getFormat(std::string const& filename);
         static sf::Color getColor(std::string const& hexColor);
+        static std::string getString(sf::Color rgbColor);
 
     protected:
         TexturePtr mTexture;
