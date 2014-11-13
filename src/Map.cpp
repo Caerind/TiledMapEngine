@@ -29,12 +29,21 @@ void Map::update(sf::Time dt)
 ////////////////////////////////////////////////////////////
 void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
+    states.transform *= getTransform();
     unsigned int i = 0;
     for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)
     {
     	if (layer == i)
     	{
-    		target.draw(*(itr->second));
+    		if (layer == 0 && mBackgroundColor != "")
+    		{
+                sf::RectangleShape background;
+                background.setSize(sf::Vector2f(mWidth * mTileWidth, mHeight * mTileHeight));
+                background.setFillColor(Image::getColor(mBackgroundColor));
+                target.draw(background,states);
+    		}
+
+    		target.draw(*(itr->second),states);
     	}
     }
 }

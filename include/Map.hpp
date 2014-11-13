@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -20,7 +21,6 @@ To Do :
 
 -Parser
 -Decompression(&Compression) & Decoding(&Encoding)
--Background Color
 -RenderOrder?
 
 */
