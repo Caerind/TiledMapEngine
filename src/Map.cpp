@@ -43,7 +43,7 @@ void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates 
                 target.draw(background,states);
     		}
 
-    		target.draw(*(itr->second),states);
+    		itr->second->render(target,states);
     	}
     }
 }

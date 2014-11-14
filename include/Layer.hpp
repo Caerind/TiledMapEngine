@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 
-#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -27,7 +26,7 @@ To Do :
 
 class Map;
 
-class Layer : public Properties, public sf::Transformable, public sf::Drawable
+class Layer : public Properties, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<Layer> Ptr;
@@ -43,6 +42,7 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
         Layer(Map* map);
 
         void update(sf::Time dt);
+        void render(sf::RenderTarget& target, sf::RenderStates states);
 
         std::string getName() const;
         int getX() const;
@@ -63,8 +63,6 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
         void setTile(int x, int y, Tile tile);
 
     private:
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
         void resize();
 
     private:

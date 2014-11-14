@@ -1,4 +1,5 @@
 #include "../include/Layer.hpp"
+#include "../include/Map.hpp"
 
 ////////////////////////////////////////////////////////////
 Layer::Tile::Tile()
@@ -13,6 +14,42 @@ Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads), mTextureCreated(false), m
 ////////////////////////////////////////////////////////////
 void Layer::update(sf::Time dt)
 {
+}
+
+////////////////////////////////////////////////////////////
+void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
+{
+    if (mVisible && mMap != nullptr)
+    {
+        states.transform *= getTransform();
+
+        if (mOpacity != 1.f)
+        {
+            if (!mTextureCreated)
+            {
+                mRenderTexture.create(mWidth * mMap->getTileWidth(), mHeight * mMap->getTileHeight());
+                mTextureCreated = true;
+            }
+
+            sf::RenderStates textureStates;
+            //textureStates.texture = texture;
+
+            mRenderTexture.clear();
+            mRenderTexture.draw(mLayer,textureStates);
+            mRenderTexture.display();
+
+            sf::Sprite s;
+            s.setTexture(mRenderTexture.getTexture());
+            s.setColor(sf::Color(255,255,255,255 * mOpacity));
+
+            target.draw(s,states);
+        }
+        else
+        {
+            //states.texture = texture;
+            target.draw(mLayer,states);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -116,42 +153,6 @@ void Layer::setTile(int x, int y, Tile tile)
     {
         mTiles[x][y] = tile;
         // Update it
-    }
-}
-
-////////////////////////////////////////////////////////////
-void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    if (mVisible && mMap != nullptr)
-    {
-        states.transform *= getTransform();
-
-        if (mOpacity != 1.f)
-        {
-            if (!mTextureCreated)
-            {
-                mRenderTexture.create();
-                mTextureCreated = true;
-            }
-
-            sf::RenderStates textureStates;
-            //textureStates.texture = texture;
-
-            mRenderTexture.clear();
-            mRenderTexture.draw(mLayer,textureStates);
-            mRenderTexture.display();
-
-            sf::Sprite s;
-            s.setTexture(mRenderTexture.getTexture());
-            s.setColor(sf::Color(255,255,255,255 * mOpacity));
-
-            target.draw(s,states);
-        }
-        else
-        {
-            //states.texture = texture;
-            target.draw(mLayer,states);
-        }
     }
 }
 
