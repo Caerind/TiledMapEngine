@@ -6,7 +6,7 @@ Layer::Tile::Tile()
 }
 
 ////////////////////////////////////////////////////////////
-Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads)
+Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads), mTextureCreated(false), mOpacity(1.f), mVisible(true)
 {
 }
 
@@ -125,7 +125,33 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
     if (mVisible && mMap != nullptr)
     {
         states.transform *= getTransform();
-        target.draw(mLayer,states);
+
+        if (mOpacity != 1.f)
+        {
+            if (!mTextureCreated)
+            {
+                mRenderTexture.create();
+                mTextureCreated = true;
+            }
+
+            sf::RenderStates textureStates;
+            //textureStates.texture = texture;
+
+            mRenderTexture.clear();
+            mRenderTexture.draw(mLayer,textureStates);
+            mRenderTexture.display();
+
+            sf::Sprite s;
+            s.setTexture(mRenderTexture.getTexture());
+            s.setColor(sf::Color(255,255,255,255 * mOpacity));
+
+            target.draw(s,states);
+        }
+        else
+        {
+            //states.texture = texture;
+            target.draw(mLayer,states);
+        }
     }
 }
 

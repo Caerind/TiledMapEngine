@@ -8,6 +8,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/System/Time.hpp>
@@ -18,7 +20,6 @@
 
 To Do :
 
--Opacity
 -How to access tileset
 -Update texture coords
 
@@ -71,6 +72,9 @@ class Layer : public Properties, public sf::Transformable, public sf::Drawable
 
         std::vector<std::vector<Tile>> mTiles;
         sf::VertexArray mLayer;
+
+        sf::RenderTexture mRenderTexture;
+        bool mTextureCreated;
 
         std::string mName; // The name of the layer.
         int mX; // The x coordinate of the layer in tiles. Defaults to 0 and can no longer be changed in Tiled Qt.
