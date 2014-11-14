@@ -92,6 +92,9 @@ class Tileset : public Image, public Properties
         //TileOffset& getTileOffset();
         //TerrainTypes& getTerrainsTypes() const;
 
+        int getLastGid() const;
+        sf::IntRect getTextureRect(int id) const;
+
         void setFirstGid(int first);
         //void setSource(std::string const& source);
         void setName(std::string const& name);
@@ -101,6 +104,10 @@ class Tileset : public Image, public Properties
         void setMargin(int margin);
         //void setTileOffset(TileOffset offset);
         //void setTerrainType(TerrainTypes ttypes);
+
+    private:
+        int getTilesPerRow() const;
+        int getTilesPerCol() const;
 
     private:
         Map* mMap;
