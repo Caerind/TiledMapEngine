@@ -50,6 +50,7 @@ class Map : public Properties, public sf::Transformable
         int getTileHeight() const;
         std::string getBackgroundColor() const;
         std::string getRenderOrder() const;
+        Tileset::Ptr getTileset(int gid);
         Tileset::Ptr getTileset(std::string const& name);
         Layer::Ptr getLayer(std::string const& name);
 

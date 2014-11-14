@@ -97,6 +97,17 @@ std::string Map::getRenderOrder() const
 }
 
 ////////////////////////////////////////////////////////////
+Tileset::Ptr Map::getTileset(int gid)
+{
+    for (auto itr = mTilesets.begin(); itr != mTilesets.end(); itr++)
+    {
+        if (gid >= itr->second->getFirstGid() && gid <= itr->second->getLastGid())
+            return itr->second;
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////
 Tileset::Ptr Map::getTileset(std::string const& name)
 {
     return (mTilesets.find(name) != mTilesets.end()) ? mTilesets[name] : nullptr;
