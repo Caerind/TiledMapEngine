@@ -76,6 +76,7 @@ int Tileset::getLastGid() const
     return mFirstGid + getTilesPerRow() * getTilesPerCol() - 1;
 }
 
+////////////////////////////////////////////////////////////
 sf::IntRect Tileset::getTextureRect(int id) const
 {
     sf::IntRect rect(0,0,mTileWidth,mTileHeight);

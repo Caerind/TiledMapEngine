@@ -69,9 +69,9 @@ class Map : public Properties, public sf::Transformable
 
     private:
         bool parseMap(pugi::xml_node node);
+        bool parseProperties(pugi::xml_node node, Properties* properties);
         bool parseTileset(pugi::xml_node node); // Including Image
         bool parseLayer(pugi::xml_node node); // Including Tiles
-        bool parseProperties(pugi::xml_node node);
 
     private:
         static std::string getDirectory(std::string const& filename);

@@ -15,11 +15,10 @@
 
 To Do :
 
--Understand TileOffset
+-Understand how to use TileOffset
 -Understand Terrain
 -Understand TerrainTypes
 -Understand Terrain member in Tile
--Use & handle mSource for .tsx file
 
 */
 
@@ -30,7 +29,6 @@ class Tileset : public Image, public Properties
     public:
         typedef std::shared_ptr<Tileset> Ptr;
 
-        /*
         struct TileOffset
         {
             TileOffset();
@@ -38,7 +36,6 @@ class Tileset : public Image, public Properties
             int x; // Horizontal offset in pixels
             int y; // Vertical offset in pixels (positive is down)
         };
-        */
 
         /*
         class Terrain : public Properties
@@ -89,7 +86,7 @@ class Tileset : public Image, public Properties
         int getTileHeight() const;
         int getSpacing() const;
         int getMargin() const;
-        //TileOffset& getTileOffset();
+        TileOffset& getTileOffset();
         //TerrainTypes& getTerrainsTypes() const;
 
         int getLastGid() const;
@@ -102,7 +99,7 @@ class Tileset : public Image, public Properties
         void setTileHeight(int height);
         void setSpacing(int spacing);
         void setMargin(int margin);
-        //void setTileOffset(TileOffset offset);
+        void setTileOffset(TileOffset offset);
         //void setTerrainType(TerrainTypes ttypes);
 
     private:
@@ -119,7 +116,7 @@ class Tileset : public Image, public Properties
         int mTileHeight; // The (maximum) height of the tiles in this tileset.
         int mSpacing; // The spacing in pixels between the tiles in this tileset (applies to the tileset image).
         int mMargin; // The margin around the tiles in this tileset (applies to the tileset image).
-        //TileOffset mTileOffset;
+        TileOffset mTileOffset;
         //TerrainTypes mTerrainTypes;
 };
 

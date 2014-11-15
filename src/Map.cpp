@@ -25,6 +25,8 @@ bool Map::loadFromFile(std::string const& filename)
         return false;
     }
 
+    mFilename = filename;
+
     pugi::xml_node mapNode;
 
     if (!(mapNode = tmxFile.child("map")))
@@ -219,7 +221,7 @@ bool Map::parseMap(pugi::xml_node node)
     {
         std::string nName = n.name();
         if (nName == "properties")
-            if (!parseProperties(n))
+            if (!parseProperties(n,this))
                 return false;
         if (nName == "tileset")
             if (!parseTileset(n))
@@ -229,25 +231,95 @@ bool Map::parseMap(pugi::xml_node node)
                 return false;
     }
 
+    return true;
+}
 
-
+////////////////////////////////////////////////////////////
+bool Map::parseProperties(pugi::xml_node node, Properties* properties)
+{
+    if (node)
+    {
+        for (auto property : node.children("property"))
+        {
+            properties->setProperty(std::string(property.attribute("name").as_string()), std::string(property.attribute("value").as_string()));
+        }
+    }
     return true;
 }
 
 ////////////////////////////////////////////////////////////
 bool Map::parseTileset(pugi::xml_node node)
 {
+    Tileset::Ptr tileset = std::shared_ptr<Tileset>(new Tileset(this));
+
+    if (!node.attribute("firstgid"))
+    {
+        return false;
+    }
+
+    tileset->setFirstGid(node.attribute("firstgid").as_int());
+
+    pugi::xml_attribute source = node.attribute("source");
+    if (source)
+    {
+        pugi::xml_document tsx;
+        std::string sourceName = working_dir + source.as_string();
+        if (!tsx.load_file(sourceName.c_str()))
+        {
+            return false;
+        }
+        node = tsx.child("tileset");
+    }
+
+    tileset->setName(node.attribute("name").as_string());
+    tileset->setTileWidth(node.attribute("tilewidth").as_int());
+    tileset->setTileHeight(node.attribute("tileheight").as_int());
+
+    pugi::xml_attribute spacing = node.attribute("spacing");
+    if (spacing) tileset->setSpacing(spacing.as_int());
+
+    pugi::xml_attribute margin = node.attribute("margin");
+    if (margin) tileset->setMargin(margin.as_int());
+
+    for (const pugi::xml_node& n : node.children()) {
+        std::string nName = n.name();
+        if (nName == "tileoffset")
+        {
+            TileOffset offset;
+            offset.x = n.attribute("x").as_int();
+            offset.y = n.attribute("y").as_int();
+            tileset->setTileOffset(offset);
+        }
+        else if (nName == "image")
+        {
+            if (n.attribute("source"))
+            {
+                if (!tileset->load(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (nName == "terraintypes")
+        {
+
+        }
+        else if (nName == "properties")
+        {
+            if (!parseProperties(n,tileset.get())
+                return false;
+        }
+    }
+
     return true;
 }
 
 ////////////////////////////////////////////////////////////
 bool Map::parseLayer(pugi::xml_node node)
-{
-    return true;
-}
-
-////////////////////////////////////////////////////////////
-bool Map::parseProperties(pugi::xml_node node)
 {
     return true;
 }
