@@ -11,6 +11,8 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
 
+#include "../pugixml/pugixml.hpp"
+
 #include "Layer.hpp"
 #include "Properties.hpp"
 #include "Tileset.hpp"
@@ -66,13 +68,17 @@ class Map : public Properties, public sf::Transformable
         void setLayer(Layer::Ptr layer);
 
     private:
-        bool parseMap();
-        bool parseTileset(); // Including Image
-        bool parseLayer(); // Including Tiles
-        bool parseProperties();
+        bool parseMap(pugi::xml_node node);
+        bool parseTileset(pugi::xml_node node); // Including Image
+        bool parseLayer(pugi::xml_node node); // Including Tiles
+        bool parseProperties(pugi::xml_node node);
+
+    private:
+        static std::string getDirectory(std::string const& filename);
 
     private:
         Manager* mManager;
+        std::string mFilename;
 
         float mVersion; // The TMX format version, generally 1.0.
         std::string mOrientation; // Map orientation. Tiled supports "orthogonal", "isometric" and "staggered" (since 0.9) at the moment.

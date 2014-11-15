@@ -18,7 +18,21 @@ Map::~Map()
 ////////////////////////////////////////////////////////////
 bool Map::loadFromFile(std::string const& filename)
 {
-    return true;
+    pugi::xml_document tmxFile;
+
+    if (!tmxFile.load_file(filename.c_str()))
+    {
+        return false;
+    }
+
+    pugi::xml_node mapNode;
+
+    if (!(mapNode = tmxFile.child("map")))
+    {
+        return false;
+    }
+
+    return parseMap(mapNode);
 }
 
 ////////////////////////////////////////////////////////////
@@ -186,26 +200,61 @@ void Map::setLayer(Layer::Ptr layer)
 }
 
 ////////////////////////////////////////////////////////////
-bool Map::parseMap()
+bool Map::parseMap(pugi::xml_node node)
+{
+    for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute())
+    {
+        std::string attrName = attr.name();
+        if (attrName == "version") mVersion = attr.as_float();
+        else if (attrName == "orientation") mOrientation = attr.value();
+        else if (attrName == "width") mWidth = attr.as_int();
+        else if (attrName == "height") mHeight = attr.as_int();
+        else if (attrName == "tilewidth") mTileWidth = attr.as_int();
+        else if (attrName == "tileheight") mTileHeight = attr.as_int();
+        else if (attrName == "backgroundcolor") mBackgroundColor = attr.value();
+        else if (attrName == "renderorder") mRenderOrder = attr.value();
+    }
+
+    for (pugi::xml_node n : node.children())
+    {
+        std::string nName = n.name();
+        if (nName == "properties")
+            if (!parseProperties(n))
+                return false;
+        if (nName == "tileset")
+            if (!parseTileset(n))
+                return false;
+        if (nName == "layer")
+            if (!parseLayer(n))
+                return false;
+    }
+
+
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////
+bool Map::parseTileset(pugi::xml_node node)
 {
     return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool Map::parseTileset()
+bool Map::parseLayer(pugi::xml_node node)
 {
     return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool Map::parseLayer()
+bool Map::parseProperties(pugi::xml_node node)
 {
     return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool Map::parseProperties()
+std::string Map::getDirectory(std::string const& filename)
 {
-    return true;
+    return (filename.rfind("/") != std::string::npos) ? filename.substr(0, filename.rfind("/")) : "";
 }
 
