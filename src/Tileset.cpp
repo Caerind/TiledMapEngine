@@ -1,6 +1,11 @@
 #include "../include/Tileset.hpp"
 
 ////////////////////////////////////////////////////////////
+Tileset::TileOffset::TileOffset()
+{
+}
+
+////////////////////////////////////////////////////////////
 Tileset::Tile::Tile()
 {
 }
@@ -9,6 +14,12 @@ Tileset::Tile::Tile()
 int Tileset::Tile::getId() const
 {
     return mId;
+}
+
+////////////////////////////////////////////////////////////
+std::string Tileset::Tile::getTerrain() const
+{
+    return mTerrain;
 }
 
 ////////////////////////////////////////////////////////////
@@ -21,6 +32,12 @@ float Tileset::Tile::getProbability() const
 void Tileset::Tile::setId(int id)
 {
     mId = id;
+}
+
+////////////////////////////////////////////////////////////
+void Tileset::Tile::setTerrain(std::string const& terrain)
+{
+    mTerrain = terrain;
 }
 
 ////////////////////////////////////////////////////////////
@@ -68,6 +85,18 @@ int Tileset::getSpacing() const
 int Tileset::getMargin() const
 {
     return mMargin;
+}
+
+////////////////////////////////////////////////////////////
+Tileset::TileOffset& Tileset::getTileOffset()
+{
+    return mTileOffset;
+}
+
+////////////////////////////////////////////////////////////
+Tileset::Tile Tileset::getTile(int id)
+{
+    return mTiles[id];
 }
 
 ////////////////////////////////////////////////////////////
@@ -122,6 +151,21 @@ void Tileset::setSpacing(int spacing)
 void Tileset::setMargin(int margin)
 {
     mMargin = margin;
+}
+
+////////////////////////////////////////////////////////////
+void Tileset::setTileOffset(TileOffset offset)
+{
+    mTileOffset = offset;
+}
+
+////////////////////////////////////////////////////////////
+void Tileset::addTile(Tileset::Tile::Ptr tile)
+{
+    if (tile != nullptr)
+    {
+        mTiles[tile->getId()] = *(tile.get());
+    }
 }
 
 ////////////////////////////////////////////////////////////

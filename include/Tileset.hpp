@@ -1,6 +1,7 @@
 #ifndef TME_TILESET_HPP
 #define TME_TILESET_HPP
 
+#include <map>
 #include <memory>
 #include <string>
 //#include <vector>
@@ -16,9 +17,9 @@
 To Do :
 
 -Understand how to use TileOffset
--Understand Terrain
--Understand TerrainTypes
--Understand Terrain member in Tile
+-Understand how to use Terrain
+-Understand how to use TerrainTypes
+-Understand how to use Terrain member in Tile
 
 */
 
@@ -60,19 +61,22 @@ class Tileset : public Image, public Properties
         class Tile : /*public Image,*/ public Properties
         {
             public:
+                typedef std::shared_ptr<Tile> Ptr;
+
+            public:
                 Tile();
 
                 int getId() const;
-                //std::string getTerrain() const;
+                std::string getTerrain() const;
                 float getProbability() const;
 
                 void setId(int id);
-                //void setTerrain(std::string const& terrain);
+                void setTerrain(std::string const& terrain);
                 void setProbability(float probability);
 
             private:
                 int mId; // The local tile ID within its tileset.
-                //std::string mTerrain; // Defines the terrain type of each corner of the tile, given as comma-separated indexes in the terrain types array in the order top-left, top-right, bottom-left, bottom-right. Leaving out a value means that corner has no terrain. (optional) (since 0.9.0)
+                std::string mTerrain; // Defines the terrain type of each corner of the tile, given as comma-separated indexes in the terrain types array in the order top-left, top-right, bottom-left, bottom-right. Leaving out a value means that corner has no terrain. (optional) (since 0.9.0)
                 float mProbability; // A percentage indicating the probability that this tile is chosen when it competes with others while editing with the terrain tool. (optional) (since 0.9.0)
         };
 
@@ -88,6 +92,7 @@ class Tileset : public Image, public Properties
         int getMargin() const;
         TileOffset& getTileOffset();
         //TerrainTypes& getTerrainsTypes() const;
+        Tile getTile(int id);
 
         int getLastGid() const;
         sf::IntRect getTextureRect(int id) const;
@@ -101,6 +106,7 @@ class Tileset : public Image, public Properties
         void setMargin(int margin);
         void setTileOffset(TileOffset offset);
         //void setTerrainType(TerrainTypes ttypes);
+        void addTile(Tile::Ptr tile);
 
     private:
         int getTilesPerRow() const;
@@ -118,6 +124,7 @@ class Tileset : public Image, public Properties
         int mMargin; // The margin around the tiles in this tileset (applies to the tileset image).
         TileOffset mTileOffset;
         //TerrainTypes mTerrainTypes;
+        std::map<int,Tile> mTiles;
 };
 
 #endif // TME_TILESET_HPP

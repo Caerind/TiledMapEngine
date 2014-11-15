@@ -237,6 +237,11 @@ bool Map::parseMap(pugi::xml_node node)
 ////////////////////////////////////////////////////////////
 bool Map::parseProperties(pugi::xml_node node, Properties* properties)
 {
+    if (properties == nullptr)
+    {
+        return false;
+    }
+
     if (node)
     {
         for (auto property : node.children("property"))
@@ -263,10 +268,12 @@ bool Map::parseTileset(pugi::xml_node node)
     if (source)
     {
         pugi::xml_document tsx;
-        std::string sourceName = working_dir + source.as_string();
-        if (!tsx.load_file(sourceName.c_str()))
+        if (!tsx.load_file(std::string(getDirectory(mFilename) + source.as_string()).c_str()))
         {
-            return false;
+            if (!tsx.load_file(std::string(source.as_string()).c_str()))
+            {
+                return false;
+            }
         }
         node = tsx.child("tileset");
     }
@@ -281,11 +288,12 @@ bool Map::parseTileset(pugi::xml_node node)
     pugi::xml_attribute margin = node.attribute("margin");
     if (margin) tileset->setMargin(margin.as_int());
 
-    for (const pugi::xml_node& n : node.children()) {
+    for (const pugi::xml_node& n : node.children())
+    {
         std::string nName = n.name();
         if (nName == "tileoffset")
         {
-            TileOffset offset;
+            Tileset::TileOffset offset;
             offset.x = n.attribute("x").as_int();
             offset.y = n.attribute("y").as_int();
             tileset->setTileOffset(offset);
@@ -296,7 +304,10 @@ bool Map::parseTileset(pugi::xml_node node)
             {
                 if (!tileset->load(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
                 {
-                    return false;
+                    if (!tileset->load((n.attribute("source").as_string())))
+                    {
+                        return false;
+                    }
                 }
             }
             else
@@ -306,14 +317,36 @@ bool Map::parseTileset(pugi::xml_node node)
         }
         else if (nName == "terraintypes")
         {
-
+            // ...
         }
         else if (nName == "properties")
         {
-            if (!parseProperties(n,tileset.get())
+            if (!parseProperties(n,tileset.get()))
                 return false;
         }
     }
+
+    // Parse each tile property
+    for (const pugi::xml_node& tile_node : node.children("tile"))
+    {
+        Tileset::Tile::Ptr tile = std::shared_ptr<Tileset::Tile>(new Tileset::Tile());
+        if (tile_node.attribute("id")) tile->setId(tile_node.attribute("id").as_int());
+        if (tile_node.attribute("terrain")) tile->setTerrain(tile_node.attribute("terrain").as_string());
+        if (tile_node.attribute("probability")) tile->setProbability(tile_node.attribute("probability").as_float());
+
+        pugi::xml_node prop = tile_node.child("properties");
+        if (prop)
+        {
+            if (!parseProperties(prop,tile.get()))
+            {
+                return false;
+            }
+        }
+
+        tileset->addTile(tile);
+    }
+
+    mTilesets[tileset->getName()] = tileset;
 
     return true;
 }
