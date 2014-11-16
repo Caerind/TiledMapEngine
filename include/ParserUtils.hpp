@@ -14,8 +14,7 @@ class ParserUtils
         static bool base64_encode(std::string& data);
         static bool base64_decode(std::string& data);
         static bool decompressString(std::string& data);
-
-
+        static bool compressString(std::string& data);
 
     private:
         static const std::string base64_table;

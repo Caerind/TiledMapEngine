@@ -23,7 +23,6 @@
 To Do :
 
 -Parser
--Decompression(&Compression) & Decoding(&Encoding)
 -RenderOrder?
 
 */
