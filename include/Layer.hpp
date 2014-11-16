@@ -14,15 +14,7 @@
 #include <SFML/System/Time.hpp>
 
 #include "Properties.hpp"
-
-/*
-
-To Do :
-
--How to access tileset
--Update texture coords
-
-*/
+#include "Tileset.hpp"
 
 class Map;
 
@@ -70,9 +62,6 @@ class Layer : public Properties, public sf::Transformable
 
         std::vector<std::vector<Tile>> mTiles;
         sf::VertexArray mLayer;
-
-        sf::RenderTexture mRenderTexture;
-        bool mTextureCreated;
 
         std::string mName; // The name of the layer.
         int mX; // The x coordinate of the layer in tiles. Defaults to 0 and can no longer be changed in Tiled Qt.

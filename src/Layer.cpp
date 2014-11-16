@@ -7,7 +7,7 @@ Layer::Tile::Tile()
 }
 
 ////////////////////////////////////////////////////////////
-Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads), mTextureCreated(false), mOpacity(1.f), mVisible(true)
+Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads), mOpacity(1.f), mVisible(true)
 {
 }
 
@@ -22,33 +22,8 @@ void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
     if (mVisible && mMap != nullptr)
     {
         states.transform *= getTransform();
-
-        if (mOpacity != 1.f)
-        {
-            if (!mTextureCreated)
-            {
-                mRenderTexture.create(mWidth * mMap->getTileWidth(), mHeight * mMap->getTileHeight());
-                mTextureCreated = true;
-            }
-
-            sf::RenderStates textureStates;
-            //textureStates.texture = texture;
-
-            mRenderTexture.clear();
-            mRenderTexture.draw(mLayer,textureStates);
-            mRenderTexture.display();
-
-            sf::Sprite s;
-            s.setTexture(mRenderTexture.getTexture());
-            s.setColor(sf::Color(255,255,255,255 * mOpacity));
-
-            target.draw(s,states);
-        }
-        else
-        {
-            //states.texture = texture;
-            target.draw(mLayer,states);
-        }
+        //states.texture = texture;
+        target.draw(mLayer,states);
     }
 }
 
@@ -149,10 +124,30 @@ void Layer::setVisible(bool visible)
 ////////////////////////////////////////////////////////////
 void Layer::setTile(int x, int y, Tile tile)
 {
-    if (x >= 0 && x < mWidth && y >= 0 && y < mHeight)
+    if (x >= 0 && x < mWidth && y >= 0 && y < mHeight && mMap != nullptr)
     {
         mTiles[x][y] = tile;
-        // Update it
+
+        int idInLayer = (x + y * mWidth) * 4;
+        Tileset::Ptr tileset = mMap->getTileset(tile.gid);
+
+        if(idInLayer >= 0 && idInLayer < static_cast<int>(mLayer.getVertexCount()) && tileset != nullptr)
+        {
+            int tileWidth = tileset->getTileWidth();
+            int tileHeight = tileset->getTileHeight();
+            sf::IntRect tRect = tileset->getTextureRect(tile.gid);
+
+            sf::Vertex* quad = &mLayer[idInLayer];
+            quad[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
+            quad[1].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight());
+            quad[2].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight() + tileHeight);
+            quad[3].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight() + tileHeight);
+
+            quad[0].texCoords = sf::Vector2f(tRect.left, tRect.top);
+            quad[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
+            quad[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
+            quad[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
+        }
     }
 }
 
