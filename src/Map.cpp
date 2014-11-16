@@ -130,9 +130,36 @@ Tileset::Ptr Map::getTileset(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
+Layer::Ptr Map::getLayer(int id)
+{
+    int i = 0;
+    for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)
+    {
+        if (id == i)
+        {
+            return itr->second;
+        }
+        i++;
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////
 Layer::Ptr Map::getLayer(std::string const& name)
 {
     return (mLayers.find(name) != mLayers.end()) ? mLayers[name] : nullptr;
+}
+
+////////////////////////////////////////////////////////////
+int Map::getLayerCount() const
+{
+    return mLayers.size();
+}
+
+////////////////////////////////////////////////////////////
+int Map::getTilesetCount() const
+{
+    return mTilesets.size();
 }
 
 ////////////////////////////////////////////////////////////
@@ -257,11 +284,6 @@ bool Map::parseTileset(pugi::xml_node node)
 {
     Tileset::Ptr tileset = std::shared_ptr<Tileset>(new Tileset(this));
 
-    if (!node.attribute("firstgid"))
-    {
-        return false;
-    }
-
     tileset->setFirstGid(node.attribute("firstgid").as_int());
 
     pugi::xml_attribute source = node.attribute("source");
@@ -270,10 +292,7 @@ bool Map::parseTileset(pugi::xml_node node)
         pugi::xml_document tsx;
         if (!tsx.load_file(std::string(getDirectory(mFilename) + source.as_string()).c_str()))
         {
-            if (!tsx.load_file(std::string(source.as_string()).c_str()))
-            {
-                return false;
-            }
+            return false;
         }
         node = tsx.child("tileset");
     }
@@ -304,15 +323,8 @@ bool Map::parseTileset(pugi::xml_node node)
             {
                 if (!tileset->load(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
                 {
-                    if (!tileset->load((n.attribute("source").as_string())))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-            }
-            else
-            {
-                return false;
             }
         }
         else if (nName == "terraintypes")
@@ -468,12 +480,14 @@ bool Map::parseLayer(pugi::xml_node node)
         }
     }
 
+    mLayers[layer->getName()] = layer;
+
     return true;
 }
 
 ////////////////////////////////////////////////////////////
 std::string Map::getDirectory(std::string const& filename)
 {
-    return (filename.rfind("/") != std::string::npos) ? filename.substr(0, filename.rfind("/")) : "";
+    return filename.substr(0, filename.find_last_of('/') + 1);
 }
 

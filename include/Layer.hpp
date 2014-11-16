@@ -45,6 +45,9 @@ class Layer : public Properties, public sf::Transformable
         bool isVisible() const;
         Tile getTile(int x, int y) const;
 
+        std::vector<std::vector<Tile>> getTiles() const;
+        std::vector<std::vector<int>> getTilesIds() const;
+
         void setName(std::string const& name);
         void setX(int x);
         void setY(int y);
@@ -54,11 +57,16 @@ class Layer : public Properties, public sf::Transformable
         void setVisible(bool visible);
         void setTile(int x, int y, Tile tile);
 
+        void setTiles(std::vector<std::vector<Tile>> const& tiles);
+        void setTilesIds(std::vector<std::vector<int>> const& tiles);
+
     private:
         void resize();
 
     private:
         Map* mMap;
+
+        Tileset::Ptr mTileset;
 
         std::vector<std::vector<Tile>> mTiles;
         sf::VertexArray mLayer;

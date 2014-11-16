@@ -8,19 +8,14 @@ Image::Image() : mTexture(nullptr)
 ////////////////////////////////////////////////////////////
 bool Image::load(std::string const& filename)
 {
-    std::string file = filename;
-    if (file == "")
-    {
-        file = mSource;
-    }
+    mSource = filename;
 
     sf::Image img;
-    if (!img.loadFromFile(file))
+    if (!img.loadFromFile(mSource))
     {
         return false;
     }
-    mFormat = Image::getFormat(file);
-    mSource = file;
+    mFormat = Image::getFormat(mSource);
 
     if (mTrans != "")
     {

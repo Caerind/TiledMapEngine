@@ -54,7 +54,11 @@ class Map : public Properties, public sf::Transformable
         std::string getRenderOrder() const;
         Tileset::Ptr getTileset(int gid);
         Tileset::Ptr getTileset(std::string const& name);
+        Layer::Ptr getLayer(int id);
         Layer::Ptr getLayer(std::string const& name);
+
+        int getLayerCount() const;
+        int getTilesetCount() const;
 
         void setVersion(float version);
         void setOrientation(std::string const& orientation);

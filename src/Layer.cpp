@@ -1,6 +1,8 @@
 #include "../include/Layer.hpp"
 #include "../include/Map.hpp"
 
+#include <iostream>
+
 ////////////////////////////////////////////////////////////
 Layer::Tile::Tile()
 {
@@ -22,7 +24,13 @@ void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
     if (mVisible && mMap != nullptr)
     {
         states.transform *= getTransform();
-        //states.texture = texture;
+        if (mTileset != nullptr)
+        {
+            if (mTileset->getTexture() != nullptr)
+            {
+                states.texture = mTileset->getTexture().get();
+            }
+        }
         target.draw(mLayer,states);
     }
 }
@@ -73,6 +81,39 @@ bool Layer::isVisible() const
 Layer::Tile Layer::getTile(int x, int y) const
 {
     return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y] : Tile();
+}
+
+////////////////////////////////////////////////////////////
+std::vector<std::vector<Layer::Tile>> Layer::getTiles() const
+{
+    return mTiles;
+}
+
+////////////////////////////////////////////////////////////
+std::vector<std::vector<int>> Layer::getTilesIds() const
+{
+    unsigned int size = mTiles.size();
+    unsigned int size2 = 0;
+    if (size >= 1)
+        size2 = mTiles[0].size();
+
+    std::vector<std::vector<int>> ids;
+
+    ids.resize(size);
+    for (unsigned int i = 0; i < size; i++)
+    {
+        ids[i].resize(size2);
+    }
+
+    for (unsigned int j = 0; j < size; j++)
+    {
+        for (unsigned int i = 0; i < size2; i++)
+        {
+            ids[i][j] = mTiles[i][j].gid;
+        }
+    }
+
+    return ids;
 }
 
 ////////////////////////////////////////////////////////////
@@ -129,13 +170,17 @@ void Layer::setTile(int x, int y, Tile tile)
         mTiles[x][y] = tile;
 
         int idInLayer = (x + y * mWidth) * 4;
-        Tileset::Ptr tileset = mMap->getTileset(tile.gid);
 
-        if(idInLayer >= 0 && idInLayer < static_cast<int>(mLayer.getVertexCount()) && tileset != nullptr)
+        if (mTileset == nullptr)
         {
-            int tileWidth = tileset->getTileWidth();
-            int tileHeight = tileset->getTileHeight();
-            sf::IntRect tRect = tileset->getTextureRect(tile.gid);
+            mTileset = mMap->getTileset(tile.gid);
+        }
+
+        if(idInLayer >= 0 && idInLayer < static_cast<int>(mLayer.getVertexCount()) && mTileset != nullptr)
+        {
+            int tileWidth = mTileset->getTileWidth();
+            int tileHeight = mTileset->getTileHeight();
+            sf::IntRect tRect = mTileset->getTextureRect(tile.gid);
 
             sf::Vertex* quad = &mLayer[idInLayer];
             quad[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
@@ -147,6 +192,37 @@ void Layer::setTile(int x, int y, Tile tile)
             quad[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
             quad[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
             quad[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Layer::setTiles(std::vector<std::vector<Layer::Tile>> const& tiles)
+{
+    mTiles = tiles;
+}
+
+////////////////////////////////////////////////////////////
+void Layer::setTilesIds(std::vector<std::vector<int>> const& tiles)
+{
+    unsigned int size = tiles.size();
+    unsigned int size2 = 0;
+    if (size >= 1)
+        size2 = tiles[0].size();
+
+    mTiles.resize(size);
+    for (unsigned int i = 0; i < size; i++)
+    {
+        mTiles[i].resize(size2);
+    }
+
+    for (unsigned int j = 0; j < size; j++)
+    {
+        for (unsigned int i = 0; i < size2; i++)
+        {
+            Tile t;
+            t.gid = tiles[i][j];
+            mTiles[i][j] = t;
         }
     }
 }
