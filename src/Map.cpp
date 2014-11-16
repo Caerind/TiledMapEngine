@@ -354,6 +354,120 @@ bool Map::parseTileset(pugi::xml_node node)
 ////////////////////////////////////////////////////////////
 bool Map::parseLayer(pugi::xml_node node)
 {
+    Layer::Ptr layer = std::shared_ptr<Layer>(new Layer(this));
+
+    layer->setName(node.attribute("name").as_string());
+
+    pugi::xml_attribute attribute_x = node.attribute("x");
+    pugi::xml_attribute attribute_y = node.attribute("y");
+    pugi::xml_attribute attribute_width = node.attribute("width");
+    pugi::xml_attribute attribute_height = node.attribute("height");
+    pugi::xml_attribute attribute_opacity = node.attribute("opacity");
+    pugi::xml_attribute attribute_visible = node.attribute("visible");
+
+    if (attribute_x) layer->setX(attribute_x.as_int());
+    if (attribute_y) layer->setY(attribute_y.as_int());
+    if (attribute_width)
+        layer->setWidth(attribute_width.as_int());
+    else
+        layer->setWidth(getWidth());
+    if (attribute_height)
+        layer->setHeight(attribute_height.as_int());
+    else
+        layer->setHeight(getHeight());
+    if (attribute_opacity) layer->setOpacity(attribute_opacity.as_float());
+    if (attribute_visible) layer->setVisible(attribute_visible.as_bool());
+
+    for (const pugi::xml_node& n : node.children())
+    {
+        std::string nName = n.name();
+        if (nName == "properties")
+        {
+            if (!parseProperties(n,layer.get()))
+                return false;
+        }
+        else if (nName == "data")
+        {
+            std::string data = n.text().as_string();
+            Layer::Tile tile;
+            int posX;
+            int posY;
+            // Check if the encoding attribute exists in data_node
+            pugi::xml_attribute attribute_encoding = n.attribute("encoding");
+            if (attribute_encoding)
+            {
+                std::string encoding = attribute_encoding.as_string();
+
+                if (encoding == "base64") // Base64 encoding
+                {
+                    std::stringstream ss;
+                    ss << data;
+                    ss >> data;
+                    if (!ParserUtils::base64_decode(data))
+                    {
+                        return false;
+                    }
+
+                    int expectedSize = layer->getWidth() * layer->getHeight() * 4;  // number of tiles * 4 bytes = 32bits / tile
+                    std::vector<unsigned char>byteVector;  // to hold decompressed data as bytes
+                    byteVector.reserve(expectedSize);
+
+                    // Check if the compression attribute exists in data_node
+                    if (n.attribute("compression"))
+                    {
+                        if (!ParserUtils::decompressString(data))
+                        {
+                            return false;
+                        }
+                        for (std::string::iterator i = data.begin(); i != data.end(); ++i)
+                            byteVector.push_back(*i);
+                    }
+                    else
+                    {
+                        for (std::string::iterator i = data.begin(); i != data.end(); ++i)
+                            byteVector.push_back(*i);
+                    }
+
+                    for (unsigned int i = 0; i < byteVector.size() - 3 ; i += 4)
+                    {
+                        tile.gid = byteVector[i] | byteVector[i + 1] << 8 | byteVector[i + 2] << 16 | byteVector[i + 3] << 24;
+
+                        layer->setTile(posX,posY,tile);
+
+                        posX = (posX + 1) % layer->getWidth();
+                        if (posY == 0) posY++;
+                    }
+                }
+                else if (encoding == "csv") // CSV encoding
+                {
+                    std::stringstream data_stream(data);
+                    while (data_stream >> tile.gid)
+                    {
+                        if (data_stream.peek() == ',')
+                            data_stream.ignore();
+
+                        layer->setTile(posX,posY,tile);
+
+                        posX = (posX + 1) % layer->getWidth();
+                        if (posY == 0) posY++;
+                    }
+                }
+            }
+            else // Unencoded
+            {
+                for (const pugi::xml_node& tile_node : n.children("tile"))
+                {
+                    tile.gid = tile_node.attribute("gid").as_int();
+
+                    layer->setTile(posX,posY,tile);
+
+                    posX = (posX + 1) % layer->getWidth();
+                    if (posY == 0) posY++;
+                }
+            }
+        }
+    }
+
     return true;
 }
 

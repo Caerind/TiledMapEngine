@@ -14,6 +14,7 @@
 #include "../pugixml/pugixml.hpp"
 
 #include "Layer.hpp"
+#include "ParserUtils.hpp"
 #include "Properties.hpp"
 #include "Tileset.hpp"
 
