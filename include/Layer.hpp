@@ -28,6 +28,9 @@ class Layer : public Properties, public sf::Transformable
             Tile();
 
             int gid; // The global tile ID.
+
+            sf::Vertex vertices[4];
+            Tileset::Ptr tileset;
         };
 
     public:
@@ -44,6 +47,7 @@ class Layer : public Properties, public sf::Transformable
         float getOpacity() const;
         bool isVisible() const;
         Tile getTile(int x, int y) const;
+        int getTileId(int x, int y) const;
 
         std::vector<std::vector<Tile>> getTiles() const;
         std::vector<std::vector<int>> getTilesIds() const;
@@ -56,6 +60,7 @@ class Layer : public Properties, public sf::Transformable
         void setOpacity(float opacity);
         void setVisible(bool visible);
         void setTile(int x, int y, Tile tile);
+        void setTileId(int x, int y, int id);
 
         void setTiles(std::vector<std::vector<Tile>> const& tiles);
         void setTilesIds(std::vector<std::vector<int>> const& tiles);
@@ -66,10 +71,7 @@ class Layer : public Properties, public sf::Transformable
     private:
         Map* mMap;
 
-        Tileset::Ptr mTileset;
-
         std::vector<std::vector<Tile>> mTiles;
-        sf::VertexArray mLayer;
 
         std::string mName; // The name of the layer.
         int mX; // The x coordinate of the layer in tiles. Defaults to 0 and can no longer be changed in Tiled Qt.

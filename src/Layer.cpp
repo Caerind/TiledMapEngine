@@ -9,7 +9,7 @@ Layer::Tile::Tile()
 }
 
 ////////////////////////////////////////////////////////////
-Layer::Layer(Map* map) : mMap(map), mLayer(sf::Quads), mOpacity(1.f), mVisible(true)
+Layer::Layer(Map* map) : mMap(map), mOpacity(1.f), mVisible(true)
 {
 }
 
@@ -21,17 +21,24 @@ void Layer::update(sf::Time dt)
 ////////////////////////////////////////////////////////////
 void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
 {
-    if (mVisible && mMap != nullptr)
+    if (mVisible)
     {
         states.transform *= getTransform();
-        if (mTileset != nullptr)
+        for (int j = 0; j < mHeight; j++)
         {
-            if (mTileset->getTexture() != nullptr)
+            for (int i = 0; i < mWidth; i++)
             {
-                states.texture = mTileset->getTexture().get();
+                if (mTiles[i][j].tileset != nullptr)
+                {
+                    if (mTiles[i][j].tileset->getTexture() != nullptr)
+                    {
+                        sf::RenderStates tStates = states;
+                        tStates.texture = mTiles[i][j].tileset->getTexture().get();
+                        target.draw(mTiles[i][j].vertices, 4, sf::Quads, tStates);
+                    }
+                }
             }
         }
-        target.draw(mLayer,states);
     }
 }
 
@@ -81,6 +88,12 @@ bool Layer::isVisible() const
 Layer::Tile Layer::getTile(int x, int y) const
 {
     return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y] : Tile();
+}
+
+////////////////////////////////////////////////////////////
+int Layer::getTileId(int x, int y) const
+{
+    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y].gid : 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -167,31 +180,51 @@ void Layer::setTile(int x, int y, Tile tile)
 {
     if (x >= 0 && x < mWidth && y >= 0 && y < mHeight && mMap != nullptr)
     {
-        mTiles[x][y] = tile;
+        tile.tileset = mMap->getTileset(tile.gid);
 
-        int idInLayer = (x + y * mWidth) * 4;
-
-        if (mTileset == nullptr)
+        if(tile.tileset != nullptr)
         {
-            mTileset = mMap->getTileset(tile.gid);
+            int tileWidth = tile.tileset->getTileWidth();
+            int tileHeight = tile.tileset->getTileHeight();
+            sf::IntRect tRect = tile.tileset->getTextureRect(tile.gid);
+
+            tile.vertices[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
+            tile.vertices[1].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight());
+            tile.vertices[2].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight() + tileHeight);
+            tile.vertices[3].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight() + tileHeight);
+
+            tile.vertices[0].texCoords = sf::Vector2f(tRect.left, tRect.top);
+            tile.vertices[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
+            tile.vertices[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
+            tile.vertices[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
         }
+    }
+}
 
-        if(idInLayer >= 0 && idInLayer < static_cast<int>(mLayer.getVertexCount()) && mTileset != nullptr)
+////////////////////////////////////////////////////////////
+void Layer::setTileId(int x, int y, int id)
+{
+    if (x >= 0 && x < mWidth && y >= 0 && y < mHeight && mMap != nullptr)
+    {
+        Tile tile;
+        tile.gid = id;
+        tile.tileset = mMap->getTileset(tile.gid);
+
+        if(tile.tileset != nullptr)
         {
-            int tileWidth = mTileset->getTileWidth();
-            int tileHeight = mTileset->getTileHeight();
-            sf::IntRect tRect = mTileset->getTextureRect(tile.gid);
+            int tileWidth = tile.tileset->getTileWidth();
+            int tileHeight = tile.tileset->getTileHeight();
+            sf::IntRect tRect = tile.tileset->getTextureRect(tile.gid);
 
-            sf::Vertex* quad = &mLayer[idInLayer];
-            quad[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
-            quad[1].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight());
-            quad[2].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight() + tileHeight);
-            quad[3].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight() + tileHeight);
+            tile.vertices[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
+            tile.vertices[1].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight());
+            tile.vertices[2].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight() + tileHeight);
+            tile.vertices[3].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight() + tileHeight);
 
-            quad[0].texCoords = sf::Vector2f(tRect.left, tRect.top);
-            quad[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
-            quad[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
-            quad[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
+            tile.vertices[0].texCoords = sf::Vector2f(tRect.left, tRect.top);
+            tile.vertices[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
+            tile.vertices[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
+            tile.vertices[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
         }
     }
 }
@@ -200,6 +233,7 @@ void Layer::setTile(int x, int y, Tile tile)
 void Layer::setTiles(std::vector<std::vector<Layer::Tile>> const& tiles)
 {
     mTiles = tiles;
+    // Update tiles
 }
 
 ////////////////////////////////////////////////////////////
@@ -225,6 +259,7 @@ void Layer::setTilesIds(std::vector<std::vector<int>> const& tiles)
             mTiles[i][j] = t;
         }
     }
+    // Update tiles
 }
 
 ////////////////////////////////////////////////////////////
@@ -249,6 +284,4 @@ void Layer::resize()
             mTiles[x].pop_back();
         }
     }
-
-    mLayer.resize(mWidth * mHeight * 4);
 }

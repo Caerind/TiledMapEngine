@@ -442,9 +442,7 @@ bool Map::parseLayer(pugi::xml_node node)
 
                     for (unsigned int i = 0; i < byteVector.size() - 3 ; i += 4)
                     {
-                        tile.gid = byteVector[i] | byteVector[i + 1] << 8 | byteVector[i + 2] << 16 | byteVector[i + 3] << 24;
-
-                        layer->setTile(posX,posY,tile);
+                        layer->setTileId(posX,posY,byteVector[i] | byteVector[i + 1] << 8 | byteVector[i + 2] << 16 | byteVector[i + 3] << 24);
 
                         posX = (posX + 1) % layer->getWidth();
                         if (posY == 0) posY++;
@@ -452,13 +450,14 @@ bool Map::parseLayer(pugi::xml_node node)
                 }
                 else if (encoding == "csv") // CSV encoding
                 {
+                    int id;
                     std::stringstream data_stream(data);
-                    while (data_stream >> tile.gid)
+                    while (data_stream >> id)
                     {
                         if (data_stream.peek() == ',')
                             data_stream.ignore();
 
-                        layer->setTile(posX,posY,tile);
+                        layer->setTileId(posX,posY,id);
 
                         posX = (posX + 1) % layer->getWidth();
                         if (posY == 0) posY++;
@@ -469,9 +468,7 @@ bool Map::parseLayer(pugi::xml_node node)
             {
                 for (const pugi::xml_node& tile_node : n.children("tile"))
                 {
-                    tile.gid = tile_node.attribute("gid").as_int();
-
-                    layer->setTile(posX,posY,tile);
+                    layer->setTileId(posX,posY,tile_node.attribute("gid").as_int());
 
                     posX = (posX + 1) % layer->getWidth();
                     if (posY == 0) posY++;
