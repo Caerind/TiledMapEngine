@@ -26,8 +26,7 @@
 
 To Do :
 
--Parser
--RenderOrder?
+-Parse Objects & ObjectGroups
 
 */
 
