@@ -1,5 +1,7 @@
 #include "../include/Tileset.hpp"
 
+#include <iostream>
+
 ////////////////////////////////////////////////////////////
 Tileset::TileOffset::TileOffset() : x(0), y(0)
 {
@@ -111,7 +113,7 @@ sf::IntRect Tileset::getTextureRect(int id) const
     sf::IntRect rect(0,0,mTileWidth,mTileHeight);
     if (id >= 0 && id < getTilesPerRow() * getTilesPerCol())
     {
-        rect.left = mMargin + ((id % getTilesPerRow()) - 1) * (mTileWidth + mSpacing);
+        rect.left = mMargin + (id % getTilesPerRow() - 1) * (mTileWidth + mSpacing);
         rect.top = mMargin + (id / getTilesPerRow()) * (mTileHeight + mSpacing);
     }
     return rect;
@@ -172,19 +174,20 @@ void Tileset::addTile(Tileset::Tile::Ptr tile)
 int Tileset::getTilesPerRow() const
 {
     int width = getWidth() - (mMargin * 2);
+    int count;
     if (mSpacing > 0)
     {
-        int i;
         while (width > mTileWidth)
         {
             width -= mTileWidth - mSpacing;
-            i++;
+            count++;
         }
-        return i;
+        return count;
     }
     else
     {
-        return width / mTileWidth;
+        count = width / mTileWidth;
+        return count;
     }
 }
 
