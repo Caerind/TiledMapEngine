@@ -97,8 +97,6 @@ void ImageLayer::setVisible(bool visible)
 ////////////////////////////////////////////////////////////
 void ImageLayer::update()
 {
-    std::cout << mX << std::endl << mY << std::endl << mWidth << std::endl << mHeight << std::endl << std::endl;
-
     mVertices[0].position = sf::Vector2f(mX, mY);
     mVertices[1].position = sf::Vector2f(mX+mWidth,mY);
     mVertices[2].position = sf::Vector2f(mX+mWidth,mY+mHeight);

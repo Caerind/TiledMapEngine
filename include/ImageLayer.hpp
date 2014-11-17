@@ -8,8 +8,6 @@
 #include "ILayer.hpp"
 #include "Image.hpp"
 
-#include <iostream>
-
 /*
 
 To Do :
