@@ -25,7 +25,7 @@ class Manager : public sf::Transformable
         Manager();
         ~Manager();
 
-        void render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
+        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
         bool loadMap(std::string const& filename);
         Map::Ptr getMap(std::string const& filename);

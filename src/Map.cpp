@@ -38,7 +38,7 @@ bool Map::loadFromFile(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
+void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
     if (layer == 0 && mBackgroundColor != "")
@@ -48,9 +48,15 @@ void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates 
         background.setFillColor(Image::getColor(mBackgroundColor));
         target.draw(background,states);
     }
-    if (getLayer(layer) != nullptr)
+    for (int i = 0; i < getILayerCount(); i++)
     {
-        getLayer(layer)->render(target,states);
+        if (i == layer)
+        {
+            if (mILayers[i] != nullptr)
+            {
+                mILayers[i]->render(target,states);
+            }
+        }
     }
 }
 
@@ -143,6 +149,29 @@ Layer::Ptr Map::getLayer(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
+ImageLayer::Ptr Map::getImageLayer(int id)
+{
+    if (id >= getImageLayerCount())
+        return nullptr;
+    int i = 0;
+    for (auto itr = mImageLayers.begin(); itr != mImageLayers.end(); itr++)
+    {
+        if (id == i)
+        {
+            return itr->second;
+        }
+        i++;
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////
+ImageLayer::Ptr Map::getImageLayer(std::string const& name)
+{
+    return (mImageLayers.find(name) != mImageLayers.end()) ? mImageLayers[name] : nullptr;
+}
+
+////////////////////////////////////////////////////////////
 int Map::getLayerCount() const
 {
     return mLayers.size();
@@ -152,6 +181,18 @@ int Map::getLayerCount() const
 int Map::getTilesetCount() const
 {
     return mTilesets.size();
+}
+
+////////////////////////////////////////////////////////////
+int Map::getImageLayerCount() const
+{
+    return mImageLayers.size();
+}
+
+////////////////////////////////////////////////////////////
+int Map::getILayerCount() const
+{
+    return mILayers.size();
 }
 
 ////////////////////////////////////////////////////////////
@@ -217,6 +258,17 @@ void Map::setLayer(Layer::Ptr layer)
     if (layer != nullptr)
     {
     	mLayers[layer->getName()] = layer;
+    	mILayers.push_back(layer);
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::setImageLayer(ImageLayer::Ptr layer)
+{
+    if (layer != nullptr)
+    {
+    	mImageLayers[layer->getName()] = layer;
+    	mILayers.push_back(layer);
     }
 }
 
@@ -247,6 +299,9 @@ bool Map::parseMap(pugi::xml_node node)
                 return false;
         if (nName == "layer")
             if (!parseLayer(n))
+                return false;
+        if (nName == "imagelayer")
+            if (!parseImageLayer(n))
                 return false;
     }
 
@@ -469,8 +524,48 @@ bool Map::parseLayer(pugi::xml_node node)
         }
     }
 
-    mLayers[layer->getName()] = layer;
+    setLayer(layer);
+    return true;
+}
 
+////////////////////////////////////////////////////////////
+bool Map::parseImageLayer(pugi::xml_node node)
+{
+    ImageLayer::Ptr layer = std::shared_ptr<ImageLayer>(new ImageLayer(this));
+
+    layer->setName(node.attribute("name").as_string());
+
+    pugi::xml_attribute attribute_x = node.attribute("x");
+    pugi::xml_attribute attribute_y = node.attribute("y");
+    pugi::xml_attribute attribute_opacity = node.attribute("opacity");
+    pugi::xml_attribute attribute_visible = node.attribute("visible");
+
+    if (attribute_x) layer->setX(attribute_x.as_int());
+    if (attribute_y) layer->setY(attribute_y.as_int());
+    if (attribute_opacity) layer->setOpacity(attribute_opacity.as_float());
+    if (attribute_visible) layer->setVisible(attribute_visible.as_bool());
+
+    for (const pugi::xml_node& n : node.children())
+    {
+        std::string nName = n.name();
+        if (nName == "properties")
+        {
+            if (!parseProperties(n,layer.get()))
+                return false;
+        }
+        else if (nName == "image")
+        {
+            if (n.attribute("source"))
+            {
+                if (!layer->loadFromFile(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    setImageLayer(layer);
     return true;
 }
 

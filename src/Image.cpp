@@ -1,7 +1,8 @@
 #include "../include/Image.hpp"
+#include "../include/Map.hpp"
 
 ////////////////////////////////////////////////////////////
-Image::Image() : mTexture(nullptr)
+Image::Image(Map* map) : mMap(map), mTexture(nullptr)
 {
 }
 

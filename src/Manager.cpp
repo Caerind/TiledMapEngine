@@ -11,7 +11,7 @@ Manager::~Manager()
 }
 
 ////////////////////////////////////////////////////////////
-void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
+void Manager::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
     for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)

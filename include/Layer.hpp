@@ -2,25 +2,30 @@
 #define TME_LAYER_HPP
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/System/Time.hpp>
 
-#include "Properties.hpp"
+#include "ILayer.hpp"
 #include "Tileset.hpp"
+
+/*
+
+To Do :
+
+-Opacity
+
+*/
 
 class Map;
 
-class Layer : public Properties, public sf::Transformable
+class Layer : public ILayer, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<Layer> Ptr;

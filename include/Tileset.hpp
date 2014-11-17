@@ -112,8 +112,6 @@ class Tileset : public Image, public Properties
         int getTilesPerCol() const;
 
     private:
-        Map* mMap;
-
         int mFirstGid; // The first global tile ID of this tileset (this global ID maps to the first tile in this tileset).
         //std::string mSource; // If this tileset is stored in an external TSX (Tile Set XML) file, this attribute refers to that file. That TSX file has the same structure as the <tileset> element described here. (There is the firstgid attribute missing and this source attribute is also not there. These two attributes are kept in the TMX map, since they are map specific.)
         std::string mName; // The name of this tileset.

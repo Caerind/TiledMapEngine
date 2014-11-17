@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -12,6 +13,8 @@
 
 #include "../extlibs/pugixml/pugixml.hpp"
 
+#include "ILayer.hpp"
+#include "ImageLayer.hpp"
 #include "Layer.hpp"
 #include "ParserUtils.hpp"
 #include "Properties.hpp"
@@ -40,7 +43,7 @@ class Map : public Properties, public sf::Transformable
 
         bool loadFromFile(std::string const& filename);
 
-        void render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
+        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
         float getVersion() const;
         std::string getOrientation() const;
@@ -54,9 +57,14 @@ class Map : public Properties, public sf::Transformable
         Tileset::Ptr getTileset(std::string const& name);
         Layer::Ptr getLayer(int id);
         Layer::Ptr getLayer(std::string const& name);
+        ImageLayer::Ptr getImageLayer(int id);
+        ImageLayer::Ptr getImageLayer(std::string const& name);
 
         int getLayerCount() const;
         int getTilesetCount() const;
+        int getImageLayerCount() const;
+        //int getObjectGroupCount() const;
+        int getILayerCount() const;
 
         void setVersion(float version);
         void setOrientation(std::string const& orientation);
@@ -68,12 +76,15 @@ class Map : public Properties, public sf::Transformable
         void setRenderOrder(std::string const& renderOrder);
         void setTileset(Tileset::Ptr tileset);
         void setLayer(Layer::Ptr layer);
+        void setImageLayer(ImageLayer::Ptr image);
 
     private:
         bool parseMap(pugi::xml_node node);
         bool parseProperties(pugi::xml_node node, Properties* properties);
         bool parseTileset(pugi::xml_node node); // Including Image
         bool parseLayer(pugi::xml_node node); // Including Tiles
+        bool parseImageLayer(pugi::xml_node node); // Including Image
+        //bool parseObejctGroup(pugi::xml_node node);
 
     private:
         static std::string getDirectory(std::string const& filename);
@@ -94,7 +105,9 @@ class Map : public Properties, public sf::Transformable
         std::map<std::string,Tileset::Ptr> mTilesets;
         std::map<std::string,Layer::Ptr> mLayers;
         //std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
-        //std::map<std::string,ImageLayer::Ptr> mImageLayers;
+        std::map<std::string,ImageLayer::Ptr> mImageLayers;
+
+        std::vector<ILayer::Ptr> mILayers;
 };
 
 #endif // TME_MAP_HPP

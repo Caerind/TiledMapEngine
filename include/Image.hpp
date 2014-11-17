@@ -18,6 +18,7 @@ To Do :
 
 */
 
+class Map;
 
 class Image
 {
@@ -33,7 +34,7 @@ class Image
         */
 
     public:
-        Image();
+        Image(Map* map);
 
         bool load(std::string const& filename = "");
 
@@ -57,6 +58,8 @@ class Image
         static std::string getString(sf::Color rgbColor);
 
     protected:
+        Map* mMap;
+
         TexturePtr mTexture;
 
         std::string mFormat; // Used for embedded images, in combination with a data child element. Valid values are file extensions like png, gif, jpg, bmp, etc. (since 0.9.0)

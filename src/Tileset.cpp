@@ -47,7 +47,7 @@ void Tileset::Tile::setProbability(float probability)
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::Tileset(Map* map) : mMap(map)
+Tileset::Tileset(Map* map) : Image(map)
 {
 }
 
