@@ -16,6 +16,8 @@
 #include "ILayer.hpp"
 #include "ImageLayer.hpp"
 #include "Layer.hpp"
+#include "Object.hpp"
+#include "ObjectGroup.hpp"
 #include "ParserUtils.hpp"
 #include "Properties.hpp"
 #include "Tileset.hpp"
@@ -63,7 +65,7 @@ class Map : public Properties, public sf::Transformable
         int getLayerCount() const;
         int getTilesetCount() const;
         int getImageLayerCount() const;
-        //int getObjectGroupCount() const;
+        int getObjectGroupCount() const;
         int getILayerCount() const;
 
         void setVersion(float version);
@@ -84,7 +86,7 @@ class Map : public Properties, public sf::Transformable
         bool parseTileset(pugi::xml_node node); // Including Image
         bool parseLayer(pugi::xml_node node); // Including Tiles
         bool parseImageLayer(pugi::xml_node node); // Including Image
-        //bool parseObejctGroup(pugi::xml_node node);
+        bool parseObejctGroup(pugi::xml_node node); // Including Objects
 
     private:
         static std::string getDirectory(std::string const& filename);
@@ -104,7 +106,7 @@ class Map : public Properties, public sf::Transformable
 
         std::map<std::string,Tileset::Ptr> mTilesets;
         std::map<std::string,Layer::Ptr> mLayers;
-        //std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
+        std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
         std::map<std::string,ImageLayer::Ptr> mImageLayers;
 
         std::vector<ILayer::Ptr> mILayers;
