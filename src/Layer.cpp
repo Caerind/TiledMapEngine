@@ -204,29 +204,9 @@ void Layer::setTile(int x, int y, Tile tile)
 ////////////////////////////////////////////////////////////
 void Layer::setTileId(int x, int y, int id)
 {
-    if (x >= 0 && x < mWidth && y >= 0 && y < mHeight && mMap != nullptr)
-    {
-        Tile tile;
-        tile.gid = id;
-        tile.tileset = mMap->getTileset(tile.gid);
-
-        if(tile.tileset != nullptr)
-        {
-            int tileWidth = tile.tileset->getTileWidth();
-            int tileHeight = tile.tileset->getTileHeight();
-            sf::IntRect tRect = tile.tileset->getTextureRect(tile.gid);
-
-            tile.vertices[0].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight());
-            tile.vertices[1].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight());
-            tile.vertices[2].position = sf::Vector2f(x * mMap->getTileWidth() + tileWidth, y * mMap->getTileHeight() + tileHeight);
-            tile.vertices[3].position = sf::Vector2f(x * mMap->getTileWidth(), y * mMap->getTileHeight() + tileHeight);
-
-            tile.vertices[0].texCoords = sf::Vector2f(tRect.left, tRect.top);
-            tile.vertices[1].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top);
-            tile.vertices[2].texCoords = sf::Vector2f(tRect.left + tileWidth, tRect.top + tileHeight);
-            tile.vertices[3].texCoords = sf::Vector2f(tRect.left, tRect.top + tileHeight);
-        }
-    }
+    Tile tile;
+    tile.gid = id;
+    setTile(x,y,tile);
 }
 
 ////////////////////////////////////////////////////////////

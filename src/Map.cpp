@@ -402,8 +402,8 @@ bool Map::parseLayer(pugi::xml_node node)
         {
             std::string data = n.text().as_string();
             Layer::Tile tile;
-            int posX;
-            int posY;
+            int posX = 0;
+            int posY = 0;
             // Check if the encoding attribute exists in data_node
             pugi::xml_attribute attribute_encoding = n.attribute("encoding");
             if (attribute_encoding)

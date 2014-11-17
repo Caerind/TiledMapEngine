@@ -1,6 +1,7 @@
 #ifndef TME_MAP_HPP
 #define TME_MAP_HPP
 
+#include <iostream>
 #include <map>
 #include <memory>
 #include <string>
