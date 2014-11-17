@@ -1,6 +1,7 @@
 #ifndef TME_LAYER_HPP
 #define TME_LAYER_HPP
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,6 +24,7 @@ class Layer : public Properties, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<Layer> Ptr;
+        typedef std::pair<int,int> Pos;
 
         class Tile : public sf::Drawable, public sf::Transformable
         {
@@ -48,6 +50,8 @@ class Layer : public Properties, public sf::Transformable
                 Tileset::Ptr mTileset;
         };
 
+        typedef std::map<Pos,Tile> TileMap;
+
     public:
         Layer(Map* map);
 
@@ -61,11 +65,11 @@ class Layer : public Properties, public sf::Transformable
         int getHeight() const;
         float getOpacity() const;
         bool isVisible() const;
-        Tile getTile(int x, int y) const;
-        int getTileId(int x, int y) const;
+        Tile getTile(int x, int y);
+        int getTileId(int x, int y);
 
-        std::vector<std::vector<Tile>> getTiles() const;
-        std::vector<std::vector<int>> getTilesIds() const;
+        TileMap getTiles() const;
+        std::map<Pos,int> getTilesIds();
 
         void setName(std::string const& name);
         void setX(int x);
@@ -77,16 +81,13 @@ class Layer : public Properties, public sf::Transformable
         void setTile(int x, int y, Tile tile);
         void setTileId(int x, int y, int id);
 
-        void setTiles(std::vector<std::vector<Tile>> const& tiles);
-        void setTilesIds(std::vector<std::vector<int>> const& tiles);
-
-    private:
-        void resize();
+        void setTiles(TileMap const& tiles);
+        void setTilesIds(std::map<Pos,int> const& tiles);
 
     private:
         Map* mMap;
 
-        std::vector<std::vector<Tile>> mTiles;
+        TileMap mTiles;
 
         std::string mName; // The name of the layer.
         int mX; // The x coordinate of the layer in tiles. Defaults to 0 and can no longer be changed in Tiled Qt.

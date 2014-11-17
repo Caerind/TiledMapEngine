@@ -38,8 +38,6 @@ void Layer::Tile::setTilePos(int x, int y, int width, int height)
     mVertices[3].position = sf::Vector2f(x, y + height);
 }
 
-
-
 ////////////////////////////////////////////////////////////
 int Layer::Tile::getId() const
 {
@@ -100,7 +98,7 @@ void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
         {
             for (int i = 0; i < mWidth; i++)
             {
-                target.draw(mTiles[i][j]);
+                target.draw(mTiles[Layer::Pos(i,j)]);
             }
         }
     }
@@ -149,48 +147,35 @@ bool Layer::isVisible() const
 }
 
 ////////////////////////////////////////////////////////////
-Layer::Tile Layer::getTile(int x, int y) const
+Layer::Tile Layer::getTile(int x, int y)
 {
-    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y] : Tile();
+    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[Layer::Pos(x,y)] : Tile();
 }
 
 ////////////////////////////////////////////////////////////
-int Layer::getTileId(int x, int y) const
+int Layer::getTileId(int x, int y)
 {
-    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[x][y].getId() : 0;
+    return (x >= 0 && x < mWidth && y >= 0 && y < mHeight) ? mTiles[Layer::Pos(x,y)].getId() : 0;
 }
 
 ////////////////////////////////////////////////////////////
-std::vector<std::vector<Layer::Tile>> Layer::getTiles() const
+Layer::TileMap Layer::getTiles() const
 {
     return mTiles;
 }
 
 ////////////////////////////////////////////////////////////
-std::vector<std::vector<int>> Layer::getTilesIds() const
+std::map<Layer::Pos,int> Layer::getTilesIds()
 {
-    unsigned int size = mTiles.size();
-    unsigned int size2 = 0;
-    if (size >= 1)
-        size2 = mTiles[0].size();
-
-    std::vector<std::vector<int>> ids;
-
-    ids.resize(size);
-    for (unsigned int i = 0; i < size; i++)
+    std::map<Layer::Pos,int> map;
+    for (int i = 0; i < mWidth; i++)
     {
-        ids[i].resize(size2);
-    }
-
-    for (unsigned int j = 0; j < size; j++)
-    {
-        for (unsigned int i = 0; i < size2; i++)
+        for (int j = 0; j < mHeight; j++)
         {
-            ids[i][j] = mTiles[i][j].getId();
+            map[Layer::Pos(i,j)] = mTiles[Layer::Pos(i,j)].getId();
         }
     }
-
-    return ids;
+    return map;
 }
 
 ////////////////////////////////////////////////////////////
@@ -217,14 +202,12 @@ void Layer::setY(int y)
 void Layer::setWidth(int width)
 {
     mWidth = width;
-    resize();
 }
 
 ////////////////////////////////////////////////////////////
 void Layer::setHeight(int height)
 {
     mHeight = height;
-    resize();
 }
 
 ////////////////////////////////////////////////////////////
@@ -244,11 +227,36 @@ void Layer::setTile(int x, int y, Tile tile)
 {
     if (x >= 0 && x < mWidth && y >= 0 && y < mHeight)
     {
-        if(tile.getTileset() != nullptr)
+        if(tile.getTileset() != nullptr && mMap != nullptr)
         {
-            tile.setTilePos(x * mMap->getTileWidth(), y * mMap->getTileHeight(), tile.getTileset()->getTileWidth(), tile.getTileset()->getTileHeight());
+            int mapTileWidth = mMap->getTileWidth();
+            int mapTileHeight = mMap->getTileHeight();
+            int width = tile.getTileset()->getTileWidth();
+            int height = tile.getTileset()->getTileHeight();
 
-            mTiles[x][y] = tile;
+            if (mMap->getOrientation() == "orthogonal")
+            {
+                tile.setTilePos(x * mapTileWidth, y * mapTileHeight, width, height);
+            }
+            else if (mMap->getOrientation() == "isometric")
+            {
+                tile.setTilePos((x-y) * mapTileWidth * 0.5,(x+y) * mapTileHeight * 0.5,width,height);
+            }
+            else if (mMap->getOrientation() == "staggered")
+            {
+                int posX;
+                if ((y % 2) == 0)
+                {
+                    posX = x * mapTileWidth;
+                }
+                else
+                {
+                    posX = x * mapTileWidth + mapTileWidth /2;
+                }
+                tile.setTilePos(posX,y * mapTileHeight / 2,width,height);
+            }
+
+            mTiles[Layer::Pos(x,y)] = tile;
         }
     }
 }
@@ -265,37 +273,14 @@ void Layer::setTileId(int x, int y, int id)
 }
 
 ////////////////////////////////////////////////////////////
-void Layer::setTiles(std::vector<std::vector<Layer::Tile>> const& tiles)
+void Layer::setTiles(Layer::TileMap const& tiles)
 {
-    // Update Tiles
-}
-
-////////////////////////////////////////////////////////////
-void Layer::setTilesIds(std::vector<std::vector<int>> const& tiles)
-{
+    mTiles = tiles;
     // Update tiles
 }
 
 ////////////////////////////////////////////////////////////
-void Layer::resize()
+void Layer::setTilesIds(std::map<Layer::Pos,int> const& tiles)
 {
-    while (mTiles.size() < static_cast<unsigned int>(mWidth))
-    {
-        mTiles.push_back(std::vector<Layer::Tile>(mHeight));
-    }
-    while (mTiles.size() > static_cast<unsigned int>(mWidth))
-    {
-        mTiles.pop_back();
-    }
-    for (unsigned int x = 0; x < static_cast<unsigned int>(mWidth); x++)
-    {
-        while (mTiles[x].size() < static_cast<unsigned int>(mHeight))
-        {
-            mTiles[x].push_back(Layer::Tile());
-        }
-        while (mTiles[x].size() > static_cast<unsigned int>(mHeight))
-        {
-            mTiles[x].pop_back();
-        }
-    }
+    // Update tiles
 }
