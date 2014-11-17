@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Time.hpp>
 
-#include "../pugixml/pugixml.hpp"
+#include "../extlibs/pugixml/pugixml.hpp"
 
 #include "Layer.hpp"
 #include "ParserUtils.hpp"
