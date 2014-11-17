@@ -1,9 +1,6 @@
 #include "../include/Layer.hpp"
 #include "../include/Map.hpp"
 
-#include <iostream>
-#include <SFML/System/Sleep.hpp>
-
 ////////////////////////////////////////////////////////////
 // LAYER::TILE                                            //
 ////////////////////////////////////////////////////////////

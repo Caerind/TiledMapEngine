@@ -38,11 +38,6 @@ bool Map::loadFromFile(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-void Map::update(sf::Time dt)
-{
-}
-
-////////////////////////////////////////////////////////////
 void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();

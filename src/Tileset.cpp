@@ -1,7 +1,5 @@
 #include "../include/Tileset.hpp"
 
-#include <iostream>
-
 ////////////////////////////////////////////////////////////
 Tileset::TileOffset::TileOffset() : x(0), y(0)
 {
@@ -111,9 +109,10 @@ int Tileset::getLastGid() const
 sf::IntRect Tileset::getTextureRect(int id) const
 {
     sf::IntRect rect(0,0,mTileWidth,mTileHeight);
+    id -= mFirstGid;
     if (id >= 0 && id < getTilesPerRow() * getTilesPerCol())
     {
-        rect.left = mMargin + (id % getTilesPerRow() - 1) * (mTileWidth + mSpacing);
+        rect.left = mMargin + (id % getTilesPerRow()) * (mTileWidth + mSpacing);
         rect.top = mMargin + (id / getTilesPerRow()) * (mTileHeight + mSpacing);
     }
     return rect;
@@ -174,39 +173,38 @@ void Tileset::addTile(Tileset::Tile::Ptr tile)
 int Tileset::getTilesPerRow() const
 {
     int width = getWidth() - (mMargin * 2);
-    int count;
-    if (mSpacing > 0)
+    int fWidth = 0;
+    if (mSpacing != 0)
     {
-        while (width > mTileWidth)
+        for (int i = 0; i <= width;)
         {
-            width -= mTileWidth - mSpacing;
-            count++;
+            i += mTileWidth + mSpacing;
+            fWidth += mTileWidth;
         }
-        return count;
     }
     else
     {
-        count = width / mTileWidth;
-        return count;
+        fWidth = width;
     }
+    return (fWidth / mTileWidth);
 }
 
 ////////////////////////////////////////////////////////////
 int Tileset::getTilesPerCol() const
 {
     int height = getHeight() - (mMargin * 2);
-    if (mSpacing > 0)
+    int fHeight = 0;
+    if (mSpacing != 0)
     {
-        int j;
-        while (height > mTileHeight)
+        for (int i = 0; i <= height;)
         {
-            height -= mTileHeight - mSpacing;
-            j++;
+            i += mTileHeight + mSpacing;
+            fHeight += mTileHeight;
         }
-        return j;
     }
     else
     {
-        return height / mTileHeight;
+        fHeight = height;
     }
+    return (fHeight / mTileHeight);
 }

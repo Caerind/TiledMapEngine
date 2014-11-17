@@ -1,7 +1,6 @@
 #ifndef TME_MAP_HPP
 #define TME_MAP_HPP
 
-#include <iostream>
 #include <map>
 #include <memory>
 #include <string>
@@ -10,7 +9,6 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <SFML/System/Time.hpp>
 
 #include "../extlibs/pugixml/pugixml.hpp"
 
@@ -42,7 +40,6 @@ class Map : public Properties, public sf::Transformable
 
         bool loadFromFile(std::string const& filename);
 
-        void update(sf::Time dt);
         void render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
         float getVersion() const;

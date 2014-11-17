@@ -8,7 +8,6 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <SFML/System/Time.hpp>
 
 #include "Map.hpp"
 
@@ -26,7 +25,6 @@ class Manager : public sf::Transformable
         Manager();
         ~Manager();
 
-        void update(sf::Time dt);
         void render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
         bool loadMap(std::string const& filename);

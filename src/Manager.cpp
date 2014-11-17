@@ -11,15 +11,6 @@ Manager::~Manager()
 }
 
 ////////////////////////////////////////////////////////////
-void Manager::update(sf::Time dt)
-{
-    for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
-    {
-        itr->second->update(dt);
-    }
-}
-
-////////////////////////////////////////////////////////////
 void Manager::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
