@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -23,14 +24,28 @@ class Layer : public Properties, public sf::Transformable
     public:
         typedef std::shared_ptr<Layer> Ptr;
 
-        struct Tile
+        class Tile : public sf::Drawable, public sf::Transformable
         {
-            Tile();
+            public:
+                Tile();
 
-            int gid; // The global tile ID.
+                void load(Map* map, int id);
+                void setTilePos(int x, int y, int width, int height);
 
-            sf::Vertex vertices[4];
-            Tileset::Ptr tileset;
+                int getId() const;
+                void setId(int id);
+
+                Tileset::Ptr getTileset() const;
+                void setTileset(Tileset::Ptr tileset);
+
+            private:
+                virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+            private:
+                int mId; // The global tile ID.
+
+                sf::Vertex mVertices[4];
+                Tileset::Ptr mTileset;
         };
 
     public:

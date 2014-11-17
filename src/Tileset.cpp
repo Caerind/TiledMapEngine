@@ -1,7 +1,7 @@
 #include "../include/Tileset.hpp"
 
 ////////////////////////////////////////////////////////////
-Tileset::TileOffset::TileOffset()
+Tileset::TileOffset::TileOffset() : x(0), y(0)
 {
 }
 

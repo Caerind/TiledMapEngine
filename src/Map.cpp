@@ -46,21 +46,16 @@ void Map::update(sf::Time dt)
 void Map::render(unsigned int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
-    unsigned int i = 0;
-    for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)
+    if (layer == 0 && mBackgroundColor != "")
     {
-    	if (layer == i)
-    	{
-    		if (layer == 0 && mBackgroundColor != "")
-    		{
-                sf::RectangleShape background;
-                background.setSize(sf::Vector2f(mWidth * mTileWidth, mHeight * mTileHeight));
-                background.setFillColor(Image::getColor(mBackgroundColor));
-                target.draw(background,states);
-    		}
-
-    		itr->second->render(target,states);
-    	}
+        sf::RectangleShape background;
+        background.setSize(sf::Vector2f(mWidth * mTileWidth, mHeight * mTileHeight));
+        background.setFillColor(Image::getColor(mBackgroundColor));
+        target.draw(background,states);
+    }
+    if (getLayer(layer) != nullptr)
+    {
+        getLayer(layer)->render(target,states);
     }
 }
 
@@ -132,6 +127,8 @@ Tileset::Ptr Map::getTileset(std::string const& name)
 ////////////////////////////////////////////////////////////
 Layer::Ptr Map::getLayer(int id)
 {
+    if (id >= getLayerCount())
+        return nullptr;
     int i = 0;
     for (auto itr = mLayers.begin(); itr != mLayers.end(); itr++)
     {
@@ -445,7 +442,7 @@ bool Map::parseLayer(pugi::xml_node node)
                         layer->setTileId(posX,posY,byteVector[i] | byteVector[i + 1] << 8 | byteVector[i + 2] << 16 | byteVector[i + 3] << 24);
 
                         posX = (posX + 1) % layer->getWidth();
-                        if (posY == 0) posY++;
+                        if (posX == 0) posY++;
                     }
                 }
                 else if (encoding == "csv") // CSV encoding
@@ -460,7 +457,7 @@ bool Map::parseLayer(pugi::xml_node node)
                         layer->setTileId(posX,posY,id);
 
                         posX = (posX + 1) % layer->getWidth();
-                        if (posY == 0) posY++;
+                        if (posX == 0) posY++;
                     }
                 }
             }
@@ -471,7 +468,7 @@ bool Map::parseLayer(pugi::xml_node node)
                     layer->setTileId(posX,posY,tile_node.attribute("gid").as_int());
 
                     posX = (posX + 1) % layer->getWidth();
-                    if (posY == 0) posY++;
+                    if (posX == 0) posY++;
                 }
             }
         }

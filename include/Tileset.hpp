@@ -16,7 +16,6 @@
 
 To Do :
 
--Understand how to use TileOffset
 -Understand how to use Terrain
 -Understand how to use TerrainTypes
 -Understand how to use Terrain member in Tile
