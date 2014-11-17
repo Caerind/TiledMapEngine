@@ -111,7 +111,7 @@ sf::IntRect Tileset::getTextureRect(int id) const
     sf::IntRect rect(0,0,mTileWidth,mTileHeight);
     if (id >= 0 && id < getTilesPerRow() * getTilesPerCol())
     {
-        rect.left = mMargin + (id % getTilesPerRow()) * (mTileWidth + mSpacing);
+        rect.left = mMargin + ((id % getTilesPerRow()) - 1) * (mTileWidth + mSpacing);
         rect.top = mMargin + (id / getTilesPerRow()) * (mTileHeight + mSpacing);
     }
     return rect;
