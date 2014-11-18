@@ -9,3 +9,17 @@ The goals of this engine are :
 - Use renderer system to easily render your game
 - Allow maps to handle collisions & triggers
 - Use QuadTree system to improve rendering & collisions
+
+
+18/11/14
+--------
+
+Feature :
+- You can load customized Tileset
+- You can render Orthogonnal, Isometric or Staggered map
+- You can load ImageLayer
+
+Working on:
+- Object & ObjectGroup
+- Image Sharing (Texture) for both Tileset & ImageLayer
+- Saving
