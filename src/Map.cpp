@@ -66,15 +66,9 @@ void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
         background.setFillColor(Image::getColor(mBackgroundColor));
         target.draw(background,states);
     }
-    for (int i = 0; i < getILayerCount(); i++)
+    if (layer >= 0 && layer < getILayerCount() && mILayers[layer] != nullptr)
     {
-        if (i == layer)
-        {
-            if (mILayers[i] != nullptr)
-            {
-                mILayers[i]->render(target,states);
-            }
-        }
+        mILayers[layer]->render(target,states);
     }
 }
 
@@ -678,6 +672,8 @@ void Map::saveTilesets(std::ofstream& stream)
             stream << "\" width=\"" << itr->second->getWidth();
             stream << "\" height=\"" << itr->second->getHeight();
             stream << "\"/>" << std::endl;
+
+            // Write Tile/Terrain/TileOffset
 
 
 

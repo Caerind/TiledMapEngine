@@ -18,7 +18,7 @@ class ILayer : public Properties, public sf::Transformable
     public:
         ILayer();
 
-        virtual void render(sf::RenderTarget& target, sf::RenderStates states) = 0;
+        virtual void render(sf::RenderTarget& target, sf::RenderStates states);
 
         virtual std::string getName() const;
         virtual void setName(std::string const& name);

@@ -6,6 +6,15 @@ ILayer::ILayer() : mName(""), mX(0), mY(0), mOpacity(1.f), mVisible(true)
 }
 
 ////////////////////////////////////////////////////////////
+void ILayer::render(sf::RenderTarget& target, sf::RenderStates states)
+{
+    if (mVisible)
+    {
+        states.transform *= getTransform();
+    }
+}
+
+////////////////////////////////////////////////////////////
 std::string ILayer::getName() const
 {
     return mName;
