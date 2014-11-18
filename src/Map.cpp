@@ -384,6 +384,10 @@ bool Map::parseTileset(pugi::xml_node node)
         }
         else if (nName == "image")
         {
+            if (n.attribute("trans"))
+            {
+                tileset->setTrans(n.attribute("trans").as_string());
+            }
             if (n.attribute("source"))
             {
                 if (!tileset->load(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
@@ -573,6 +577,10 @@ bool Map::parseImageLayer(pugi::xml_node node)
         }
         else if (nName == "image")
         {
+            if (n.attribute("trans"))
+            {
+                layer->setTrans(n.attribute("trans").as_string());
+            }
             if (n.attribute("source"))
             {
                 if (!layer->loadFromFile(std::string(getDirectory(mFilename) + n.attribute("source").as_string())))
@@ -601,9 +609,19 @@ bool Map::saveMap(std::string const& filename)
 
     // Open Map Node
     file << "<map version=\"" << mVersion << "\" orientation=\"" << mOrientation << "\" width=\"" << mWidth << "\" height=\"" << mHeight << "\"";
-    file << " tilewidth=\"" << mTileWidth << "\" tileheight=\"" << mTileHeight << "\" backgroundcolor=\"" << mBackgroundColor << "\" renderorder=\"" << mRenderOrder << "\">" << std::endl;
+    file << " tilewidth=\"" << mTileWidth << "\" tileheight=\"" << mTileHeight;
+    if (mBackgroundColor != "")
+    {
+        file << "\" backgroundcolor=\"" << mBackgroundColor;
+    }
+    if (mRenderOrder != "")
+    {
+        file << "\" renderorder=\"" << mRenderOrder;
+    }
+    file << "\">" << std::endl;
 
     int indent = 1;
+
     // Map Properties
     saveProperties(file,this,indent);
 
@@ -663,6 +681,11 @@ void Map::saveTilesets(std::ofstream& stream)
             stream << "\" margin=\"" << itr->second->getMargin();
             stream << "\">" << std::endl;
 
+            // Write TileOffset
+            stream << "  <tileoffset x=\"" << itr->second->getTileOffset().x;
+            stream << "\" y=\"" << itr->second->getTileOffset().y;
+            stream << "\"/>" << std::endl;
+
             // Write Properties
             saveProperties(stream,itr->second.get(),2);
 
@@ -673,7 +696,32 @@ void Map::saveTilesets(std::ofstream& stream)
             stream << "\" height=\"" << itr->second->getHeight();
             stream << "\"/>" << std::endl;
 
-            // Write Tile/Terrain/TileOffset
+            // Write ???
+
+            // Write Tile
+            for (int i = 0; i < itr->second->getTileCount(); i++)
+            {
+                Tileset::Tile tile = itr->second->getTileInContainer(i);
+                stream << "  <tile id=\"" << tile.getId();
+                if (tile.getTerrain() != "")
+                {
+                    stream << "\" terrain=\"" << tile.getTerrain();
+                }
+                if (tile.getProbability() != 0.0f)
+                {
+                    stream << "\" probability=\"" << tile.getProbability();
+                }
+                if(!tile.isEmpty())
+                {
+                    stream << "\">" << std::endl;
+                    saveProperties(stream,&tile,3);
+                    stream << "  </tile>" << std::endl;
+                }
+                else
+                {
+                    stream << "\"/>" << std::endl;
+                }
+            }
 
 
 

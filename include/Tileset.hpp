@@ -107,6 +107,10 @@ class Tileset : public Image, public Properties
         //void setTerrainType(TerrainTypes ttypes);
         void addTile(Tile::Ptr tile);
 
+        // Only used by Map in Saving
+        Tile getTileInContainer(int id) const;
+        int getTileCount() const;
+
     private:
         int getTilesPerRow() const;
         int getTilesPerCol() const;

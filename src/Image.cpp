@@ -2,7 +2,7 @@
 #include "../include/Map.hpp"
 
 ////////////////////////////////////////////////////////////
-Image::Image(Map* map) : mMap(map), mTexture(nullptr)
+Image::Image(Map* map) : mMap(map), mTexture(nullptr), mTrans("")
 {
 }
 

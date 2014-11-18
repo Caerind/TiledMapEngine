@@ -67,6 +67,7 @@ Properties::Property Properties::getProperty(int id) const
         {
             return Properties::Property(itr->first,itr->second);
         }
+        i++;
     }
     return Properties::Property("","");
 }

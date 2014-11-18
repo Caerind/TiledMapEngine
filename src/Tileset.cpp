@@ -6,7 +6,7 @@ Tileset::TileOffset::TileOffset() : x(0), y(0)
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::Tile::Tile()
+Tileset::Tile::Tile() : mId(0), mTerrain(""), mProbability(0.0f)
 {
 }
 
@@ -167,6 +167,31 @@ void Tileset::addTile(Tileset::Tile::Ptr tile)
     {
         mTiles[tile->getId()] = *(tile.get());
     }
+}
+
+////////////////////////////////////////////////////////////
+Tileset::Tile Tileset::getTileInContainer(int id) const
+{
+    if (id < 0 || id >= getTileCount())
+    {
+        return Tile();
+    }
+    int i = 0;
+    for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
+    {
+        if (i == id)
+        {
+            return itr->second;
+        }
+        i++;
+    }
+    return Tile();
+}
+
+////////////////////////////////////////////////////////////
+int Tileset::getTileCount() const
+{
+    return static_cast<int>(mTiles.size());
 }
 
 ////////////////////////////////////////////////////////////
