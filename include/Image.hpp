@@ -10,14 +10,6 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-/*
-
-To Do :
-
--Understand Data
-
-*/
-
 class Map;
 
 class Image

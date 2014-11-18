@@ -38,6 +38,23 @@ bool Map::loadFromFile(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
+bool Map::saveToFile(std::string const& filename)
+{
+    if (filename != "")
+    {
+        return saveMap(filename);
+    }
+    else if (filename == "" && mFilename != "")
+    {
+        return saveMap(mFilename);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+////////////////////////////////////////////////////////////
 void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
 {
     states.transform *= getTransform();
@@ -193,6 +210,12 @@ int Map::getImageLayerCount() const
 int Map::getILayerCount() const
 {
     return mILayers.size();
+}
+
+////////////////////////////////////////////////////////////
+Manager* Map::getManager() const
+{
+    return mManager;
 }
 
 ////////////////////////////////////////////////////////////
@@ -567,6 +590,12 @@ bool Map::parseImageLayer(pugi::xml_node node)
 
     setImageLayer(layer);
     return true;
+}
+
+////////////////////////////////////////////////////////////
+bool Map::saveMap(std::string const& filename)
+{
+    return false;
 }
 
 ////////////////////////////////////////////////////////////

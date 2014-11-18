@@ -2,7 +2,7 @@
 #include "../include/Map.hpp"
 
 ////////////////////////////////////////////////////////////
-ObjectGroup::ObjectGroup(Map* map) : mMap(map), mOpacity(1.f), mVisible(true)
+ObjectGroup::ObjectGroup(Map* map) : mMap(map)
 {
 }
 
@@ -12,17 +12,14 @@ void ObjectGroup::render(sf::RenderTarget& target, sf::RenderStates states)
     if (mVisible)
     {
         states.transform *= getTransform();
-        for (auto itr = mObjects.begin(); itr != mObjects.end(); itr++)
+        for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
         {
-            target.draw(*(itr->second),states);
+            if (mObjects[i] != nullptr)
+            {
+                target.draw(*mObjects[i],states);
+            }
         }
     }
-}
-
-////////////////////////////////////////////////////////////
-std::string ObjectGroup::getName() const
-{
-    return mName;
 }
 
 ////////////////////////////////////////////////////////////
@@ -32,62 +29,38 @@ std::string ObjectGroup::getColor() const
 }
 
 ////////////////////////////////////////////////////////////
-float ObjectGroup::getOpacity() const
-{
-    return mOpacity;
-}
-
-////////////////////////////////////////////////////////////
-bool ObjectGroup::isVisible() const
-{
-    return mVisible;
-}
-
-////////////////////////////////////////////////////////////
-Object::Ptr ObjectGroup::getObject(std::string const& name)
-{
-    return (mObjects.find(name) != mObjects.end()) ? mObjects[name] : nullptr;
-}
-
-////////////////////////////////////////////////////////////
-Object::Ptr ObjectGroup::getObject(int id)
-{
-    if (id >= static_cast<int>(mObjects.size()))
-        return nullptr;
-    int i = 0;
-    for (auto itr = mObjects.begin(); itr != mObjects.end(); itr++)
-    {
-        if (id == i)
-        {
-            return itr->second;
-        }
-        i++;
-    }
-    return nullptr;
-}
-
-////////////////////////////////////////////////////////////
-void ObjectGroup::setName(std::string const& name)
-{
-    mName = name;
-}
-
-////////////////////////////////////////////////////////////
 void ObjectGroup::setColor(std::string const& color)
 {
     mColor = color;
 }
 
 ////////////////////////////////////////////////////////////
-void ObjectGroup::setOpacity(float opacity)
+int ObjectGroup::getObjectCount() const
 {
-    mOpacity = opacity;
+    return static_cast<int>(mObjects.size());
 }
 
 ////////////////////////////////////////////////////////////
-void ObjectGroup::setVisible(bool visible)
+Object::Ptr ObjectGroup::getObject(std::string const& name)
 {
-    mVisible = visible;
+    for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
+    {
+        if (mObjects[i]->getName() == name)
+        {
+            return mObjects[i];
+        }
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////
+Object::Ptr ObjectGroup::getObject(int id)
+{
+    if (id >= 0 && id < static_cast<int>(mObjects.size()))
+    {
+        return mObjects[id];
+    }
+    return nullptr;
 }
 
 ////////////////////////////////////////////////////////////
@@ -95,7 +68,7 @@ void ObjectGroup::setObject(Object::Ptr object)
 {
     if (object != nullptr)
     {
-        mObjects[object->getName()] = object;
+        mObjects.push_back(object);
     }
 }
 

@@ -1,6 +1,7 @@
 #ifndef TME_MAP_HPP
 #define TME_MAP_HPP
 
+#include <fstream>
 #include <map>
 #include <memory>
 #include <string>
@@ -27,6 +28,7 @@
 To Do :
 
 -Parse Objects & ObjectGroups
+-Save
 
 */
 
@@ -43,6 +45,7 @@ class Map : public Properties, public sf::Transformable
         ~Map();
 
         bool loadFromFile(std::string const& filename);
+        bool saveToFile(std::string const& filename = "");
 
         void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
 
@@ -67,6 +70,8 @@ class Map : public Properties, public sf::Transformable
         int getObjectGroupCount() const;
         int getILayerCount() const;
 
+        Manager* getManager() const;
+
         void setVersion(float version);
         void setOrientation(std::string const& orientation);
         void setWidth(int width);
@@ -86,6 +91,9 @@ class Map : public Properties, public sf::Transformable
         bool parseLayer(pugi::xml_node node); // Including Tiles
         bool parseImageLayer(pugi::xml_node node); // Including Image
         bool parseObejctGroup(pugi::xml_node node); // Including Objects
+
+    private:
+        bool saveMap(std::string const& filename);
 
     private:
         static std::string getDirectory(std::string const& filename);
