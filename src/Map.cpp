@@ -1,7 +1,8 @@
 #include "../include/Map.hpp"
 
 ////////////////////////////////////////////////////////////
-Map::Map() : mManager(nullptr)
+Map::Map() : mManager(nullptr), mVersion(1.0f), mOrientation(""), mWidth(0), mHeight(0), mTileWidth(0), mTileHeight(0)
+, mBackgroundColor(""), mRenderOrder("")
 {
 }
 
@@ -595,7 +596,103 @@ bool Map::parseImageLayer(pugi::xml_node node)
 ////////////////////////////////////////////////////////////
 bool Map::saveMap(std::string const& filename)
 {
-    return false;
+    std::ofstream file(filename);
+    if (!file)
+    {
+        return false;
+    }
+
+    // XML Header
+    file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
+
+    // Open Map Node
+    file << "<map version=\"" << mVersion << "\" orientation=\"" << mOrientation << "\" width=\"" << mWidth << "\" height=\"" << mHeight << "\"";
+    file << " tilewidth=\"" << mTileWidth << "\" tileheight=\"" << mTileHeight << "\" backgroundcolor=\"" << mBackgroundColor << "\" renderorder=\"" << mRenderOrder << "\">" << std::endl;
+
+    int indent = 1;
+    // Map Properties
+    saveProperties(file,this,indent);
+
+    // Save All Tilesets
+    saveTilesets(file);
+
+
+
+
+
+
+
+    // End Map Node
+    file << "</map>" << std::endl;
+
+    file.close();
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveProperties(std::ofstream& stream, Properties* properties, int indent)
+{
+    if (properties != nullptr)
+    {
+        if (!properties->isEmpty())
+        {
+            addIndent(stream,indent);
+            stream << "<properties>" << std::endl;
+            for (int i = 0; i < properties->getPropertyCount(); i++)
+            {
+                Properties::Property p = properties->getProperty(i);
+                if (p.first != "")
+                {
+                    addIndent(stream,indent + 1);
+                    stream << "<property name=\"" << p.first << "\" value=\"" << p.second << "\"/>" << std::endl;
+                }
+            }
+            addIndent(stream,indent);
+            stream << "</properties>" << std::endl;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveTilesets(std::ofstream& stream)
+{
+    for (auto itr = mTilesets.begin(); itr != mTilesets.end(); itr++)
+    {
+        if (itr->second != nullptr)
+        {
+            stream << " <tileset firstgid=\"" << itr->second->getFirstGid();
+            stream << "\" name=\"" << itr->second->getName();
+            stream << "\" tilewidth=\"" << itr->second->getTileWidth();
+            stream << "\" tileheight=\"" << itr->second->getTileHeight();
+            stream << "\" spacing=\"" << itr->second->getSpacing();
+            stream << "\" margin=\"" << itr->second->getMargin();
+            stream << "\">" << std::endl;
+
+            // Write Properties
+            saveProperties(stream,itr->second.get(),2);
+
+            // Write Image
+            stream << "  <image source=\"" << itr->second->getSource();
+            stream << "\" trans=\"" << itr->second->getTrans();
+            stream << "\" width=\"" << itr->second->getWidth();
+            stream << "\" height=\"" << itr->second->getHeight();
+            stream << "\"/>" << std::endl;
+
+
+
+            stream << " </tileset>" << std::endl;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::addIndent(std::ofstream& stream, int indent)
+{
+    for (int i = 0; i < indent; i++)
+    {
+        stream << " ";
+    }
 }
 
 ////////////////////////////////////////////////////////////

@@ -8,6 +8,9 @@
 class Properties
 {
     public:
+        typedef std::pair<std::string,std::string> Property;
+
+    public:
         Properties();
 
         int getInt(std::string const& name);
@@ -18,6 +21,8 @@ class Properties
 
         bool hasProperty(std::string const& name) const;
         bool isEmpty() const;
+        int getPropertyCount() const;
+        Property getProperty(int id) const;
 
         void setProperty(std::string const& name, int value);
         void setProperty(std::string const& name, float value);

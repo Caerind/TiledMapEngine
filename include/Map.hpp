@@ -94,8 +94,11 @@ class Map : public Properties, public sf::Transformable
 
     private:
         bool saveMap(std::string const& filename);
+        void saveProperties(std::ofstream& stream, Properties* properies, int indent);
+        void saveTilesets(std::ofstream& stream);
 
     private:
+        static void addIndent(std::ofstream& stream, int indent);
         static std::string getDirectory(std::string const& filename);
 
     private:

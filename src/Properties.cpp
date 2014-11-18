@@ -48,6 +48,30 @@ bool Properties::isEmpty() const
 }
 
 ////////////////////////////////////////////////////////////
+int Properties::getPropertyCount() const
+{
+    return mProperties.size();
+}
+
+////////////////////////////////////////////////////////////
+Properties::Property Properties::getProperty(int id) const
+{
+    if (id < 0 || id >= getPropertyCount())
+    {
+        return Properties::Property("","");
+    }
+    int i = 0;
+    for (auto itr = mProperties.begin(); itr != mProperties.end(); itr++)
+    {
+        if (id == i)
+        {
+            return Properties::Property(itr->first,itr->second);
+        }
+    }
+    return Properties::Property("","");
+}
+
+////////////////////////////////////////////////////////////
 void Properties::setProperty(std::string const& name, int value)
 {
     mProperties[name] = toString<int>(value);
