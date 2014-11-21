@@ -23,3 +23,11 @@ Working on:
 - Object & ObjectGroup
 - Image Sharing (Texture) for both Tileset & ImageLayer
 - Saving
+
+
+21/11/14
+--------
+
+Added since the 18/11/14 :
+- You can save Tilesets (into .tmx only (at the moment))
+- You can save Tile Layer (Layer class)
