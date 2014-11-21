@@ -184,6 +184,29 @@ ImageLayer::Ptr Map::getImageLayer(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
+ObjectGroup::Ptr Map::getObjectGroup(int id)
+{
+    if (id >= getObjectGroupCount())
+        return nullptr;
+    int i = 0;
+    for (auto itr = mObjectGroups.begin(); itr != mObjectGroups.end(); itr++)
+    {
+        if (id == i)
+        {
+            return itr->second;
+        }
+        i++;
+    }
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////
+ObjectGroup::Ptr Map::getObjectGroup(std::string const& name)
+{
+    return (mObjectGroups.find(name) != mObjectGroups.end()) ? mObjectGroups[name] : nullptr;
+}
+
+////////////////////////////////////////////////////////////
 int Map::getLayerCount() const
 {
     return mLayers.size();
@@ -199,6 +222,12 @@ int Map::getTilesetCount() const
 int Map::getImageLayerCount() const
 {
     return mImageLayers.size();
+}
+
+////////////////////////////////////////////////////////////
+int Map::getObjectGroupCount() const
+{
+    return mObjectGroups.size();
 }
 
 ////////////////////////////////////////////////////////////
@@ -287,6 +316,16 @@ void Map::setImageLayer(ImageLayer::Ptr layer)
     {
     	mImageLayers[layer->getName()] = layer;
     	mILayers.push_back(layer);
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::setObjectGroup(ObjectGroup::Ptr group)
+{
+    if (group != nullptr)
+    {
+    	mObjectGroups[group->getName()] = group;
+    	mILayers.push_back(group);
     }
 }
 
@@ -628,11 +667,8 @@ bool Map::saveMap(std::string const& filename)
     // Save All Tilesets
     saveTilesets(file);
 
-
-
-
-
-
+    // Save Layers
+    saveLayers(file);
 
     // End Map Node
     file << "</map>" << std::endl;
@@ -673,18 +709,26 @@ void Map::saveTilesets(std::ofstream& stream)
     {
         if (itr->second != nullptr)
         {
-            stream << " <tileset firstgid=\"" << itr->second->getFirstGid();
-            stream << "\" name=\"" << itr->second->getName();
-            stream << "\" tilewidth=\"" << itr->second->getTileWidth();
-            stream << "\" tileheight=\"" << itr->second->getTileHeight();
-            stream << "\" spacing=\"" << itr->second->getSpacing();
-            stream << "\" margin=\"" << itr->second->getMargin();
-            stream << "\">" << std::endl;
+            stream << " <tileset firstgid=\"" << itr->second->getFirstGid() << "\"";
+            stream << " name=\"" << itr->second->getName() << "\"";
+            stream << " tilewidth=\"" << itr->second->getTileWidth() << "\"";
+            stream << " tileheight=\"" << itr->second->getTileHeight() << "\"";
+            if (itr->second->getSpacing() != 0)
+            {
+                stream << " spacing=\"" << itr->second->getSpacing() << "\"";
+            }
+            if (itr->second->getMargin() != 0)
+            {
+                stream << " margin=\"" << itr->second->getMargin() << "\"";
+            }
+            stream << ">" << std::endl;
 
             // Write TileOffset
-            stream << "  <tileoffset x=\"" << itr->second->getTileOffset().x;
-            stream << "\" y=\"" << itr->second->getTileOffset().y;
-            stream << "\"/>" << std::endl;
+            if (itr->second->getTileOffset().x != 0 || itr->second->getTileOffset().y != 0)
+            {   stream << "  <tileoffset x=\"" << itr->second->getTileOffset().x;
+                stream << "\" y=\"" << itr->second->getTileOffset().y;
+                stream << "\"/>" << std::endl;
+            }
 
             // Write Properties
             saveProperties(stream,itr->second.get(),2);
@@ -723,10 +767,107 @@ void Map::saveTilesets(std::ofstream& stream)
                 }
             }
 
-
-
             stream << " </tileset>" << std::endl;
         }
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveLayers(std::ofstream& stream)
+{
+    for (auto itr = mILayers.begin(); itr != mILayers.end(); itr++)
+    {
+        if ((*itr)->getLayerType() == ILayer::Layer)
+        {
+            saveLayer(stream,(*itr)->getName());
+        }
+        else if ((*itr)->getLayerType() == ILayer::ImageLayer)
+        {
+            saveImageLayer(stream,(*itr)->getName());
+        }
+        else if ((*itr)->getLayerType() == ILayer::ObjectGroup)
+        {
+            saveObjectGroup(stream,(*itr)->getName());
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveLayer(std::ofstream& stream, std::string const& name)
+{
+    Layer::Ptr layer = getLayer(name);
+    if (layer != nullptr)
+    {
+        stream << " <layer name=\"" << layer->getName() << "\"";
+        if (layer->getX() != 0)
+        {
+            stream << " x=\"" << layer->getX() << "\"";
+        }
+        if (layer->getY() != 0)
+        {
+            stream << " y=\"" << layer->getY() << "\"";
+        }
+        stream << " width=\"" << layer->getWidth() << "\"";
+        stream << " height=\"" << layer->getHeight() << "\"";
+        if (layer->getOpacity() != 1.f)
+        {
+            stream << " opacity=\"" << layer->getOpacity() << "\"";
+        }
+        if (!layer->isVisible())
+        {
+            stream << " visible=\"" << layer->isVisible() << "\"";
+        }
+        stream << ">" << std::endl;
+
+        saveProperties(stream,layer.get(),2);
+
+        stream << "  <data encoding=\"base64\" compression=\"zlib\">" << std::endl;
+
+
+        //Handle Data
+        std::string data;
+        data.reserve(layer->getWidth() * layer->getHeight() * 4);
+
+        for (int y = 0; y < layer->getHeight(); y++)
+        {
+            for (int x = 0; x < layer->getWidth(); x++)
+            {
+                const unsigned gid = layer->getTileId(x,y);
+                data.push_back((char) (gid));
+                data.push_back((char) (gid >> 8));
+                data.push_back((char) (gid >> 16));
+                data.push_back((char) (gid >> 24));
+            }
+        }
+
+        ParserUtils::compressString(data);
+        ParserUtils::base64_encode(data);
+
+        stream << "   " << data << std::endl;
+
+        stream << "  </data>" << std::endl;
+
+        stream << " </layer>" << std::endl;
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveImageLayer(std::ofstream& stream, std::string const& name)
+{
+    ImageLayer::Ptr layer = getImageLayer(name);
+    if (layer != nullptr)
+    {
+
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveObjectGroup(std::ofstream& stream, std::string const& name)
+{
+    ObjectGroup::Ptr layer = getObjectGroup(name);
+    if (layer != nullptr)
+    {
+
     }
 }
 

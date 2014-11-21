@@ -15,10 +15,20 @@ class ILayer : public Properties, public sf::Transformable
     public:
         typedef std::shared_ptr<ILayer> Ptr;
 
+        enum LayerType
+        {
+            I,
+            Layer,
+            ImageLayer,
+            ObjectGroup,
+        };
+
     public:
         ILayer();
 
         virtual void render(sf::RenderTarget& target, sf::RenderStates states);
+
+        virtual LayerType getLayerType() const;
 
         virtual std::string getName() const;
         virtual void setName(std::string const& name);
@@ -36,6 +46,7 @@ class ILayer : public Properties, public sf::Transformable
         virtual void setVisible(bool visible);
 
     protected:
+        LayerType mType;
         std::string mName;
         int mX;
         int mY;

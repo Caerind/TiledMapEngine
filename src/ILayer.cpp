@@ -1,7 +1,7 @@
 #include "../include/ILayer.hpp"
 
 ////////////////////////////////////////////////////////////
-ILayer::ILayer() : mName(""), mX(0), mY(0), mOpacity(1.f), mVisible(true)
+ILayer::ILayer() : mType(ILayer::I), mName(""), mX(0), mY(0), mOpacity(1.f), mVisible(true)
 {
 }
 
@@ -12,6 +12,12 @@ void ILayer::render(sf::RenderTarget& target, sf::RenderStates states)
     {
         states.transform *= getTransform();
     }
+}
+
+////////////////////////////////////////////////////////////
+ILayer::LayerType ILayer::getLayerType() const
+{
+    return mType;
 }
 
 ////////////////////////////////////////////////////////////

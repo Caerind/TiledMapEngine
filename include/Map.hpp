@@ -63,6 +63,8 @@ class Map : public Properties, public sf::Transformable
         Layer::Ptr getLayer(std::string const& name);
         ImageLayer::Ptr getImageLayer(int id);
         ImageLayer::Ptr getImageLayer(std::string const& name);
+        ObjectGroup::Ptr getObjectGroup(int id);
+        ObjectGroup::Ptr getObjectGroup(std::string const& name);
 
         int getLayerCount() const;
         int getTilesetCount() const;
@@ -83,6 +85,7 @@ class Map : public Properties, public sf::Transformable
         void setTileset(Tileset::Ptr tileset);
         void setLayer(Layer::Ptr layer);
         void setImageLayer(ImageLayer::Ptr image);
+        void setObjectGroup(ObjectGroup::Ptr group);
 
     private:
         bool parseMap(pugi::xml_node node);
@@ -96,6 +99,10 @@ class Map : public Properties, public sf::Transformable
         bool saveMap(std::string const& filename);
         void saveProperties(std::ofstream& stream, Properties* properies, int indent);
         void saveTilesets(std::ofstream& stream);
+        void saveLayers(std::ofstream& stream);
+        void saveLayer(std::ofstream& stream, std::string const& name);
+        void saveImageLayer(std::ofstream& stream, std::string const& name);
+        void saveObjectGroup(std::ofstream& stream, std::string const& name);
 
     private:
         static void addIndent(std::ofstream& stream, int indent);
