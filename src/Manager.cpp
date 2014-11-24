@@ -1,5 +1,8 @@
 #include "../include/Manager.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 Manager::Manager()
 {
@@ -74,3 +77,4 @@ void Manager::addImage(Image::Ptr img)
     }
 }
 
+} // namespace tme

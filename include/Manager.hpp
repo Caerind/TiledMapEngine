@@ -11,6 +11,9 @@
 
 #include "Map.hpp"
 
+namespace tme
+{
+
 class Manager : public sf::Transformable
 {
     public:
@@ -29,5 +32,7 @@ class Manager : public sf::Transformable
         std::map<std::string,Map::Ptr> mMaps;
         std::map<std::string,Image::Ptr> mImages; // Source/Image
 };
+
+} // namespace tme
 
 #endif // TME_MANAGER_HPP
