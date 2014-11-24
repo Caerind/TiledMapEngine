@@ -1,5 +1,8 @@
 #include "../include/Properties.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 Properties::Properties()
 {
@@ -97,6 +100,12 @@ void Properties::setProperty(std::string const& name, bool value)
 }
 
 ////////////////////////////////////////////////////////////
+void Properties::setProperty(Property property)
+{
+    mProperties.insert(property);
+}
+
+////////////////////////////////////////////////////////////
 void Properties::setProperties(std::map<std::string,std::string> properties)
 {
     mProperties = properties;
@@ -114,3 +123,4 @@ std::string Properties::toString(bool boolean)
     return (boolean) ? "true" : "false";
 }
 
+} // namespace tme

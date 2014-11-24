@@ -5,6 +5,9 @@
 #include <string>
 #include <sstream>
 
+namespace tme
+{
+
 class Properties
 {
     public:
@@ -28,6 +31,7 @@ class Properties
         void setProperty(std::string const& name, float value);
         void setProperty(std::string const& name, std::string value);
         void setProperty(std::string const& name, bool value);
+        void setProperty(Property property);
         void setProperties(std::map<std::string,std::string> properties);
 
     public:
@@ -61,5 +65,7 @@ std::string Properties::toString(T number)
     oss << number;
     return oss.str();
 }
+
+} // namespace tme
 
 #endif // TME_PROPERTIES_HPP
