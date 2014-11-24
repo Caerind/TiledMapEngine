@@ -1,6 +1,5 @@
 #include "../include/ObjectGroup.hpp"
 #include "../include/Map.hpp"
-#include <iostream>
 
 ////////////////////////////////////////////////////////////
 ObjectGroup::ObjectGroup(Map* map) : mMap(map)

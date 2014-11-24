@@ -1018,6 +1018,82 @@ void Map::saveObjectGroup(std::ofstream& stream, std::string const& name)
         saveProperties(stream,layer.get(),2);
 
 
+        for (int i = 0; i < layer->getObjectCount(); i++)
+        {
+            Object::Ptr obj = layer->getObject(i);
+            if (obj != nullptr)
+            {
+                stream << "  <object";
+                switch (obj->getType())
+                {
+                    case Object::Rectangle:
+                    {
+                        stream << " x=\"" << obj->getX() << "\"";
+                        stream << " y=\"" << obj->getY() << "\"";
+                        stream << " width=\"" << obj->getWidth() << "\"";
+                        stream << " height=\"" << obj->getHeight() << "\"";
+
+                        //TODO
+
+                        stream << "/>" << std::endl;
+                    } break;
+
+                    case Object::Ellipse:
+                    {
+                        stream << " x=\"" << obj->getX() << "\"";
+                        stream << " y=\"" << obj->getY() << "\"";
+                        stream << " width=\"" << obj->getWidth() << "\"";
+                        stream << " height=\"" << obj->getHeight() << "\"";
+
+                        //TODO
+
+                        stream << ">" << std::endl;
+                        stream << "   <ellipse/>" << std::endl;
+                        stream << "  </object>" << std::endl;
+                    } break;
+
+                    case Object::Polygon:
+                    {
+                        stream << " x=\"" << obj->getX() << "\"";
+                        stream << " y=\"" << obj->getY() << "\"";
+
+                        //TODO
+
+                        stream << ">" << std::endl;
+                        stream << "   <polygon points=\"" << obj->getPoints() << "\"/>" << std::endl;
+                        stream << "  </object>" << std::endl;
+                    } break;
+
+                    case Object::Polyline:
+                    {
+                        stream << " x=\"" << obj->getX() << "\"";
+                        stream << " y=\"" << obj->getY() << "\"";
+
+                        //TODO
+
+                        stream << ">" << std::endl;
+                        stream << "   <polyline points=\"" << obj->getPoints() << "\"/>" << std::endl;
+                        stream << "  </object>" << std::endl;
+                    } break;
+
+                    case Object::Tile:
+                    {
+                        stream << " gid=\"" << obj->getGid() << "\"";
+                        stream << " x=\"" << obj->getX() << "\"";
+                        stream << " y=\"" << obj->getY() << "\"";
+
+                        //TODO
+
+                        stream << "/>" << std::endl;
+                    } break;
+
+                    default: break;
+                }
+            }
+
+        }
+
+
 
         stream << " </objectgroup>" << std::endl;
     }
