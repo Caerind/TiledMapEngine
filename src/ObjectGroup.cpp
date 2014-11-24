@@ -1,5 +1,6 @@
 #include "../include/ObjectGroup.hpp"
 #include "../include/Map.hpp"
+#include <iostream>
 
 ////////////////////////////////////////////////////////////
 ObjectGroup::ObjectGroup(Map* map) : mMap(map)
@@ -15,10 +16,7 @@ void ObjectGroup::render(sf::RenderTarget& target, sf::RenderStates states)
         states.transform *= getTransform();
         for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
         {
-            if (mObjects[i] != nullptr)
-            {
-                target.draw(*mObjects[i],states);
-            }
+            target.draw(*mObjects[i],states);
         }
     }
 }
@@ -77,3 +75,26 @@ void ObjectGroup::setObject(Object::Ptr object)
     }
 }
 
+////////////////////////////////////////////////////////////
+int ObjectGroup::getWidth() const
+{
+    return mWidth;
+}
+
+////////////////////////////////////////////////////////////
+int ObjectGroup::getHeight() const
+{
+    return mHeight;
+}
+
+////////////////////////////////////////////////////////////
+void ObjectGroup::setWidth(int width)
+{
+    mWidth = width;
+}
+
+////////////////////////////////////////////////////////////
+void ObjectGroup::setHeight(int height)
+{
+    mHeight = height;
+}

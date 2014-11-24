@@ -204,6 +204,10 @@ void Object::setVertex(sf::Vertex vertex, int id)
 ////////////////////////////////////////////////////////////
 void Object::applyColor(sf::Color color)
 {
+    for (int i = 0; i < static_cast<int>(mVertices.size()); i++)
+    {
+        mVertices[i].color = color;
+    }
 }
 
 ////////////////////////////////////////////////////////////

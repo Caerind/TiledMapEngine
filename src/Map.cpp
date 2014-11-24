@@ -324,7 +324,7 @@ void Map::setObjectGroup(ObjectGroup::Ptr group)
 {
     if (group != nullptr)
     {
-    	mObjectGroups[group->getName()] = group;
+        mObjectGroups[group->getName()] = group;
     	mILayers.push_back(group);
     }
 }
@@ -359,6 +359,9 @@ bool Map::parseMap(pugi::xml_node node)
                 return false;
         if (nName == "imagelayer")
             if (!parseImageLayer(n))
+                return false;
+        if (nName == "objectgroup")
+            if (!parseObjectGroup(n))
                 return false;
     }
 
@@ -646,11 +649,15 @@ bool Map::parseObjectGroup(pugi::xml_node node)
 
     pugi::xml_attribute attribute_x = node.attribute("x");
     pugi::xml_attribute attribute_y = node.attribute("y");
+    pugi::xml_attribute attribute_width = node.attribute("width");
+    pugi::xml_attribute attribute_height = node.attribute("height");
     pugi::xml_attribute attribute_opacity = node.attribute("opacity");
     pugi::xml_attribute attribute_visible = node.attribute("visible");
 
     if (attribute_x) layer->setX(attribute_x.as_int());
     if (attribute_y) layer->setY(attribute_y.as_int());
+    if (attribute_width) layer->setWidth(attribute_width.as_int());
+    if (attribute_height) layer->setHeight(attribute_height.as_int());
     if (attribute_opacity) layer->setOpacity(attribute_opacity.as_float());
     if (attribute_visible) layer->setVisible(attribute_visible.as_bool());
 
@@ -676,29 +683,28 @@ bool Map::parseObjectGroup(pugi::xml_node node)
             {
                 for (const pugi::xml_node& objSettings : n.children())
                 {
-                    if (objSettings.name() == "ellipse")
+                    std::string name = objSettings.name();
+                    if (name == "ellipse")
                     {
                         type = Object::Ellipse;
                     }
-                    else if (objSettings.name() == "polygon")
+                    else if (name == "polygon")
                     {
                         type = Object::Polygon;
                         obj->setPoints(objSettings.attribute("points").as_string());
                     }
-                    else if (objSettings.name() == "polyline")
+                    else if (name == "polyline")
                     {
                         type = Object::Polyline;
                         obj->setPoints(objSettings.attribute("points").as_string());
                     }
-                    else if (objSettings.name() == "properties")
+                    else if (name == "properties")
                     {
                         if (!parseProperties(objSettings,obj.get()))
                             return false;
                     }
                 }
             }
-
-            obj->setType(type);
 
             pugi::xml_attribute attribute_x = n.attribute("x");
             pugi::xml_attribute attribute_y = n.attribute("y");
@@ -709,6 +715,8 @@ bool Map::parseObjectGroup(pugi::xml_node node)
             if (attribute_y) obj->setY(attribute_y.as_int());
             if (attribute_width) obj->setWidth(attribute_width.as_int());
             if (attribute_height) obj->setHeight(attribute_height.as_int());
+
+            obj->setType(type);
 
             layer->setObject(obj);
         }
@@ -981,7 +989,37 @@ void Map::saveObjectGroup(std::ofstream& stream, std::string const& name)
     ObjectGroup::Ptr layer = getObjectGroup(name);
     if (layer != nullptr)
     {
+        stream << " <objectgroup";
+        if (layer->getColor() != "")
+        {
+            stream << " color=\"" << layer->getColor() << "\"";
+        }
+        stream << " name=\"" << layer->getName() << "\"";
+        if (layer->getX() != 0)
+        {
+            stream << " x=\"" << layer->getX() << "\"";
+        }
+        if (layer->getY() != 0)
+        {
+            stream << " y=\"" << layer->getY() << "\"";
+        }
+        stream << " width=\"" << layer->getWidth() << "\"";
+        stream << " height=\"" << layer->getHeight() << "\"";
+        if (layer->getOpacity() != 1.f)
+        {
+            stream << " opacity=\"" << layer->getOpacity() << "\"";
+        }
+        if (!layer->isVisible())
+        {
+            stream << " visible=\"" << layer->isVisible() << "\"";
+        }
+        stream << ">" << std::endl;
 
+        saveProperties(stream,layer.get(),2);
+
+
+
+        stream << " </objectgroup>" << std::endl;
     }
 }
 
