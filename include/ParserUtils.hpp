@@ -8,6 +8,9 @@
 
 #include <zlib.h>
 
+namespace tme
+{
+
 class ParserUtils
 {
     public:
@@ -24,5 +27,7 @@ class ParserUtils
             return (isalnum(c) || (c == '+') || (c == '/'));
         }
 };
+
+} // namespace tme
 
 #endif // TME_PARSERUTILS_HPP

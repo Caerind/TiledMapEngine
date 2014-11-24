@@ -1,5 +1,8 @@
 #include "../include/ParserUtils.hpp"
 
+namespace tme
+{
+
 const std::string ParserUtils::base64_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                               "abcdefghijklmnopqrstuvwxyz"
                                               "0123456789+/";
@@ -173,3 +176,4 @@ bool ParserUtils::compressString(std::string& data)
     return true;
 }
 
+} // namespace tme
