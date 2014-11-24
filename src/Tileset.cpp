@@ -1,54 +1,65 @@
 #include "../include/Tileset.hpp"
+#include "../include/Map.hpp"
 
-////////////////////////////////////////////////////////////
-Tileset::TileOffset::TileOffset() : x(0), y(0)
+namespace tme
 {
-}
-
-////////////////////////////////////////////////////////////
-Tileset::Tile::Tile() : mId(0), mTerrain(""), mProbability(0.0f)
-{
-}
-
-////////////////////////////////////////////////////////////
-int Tileset::Tile::getId() const
-{
-    return mId;
-}
-
-////////////////////////////////////////////////////////////
-std::string Tileset::Tile::getTerrain() const
-{
-    return mTerrain;
-}
-
-////////////////////////////////////////////////////////////
-float Tileset::Tile::getProbability() const
-{
-    return mProbability;
-}
-
-////////////////////////////////////////////////////////////
-void Tileset::Tile::setId(int id)
-{
-    mId = id;
-}
-
-////////////////////////////////////////////////////////////
-void Tileset::Tile::setTerrain(std::string const& terrain)
-{
-    mTerrain = terrain;
-}
-
-////////////////////////////////////////////////////////////
-void Tileset::Tile::setProbability(float probability)
-{
-    mProbability = probability;
-}
 
 ////////////////////////////////////////////////////////////
 Tileset::Tileset(Map* map) : Image(map), mSpacing(0), mMargin(0)
 {
+}
+
+////////////////////////////////////////////////////////////
+bool Tileset::saveToFile(std::string const& filename)
+{
+    std::ofstream file((filename == "") ? mFilename : filename);
+    if (!file)
+        return false;
+
+    file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
+
+    file << "<tileset name=\"" << mName << "\"";
+    file << " tilewidth=\"" << mTileSize.x << "\"";
+    file << " tileheight=\"" << mTileSize.y << "\"";
+    if (mSpacing != 0)
+        file << " spacing=\"" << mSpacing << "\"";
+    if (mMargin != 0)
+        file << " margin=\"" << mMargin << "\"";
+    file << ">" << std::endl;
+
+    if (mTileOffset != sf::Vector2i(0,0))
+        file << " <tileoffset x=\"" << mTileOffset.x << "\" y=\"" << mTileOffset.y << "\"/>" << std::endl;
+
+    Map::saveProperties(file,this,1);
+
+    file << " <image source=\"" << mSource;
+    file << "\" trans=\"" << mTrans;
+    file << "\" width=\"" << mSize.x;
+    file << "\" height=\"" << mSize.y;
+    file << "\"/>" << std::endl;
+
+    for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
+    {
+        file << " <tile id=\"" << itr->second.getId();
+        if (itr->second.getTerrain() != "")
+            file << "\" terrain=\"" <<itr->second.getTerrain();
+        if (itr->second.getProbability() != 0.0f)
+            file << "\" probability=\"" << itr->second.getProbability();
+        if(!itr->second.isEmpty())
+        {
+            file << "\">" << std::endl;
+            Map::saveProperties(file,&itr->second,2);
+            file << " </tile>" << std::endl;
+        }
+        else
+        {
+            file << "\"/>" << std::endl;
+        }
+    }
+
+    file << "</tileset>" << std::endl;
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////
@@ -64,15 +75,9 @@ std::string Tileset::getName() const
 }
 
 ////////////////////////////////////////////////////////////
-int Tileset::getTileWidth() const
+sf::Vector2i Tileset::getTileSize() const
 {
-    return mTileWidth;
-}
-
-////////////////////////////////////////////////////////////
-int Tileset::getTileHeight() const
-{
-    return mTileHeight;
+    return mTileSize;
 }
 
 ////////////////////////////////////////////////////////////
@@ -88,13 +93,13 @@ int Tileset::getMargin() const
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::TileOffset& Tileset::getTileOffset()
+sf::Vector2i Tileset::getTileOffset() const
 {
     return mTileOffset;
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::Tile Tileset::getTile(int id)
+TileData Tileset::getTile(int id)
 {
     return mTiles[id];
 }
@@ -108,12 +113,12 @@ int Tileset::getLastGid() const
 ////////////////////////////////////////////////////////////
 sf::IntRect Tileset::getTextureRect(int id) const
 {
-    sf::IntRect rect(0,0,mTileWidth,mTileHeight);
+    sf::IntRect rect(0,0,mTileSize.x,mTileSize.y);
     id -= mFirstGid;
     if (id >= 0 && id < getTilesPerRow() * getTilesPerCol())
     {
-        rect.left = mMargin + (id % getTilesPerRow()) * (mTileWidth + mSpacing);
-        rect.top = mMargin + (id / getTilesPerRow()) * (mTileHeight + mSpacing);
+        rect.left = mMargin + (id % getTilesPerRow()) * (mTileSize.x + mSpacing);
+        rect.top = mMargin + (id / getTilesPerRow()) * (mTileSize.y + mSpacing);
     }
     return rect;
 }
@@ -131,15 +136,9 @@ void Tileset::setName(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
-void Tileset::setTileWidth(int width)
+void Tileset::setTileSize(sf::Vector2i size)
 {
-    mTileWidth = width;
-}
-
-////////////////////////////////////////////////////////////
-void Tileset::setTileHeight(int height)
-{
-    mTileHeight = height;
+    mTileSize = size;
 }
 
 ////////////////////////////////////////////////////////////
@@ -155,26 +154,23 @@ void Tileset::setMargin(int margin)
 }
 
 ////////////////////////////////////////////////////////////
-void Tileset::setTileOffset(TileOffset offset)
+void Tileset::setTileOffset(sf::Vector2i offset)
 {
     mTileOffset = offset;
 }
 
 ////////////////////////////////////////////////////////////
-void Tileset::addTile(Tileset::Tile::Ptr tile)
+void Tileset::addTile(TileData const& tile)
 {
-    if (tile != nullptr)
-    {
-        mTiles[tile->getId()] = *(tile.get());
-    }
+    mTiles[tile.getId()] = tile;
 }
 
 ////////////////////////////////////////////////////////////
-Tileset::Tile Tileset::getTileInContainer(int id) const
+TileData Tileset::getTileInContainer(int id) const
 {
     if (id < 0 || id >= getTileCount())
     {
-        return Tile();
+        return TileData();
     }
     int i = 0;
     for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
@@ -185,7 +181,7 @@ Tileset::Tile Tileset::getTileInContainer(int id) const
         }
         i++;
     }
-    return Tile();
+    return TileData();
 }
 
 ////////////////////////////////////////////////////////////
@@ -197,39 +193,45 @@ int Tileset::getTileCount() const
 ////////////////////////////////////////////////////////////
 int Tileset::getTilesPerRow() const
 {
-    int width = getWidth() - (mMargin * 2);
-    int fWidth = 0;
+    if (mTileSize.x == 0)
+        return 0;
+    int width = mTileSize.x - (mMargin * 2);
+    int finalWidth = 0;
     if (mSpacing != 0)
     {
         for (int i = 0; i <= width;)
         {
-            i += mTileWidth + mSpacing;
-            fWidth += mTileWidth;
+            i += mTileSize.x + mSpacing;
+            finalWidth += mTileSize.x;
         }
     }
     else
     {
-        fWidth = width;
+        finalWidth = width;
     }
-    return (fWidth / mTileWidth);
+    return (finalWidth / mTileSize.x);
 }
 
 ////////////////////////////////////////////////////////////
 int Tileset::getTilesPerCol() const
 {
-    int height = getHeight() - (mMargin * 2);
-    int fHeight = 0;
+    if (mTileSize.y == 0)
+        return 0;
+    int height = mTileSize.y - (mMargin * 2);
+    int finalHeight = 0;
     if (mSpacing != 0)
     {
         for (int i = 0; i <= height;)
         {
-            i += mTileHeight + mSpacing;
-            fHeight += mTileHeight;
+            i += mTileSize.y + mSpacing;
+            finalHeight += mTileSize.y;
         }
     }
     else
     {
-        fHeight = height;
+        finalHeight = height;
     }
-    return (fHeight / mTileHeight);
+    return (finalHeight / mTileSize.y);
 }
+
+} // namespace tme
