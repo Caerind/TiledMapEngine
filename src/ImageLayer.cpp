@@ -1,6 +1,9 @@
 #include "../include/ImageLayer.hpp"
 #include "../include/Map.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 ImageLayer::ImageLayer(Map* map) : Image(map)
 {
@@ -15,7 +18,23 @@ bool ImageLayer::loadFromFile(std::string const& filename)
         return false;
     }
 
-    update();
+    mVertices[0].position = sf::Vector2f(0, 0);
+    mVertices[1].position = sf::Vector2f(tme::Image::mSize.x,0);
+    mVertices[2].position = sf::Vector2f(tme::Image::mSize.x,tme::Image::mSize.y);
+    mVertices[3].position = sf::Vector2f(0,tme::Image::mSize.y);
+
+    mVertices[0].texCoords = sf::Vector2f(0,0);
+    mVertices[1].texCoords = sf::Vector2f(tme::Image::mSize.x,0);
+    mVertices[2].texCoords = sf::Vector2f(tme::Image::mSize.x,tme::Image::mSize.y);
+    mVertices[3].texCoords = sf::Vector2f(0,tme::Image::mSize.y);
+
+    sf::Color color = sf::Color::White;
+    color.a = 255.f * mOpacity;
+
+    mVertices[0].color = color;
+    mVertices[1].color = color;
+    mVertices[2].color = color;
+    mVertices[3].color = color;
 
     return true;
 }
@@ -34,40 +53,4 @@ void ImageLayer::render(sf::RenderTarget& target, sf::RenderStates states)
     }
 }
 
-////////////////////////////////////////////////////////////
-void ImageLayer::setX(int x)
-{
-    mX = x;
-    update();
-}
-
-////////////////////////////////////////////////////////////
-void ImageLayer::setY(int y)
-{
-    mY = y;
-    update();
-}
-
-////////////////////////////////////////////////////////////
-void ImageLayer::update()
-{
-    mVertices[0].position = sf::Vector2f(0, 0);
-    mVertices[1].position = sf::Vector2f(mWidth,0);
-    mVertices[2].position = sf::Vector2f(mWidth,mHeight);
-    mVertices[3].position = sf::Vector2f(0,mHeight);
-
-    mVertices[0].texCoords = sf::Vector2f(0,0);
-    mVertices[1].texCoords = sf::Vector2f(mWidth,0);
-    mVertices[2].texCoords = sf::Vector2f(mWidth,mHeight);
-    mVertices[3].texCoords = sf::Vector2f(0,mHeight);
-
-    sf::Color color = sf::Color::White;
-    color.a = 255.f * mOpacity;
-
-    mVertices[0].color = color;
-    mVertices[1].color = color;
-    mVertices[2].color = color;
-    mVertices[3].color = color;
-
-    setPosition(mX,mY);
-}
+} // namespace tme

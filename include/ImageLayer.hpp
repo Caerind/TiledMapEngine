@@ -8,6 +8,9 @@
 
 class Map;
 
+namespace tme
+{
+
 class ImageLayer : public ILayer, public Image
 {
     public:
@@ -20,14 +23,10 @@ class ImageLayer : public ILayer, public Image
 
         void render(sf::RenderTarget& target, sf::RenderStates states);
 
-        void setX(int x);
-        void setY(int y);
-
-    private:
-        void update();
-
     private:
         sf::Vertex mVertices[4];
 };
+
+} // namespace tme
 
 #endif // TME_IMAGELAYER_HPP
