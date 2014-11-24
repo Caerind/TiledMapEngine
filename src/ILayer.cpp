@@ -1,7 +1,7 @@
 #include "../include/ILayer.hpp"
 
 ////////////////////////////////////////////////////////////
-ILayer::ILayer() : mType(ILayer::I), mName(""), mX(0), mY(0), mOpacity(1.f), mVisible(true)
+ILayer::ILayer() : mType(ILayer::I), mName(""), mPosition(0,0), mSize(0,0), mOpacity(1.f), mVisible(true)
 {
 }
 
@@ -33,29 +33,28 @@ void ILayer::setName(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
-int ILayer::getX() const
+sf::Vector2i ILayer::getPosition() const
 {
-    return mX;
+    return mPosition;
 }
 
 ////////////////////////////////////////////////////////////
-void ILayer::setX(int x)
+void ILayer::setPosition(sf::Vector2i position)
 {
-    mX = x;
-    setPosition(mX,mY);
+    mPosition = position;
+    sf::Transformable::setPosition(mPosition.x, mPosition.y);
 }
 
 ////////////////////////////////////////////////////////////
-int ILayer::getY() const
+sf::Vector2i ILayer::getSize() const
 {
-    return mY;
+    return mSize;
 }
 
 ////////////////////////////////////////////////////////////
-void ILayer::setY(int y)
+void ILayer::setSize(sf::Vector2i size)
 {
-    mY = y;
-    setPosition(mX,mY);
+    mSize = size;
 }
 
 ////////////////////////////////////////////////////////////

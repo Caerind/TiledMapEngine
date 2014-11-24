@@ -10,7 +10,7 @@
 
 #include "Properties.hpp"
 
-class ILayer : public Properties, public sf::Transformable
+class ILayer : public tme::Properties, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<ILayer> Ptr;
@@ -33,11 +33,11 @@ class ILayer : public Properties, public sf::Transformable
         virtual std::string getName() const;
         virtual void setName(std::string const& name);
 
-        virtual int getX() const;
-        virtual void setX(int x);
+        virtual sf::Vector2i getPosition() const;
+        virtual void setPosition(sf::Vector2i position);
 
-        virtual int getY() const;
-        virtual void setY(int y);
+        virtual sf::Vector2i getSize() const;
+        virtual void setSize(sf::Vector2i size);
 
         virtual float getOpacity() const;
         virtual void setOpacity(float opacity);
@@ -48,8 +48,8 @@ class ILayer : public Properties, public sf::Transformable
     protected:
         LayerType mType;
         std::string mName;
-        int mX;
-        int mY;
+        sf::Vector2i mPosition;
+        sf::Vector2i mSize;
         float mOpacity;
         bool mVisible;
 };
