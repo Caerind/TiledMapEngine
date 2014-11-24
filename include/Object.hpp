@@ -1,5 +1,5 @@
-#ifndef OBJECT_HPP
-#define OBJECT_HPP
+#ifndef TME_OBJECT_HPP
+#define TME_OBJECT_HPP
 
 #include <memory>
 #include <string>
@@ -81,4 +81,4 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
 
 } // namespace tme
 
-#endif // OBJECT_HPP
+#endif // TME_OBJECT_HPP
