@@ -2,6 +2,9 @@
 #include "../include/Map.hpp"
 #include "../include/Manager.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 Image::Image(Map* map) : mMap(map), mTexture(nullptr), mTrans("")
 {
@@ -12,41 +15,32 @@ bool Image::load(std::string const& filename)
 {
     mSource = filename;
 
+    // Test if the image is already loaded in the sharing system
     if (!loadFromManager())
     {
         sf::Image img;
         if (!img.loadFromFile(mSource))
-        {
             return false;
-        }
-        mFormat = Image::getFormat(mSource);
+
+        mFormat = getFormat(mSource);
 
         if (mTrans != "")
-        {
-            img.createMaskFromColor(Image::getColor(mTrans));
-        }
+            img.createMaskFromColor(getColor(mTrans));
 
-        mWidth = static_cast<int>(img.getSize().x);
-        mHeight = static_cast<int>(img.getSize().y);
+        mSize.x = img.getSize().x;
+        mSize.y = img.getSize().y;
 
         mTexture = std::shared_ptr<sf::Texture>(new sf::Texture());
         if (mTexture == nullptr)
-        {
             return false;
-        }
 
-        if (!mTexture->loadFromImage(img, sf::IntRect(0,0,mWidth,mHeight)))
-        {
+        if (!mTexture->loadFromImage(img, sf::IntRect(0,0,mSize.x,mSize.y)))
             return false;
-        }
 
+        // Add image to sharing system
         if (mMap != nullptr)
-        {
             if (mMap->getManager() != nullptr)
-            {
                 mMap->getManager()->addImage(std::shared_ptr<Image>(this));
-            }
-        }
     }
     return true;
 }
@@ -65,8 +59,7 @@ bool Image::loadFromManager()
                 setFormat(img->getFormat());
                 setSource(img->getSource());
                 setTrans(img->getTrans());
-                setWidth(img->getWidth());
-                setHeight(img->getHeight());
+                setSize(img->getSize());
                 return true;
             }
         }
@@ -99,15 +92,9 @@ std::string Image::getTrans() const
 }
 
 ////////////////////////////////////////////////////////////
-int Image::getWidth() const
+sf::Vector2i Image::getSize() const
 {
-    return mWidth;
-}
-
-////////////////////////////////////////////////////////////
-int Image::getHeight() const
-{
-    return mHeight;
+    return mSize;
 }
 
 ////////////////////////////////////////////////////////////
@@ -135,15 +122,9 @@ void Image::setTrans(std::string const& trans)
 }
 
 ////////////////////////////////////////////////////////////
-void Image::setWidth(int width)
+void Image::setSize(sf::Vector2i size)
 {
-    mWidth = width;
-}
-
-////////////////////////////////////////////////////////////
-void Image::setHeight(int height)
-{
-    mHeight = height;
+    mSize = size;
 }
 
 ////////////////////////////////////////////////////////////
@@ -163,9 +144,7 @@ sf::Color Image::getColor(std::string const& hexColor)
 
         // If the value as a # as first char
         if (hex.front() == '#')
-        {
             hex.erase(0,1);
-        }
 
         for (unsigned int i = 0; i < hexColor.size() / 2; i++)
         {
@@ -185,9 +164,7 @@ sf::Color Image::getColor(std::string const& hexColor)
         return color;
     }
     else
-    {
         return sf::Color::White;
-    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -200,3 +177,4 @@ std::string Image::getString(sf::Color rgbColor)
     return ss.str();
 }
 
+} // namespace tme
