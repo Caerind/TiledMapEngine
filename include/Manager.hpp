@@ -11,14 +11,6 @@
 
 #include "Map.hpp"
 
-/*
-
-To Do :
-
--How to share Image ?
-
-*/
-
 class Manager : public sf::Transformable
 {
     public:
@@ -30,8 +22,12 @@ class Manager : public sf::Transformable
         bool loadMap(std::string const& filename);
         Map::Ptr getMap(std::string const& filename);
 
+        Image::Ptr getImage(std::string const& sourceName);
+        void addImage(Image::Ptr img);
+
     private:
         std::map<std::string,Map::Ptr> mMaps;
+        std::map<std::string,Image::Ptr> mImages; // Source/Image
 };
 
 #endif // TME_MANAGER_HPP

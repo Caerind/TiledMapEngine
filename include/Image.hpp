@@ -29,6 +29,7 @@ class Image
         Image(Map* map);
 
         bool load(std::string const& filename = "");
+        bool loadFromManager();
 
         TexturePtr getTexture() const;
         std::string getFormat() const;

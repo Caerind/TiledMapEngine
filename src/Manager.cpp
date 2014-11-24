@@ -52,52 +52,25 @@ Map::Ptr Manager::getMap(std::string const& filename)
     }
 }
 
-/*
 ////////////////////////////////////////////////////////////
-bool Manager::loadTexture(std::string const& filename)
+Image::Ptr Manager::getImage(std::string const& sourceName)
 {
-    if (mTextures.find(filename) == mTextures.end())
+    if (mImages.find(sourceName) != mImages.end())
     {
-        std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>(new sf::Texture());
-        if (texture->loadFromFile(filename))
-        {
-            mTextures[filename] = texture;
-            return true;
-        }
-        return false;
+        return mImages[sourceName];
     }
     else
     {
-        return true;
+        return nullptr;
     }
 }
 
 ////////////////////////////////////////////////////////////
-void Manager::addTexture(std::shared_ptr<sf::Texture> texture, std::string const& filename)
+void Manager::addImage(Image::Ptr img)
 {
-    if (texture != nullptr && filename != "")
+    if (img != nullptr)
     {
-        mTextures[filename] = texture;
+        mImages[img->getSource()] = img;
     }
 }
 
-////////////////////////////////////////////////////////////
-std::shared_ptr<sf::Texture> Manager::getTexture(std::string const& filename)
-{
-    if (mTextures.find(filename) != mTextures.end())
-    {
-        return mTextures[filename];
-    }
-    else
-    {
-        if (loadTexture(filename))
-        {
-            return mTextures[filename];
-        }
-        else
-        {
-            return nullptr;
-        }
-    }
-}
-*/

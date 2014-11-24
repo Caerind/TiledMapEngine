@@ -11,33 +11,66 @@ bool Image::load(std::string const& filename)
 {
     mSource = filename;
 
-    sf::Image img;
-    if (!img.loadFromFile(mSource))
+    if (!loadFromManager())
     {
-        return false;
+        sf::Image img;
+        if (!img.loadFromFile(mSource))
+        {
+            return false;
+        }
+        mFormat = Image::getFormat(mSource);
+
+        if (mTrans != "")
+        {
+            img.createMaskFromColor(Image::getColor(mTrans));
+        }
+
+        mWidth = static_cast<int>(img.getSize().x);
+        mHeight = static_cast<int>(img.getSize().y);
+
+        mTexture = std::shared_ptr<sf::Texture>(new sf::Texture());
+        if (mTexture == nullptr)
+        {
+            return false;
+        }
+
+        if (!mTexture->loadFromImage(img, sf::IntRect(0,0,mWidth,mHeight)))
+        {
+            return false;
+        }
+
+        if (mMap != nullptr)
+        {
+            if (mMap->getManager() != nullptr)
+            {
+                mMap->getManager()->addImage(std::shared_ptr<Image>(this));
+            }
+        }
     }
-    mFormat = Image::getFormat(mSource);
-
-    if (mTrans != "")
-    {
-        img.createMaskFromColor(Image::getColor(mTrans));
-    }
-
-    mWidth = static_cast<int>(img.getSize().x);
-    mHeight = static_cast<int>(img.getSize().y);
-
-    mTexture = std::shared_ptr<sf::Texture>(new sf::Texture());
-    if (mTexture == nullptr)
-    {
-        return false;
-    }
-
-    if (!mTexture->loadFromImage(img, sf::IntRect(0,0,mWidth,mHeight)))
-    {
-        return false;
-    }
-
     return true;
+}
+
+////////////////////////////////////////////////////////////
+bool Image::loadFromManager()
+{
+    if (mMap != nullptr)
+    {
+        if (mMap->getManager() != nullptr)
+        {
+            Image::Ptr img = mMap->getManager()->getImage(mSource);
+            if (img != nullptr)
+            {
+                getTexture(img->getTexture());
+                getFormat(img->getFormat());
+                getSource(img->getSource());
+                getTrans(img->getTrans());
+                getWidth(img->getWidth());
+                getHeight(img->getHeight());
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 ////////////////////////////////////////////////////////////
