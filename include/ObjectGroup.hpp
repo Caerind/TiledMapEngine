@@ -21,6 +21,7 @@ class ObjectGroup : public ILayer
 
         std::string getColor() const;
         void setColor(std::string const& color);
+        void setOpacity(float opacity);
 
         int getObjectCount() const;
         Object::Ptr getObject(std::string const& name);

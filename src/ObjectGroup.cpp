@@ -30,6 +30,20 @@ std::string ObjectGroup::getColor() const
 void ObjectGroup::setColor(std::string const& color)
 {
     mColor = color;
+
+    sf::Color sfColor(Image::getColor(mColor));
+    sfColor.a = 255.f * mOpacity;
+    for (auto itr = mObjects.begin(); itr != mObjects.end(); itr++)
+    {
+        (*itr)->applyColor(sfColor);
+    }
+}
+
+////////////////////////////////////////////////////////////
+void ObjectGroup::setOpacity(float opacity)
+{
+    mOpacity = opacity;
+    setColor(mColor);
 }
 
 ////////////////////////////////////////////////////////////

@@ -61,5 +61,13 @@ void ImageLayer::update()
     mVertices[2].texCoords = sf::Vector2f(mWidth,mHeight);
     mVertices[3].texCoords = sf::Vector2f(0,mHeight);
 
+    sf::Color color = sf::Color::White;
+    color.a = 255.f * mOpacity;
+
+    mVertices[0].color = color;
+    mVertices[1].color = color;
+    mVertices[2].color = color;
+    mVertices[3].color = color;
+
     setPosition(mX,mY);
 }

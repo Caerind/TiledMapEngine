@@ -33,6 +33,8 @@ class Layer : public ILayer
                 Tileset::Ptr getTileset() const;
                 void setTileset(Tileset::Ptr tileset);
 
+                void setOpacity(float opacity);
+
             private:
                 virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -65,6 +67,8 @@ class Layer : public ILayer
         void setTileId(int x, int y, int id);
         void setTiles(TileMap const& tiles);
         void setTilesIds(std::map<Pos,int> const& tiles);
+
+        void setOpacity(float opacity);
 
     private:
         Map* mMap;

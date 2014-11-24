@@ -60,6 +60,17 @@ void Layer::Tile::setTileset(Tileset::Ptr tileset)
 }
 
 ////////////////////////////////////////////////////////////
+void Layer::Tile::setOpacity(float opacity)
+{
+    sf::Color a = sf::Color::White;
+    a.a = 255.f * opacity;
+    for (int i = 0; i < 4; i++)
+    {
+        mVertices[i].color = a;
+    }
+}
+
+////////////////////////////////////////////////////////////
 void Layer::Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     if (mTileset != nullptr)
@@ -214,4 +225,14 @@ void Layer::setTiles(Layer::TileMap const& tiles)
 void Layer::setTilesIds(std::map<Layer::Pos,int> const& tiles)
 {
     // Update tiles
+}
+
+////////////////////////////////////////////////////////////
+void Layer::setOpacity(float opacity)
+{
+    mOpacity = opacity;
+    for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
+    {
+        itr->second.setOpacity(opacity);
+    }
 }

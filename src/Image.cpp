@@ -155,32 +155,39 @@ std::string Image::getFormat(std::string const& filename)
 ////////////////////////////////////////////////////////////
 sf::Color Image::getColor(std::string const& hexColor)
 {
-    sf::Color color;
-    std::stringstream ss;
-    std::string hex = hexColor;
-
-    // If the value as a # as first char
-    if (hex.front() == '#')
+    if (hexColor != "")
     {
-        hex.erase(0,1);
-    }
+        sf::Color color;
+        std::stringstream ss;
+        std::string hex = hexColor;
 
-    for (unsigned int i = 0; i < hexColor.size() / 2; i++)
-    {
-        ss << std::hex << hex.substr(0,2);
-        hex.erase(0,2);
-        switch (i)
+        // If the value as a # as first char
+        if (hex.front() == '#')
         {
-            case 0: ss >> color.r; break;
-            case 1: ss >> color.g; break;
-            case 2: ss >> color.b; break;
-            case 3: ss >> color.a; break;
-            default: break;
+            hex.erase(0,1);
         }
-        ss.clear();
-    }
 
-    return color;
+        for (unsigned int i = 0; i < hexColor.size() / 2; i++)
+        {
+            ss << std::hex << hex.substr(0,2);
+            hex.erase(0,2);
+            switch (i)
+            {
+                case 0: ss >> color.r; break;
+                case 1: ss >> color.g; break;
+                case 2: ss >> color.b; break;
+                case 3: ss >> color.a; break;
+                default: break;
+            }
+            ss.clear();
+        }
+
+        return color;
+    }
+    else
+    {
+        return sf::Color::White;
+    }
 }
 
 ////////////////////////////////////////////////////////////
