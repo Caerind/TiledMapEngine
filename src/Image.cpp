@@ -1,5 +1,6 @@
 #include "../include/Image.hpp"
 #include "../include/Map.hpp"
+#include "../include/Manager.hpp"
 
 ////////////////////////////////////////////////////////////
 Image::Image(Map* map) : mMap(map), mTexture(nullptr), mTrans("")
@@ -60,12 +61,12 @@ bool Image::loadFromManager()
             Image::Ptr img = mMap->getManager()->getImage(mSource);
             if (img != nullptr)
             {
-                getTexture(img->getTexture());
-                getFormat(img->getFormat());
-                getSource(img->getSource());
-                getTrans(img->getTrans());
-                getWidth(img->getWidth());
-                getHeight(img->getHeight());
+                setTexture(img->getTexture());
+                setFormat(img->getFormat());
+                setSource(img->getSource());
+                setTrans(img->getTrans());
+                setWidth(img->getWidth());
+                setHeight(img->getHeight());
                 return true;
             }
         }
