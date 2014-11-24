@@ -1,5 +1,5 @@
-#ifndef ILAYER_HPP
-#define ILAYER_HPP
+#ifndef TME_ILAYER_HPP
+#define TME_ILAYER_HPP
 
 #include <memory>
 #include <string>
@@ -59,4 +59,4 @@ class ILayer : public Properties, public sf::Transformable
 
 } // namespace tme
 
-#endif // ILAYER_HPP
+#endif // TME_ILAYER_HPP
