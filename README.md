@@ -31,3 +31,13 @@ Working on:
 Added since the 18/11/14 :
 - You can save Tilesets (into .tmx only (at the moment))
 - You can save Tile Layer (Layer class)
+
+24/11/14
+--------
+
+Added since the 21/11/14 :
+- You can load/render/save Object & Groups !
+- You can save all layers (Few properties are actually missing)
+- Image Sharing system done !
+
+
