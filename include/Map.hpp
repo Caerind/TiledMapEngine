@@ -93,7 +93,7 @@ class Map : public Properties, public sf::Transformable
         bool parseTileset(pugi::xml_node node); // Including Image
         bool parseLayer(pugi::xml_node node); // Including Tiles
         bool parseImageLayer(pugi::xml_node node); // Including Image
-        bool parseObejctGroup(pugi::xml_node node); // Including Objects
+        bool parseObjectGroup(pugi::xml_node node); // Including Objects
 
     private:
         bool saveMap(std::string const& filename);

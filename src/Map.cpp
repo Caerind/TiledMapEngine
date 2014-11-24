@@ -635,6 +635,90 @@ bool Map::parseImageLayer(pugi::xml_node node)
 }
 
 ////////////////////////////////////////////////////////////
+bool Map::parseObjectGroup(pugi::xml_node node)
+{
+    ObjectGroup::Ptr layer = std::shared_ptr<ObjectGroup>(new ObjectGroup(this));
+
+    layer->setName(node.attribute("name").as_string());
+
+    pugi::xml_attribute attribute_color = node.attribute("color");
+    if (attribute_color) layer->setColor(attribute_color.as_string());
+
+    pugi::xml_attribute attribute_x = node.attribute("x");
+    pugi::xml_attribute attribute_y = node.attribute("y");
+    pugi::xml_attribute attribute_opacity = node.attribute("opacity");
+    pugi::xml_attribute attribute_visible = node.attribute("visible");
+
+    if (attribute_x) layer->setX(attribute_x.as_int());
+    if (attribute_y) layer->setY(attribute_y.as_int());
+    if (attribute_opacity) layer->setOpacity(attribute_opacity.as_float());
+    if (attribute_visible) layer->setVisible(attribute_visible.as_bool());
+
+    for (const pugi::xml_node& n : node.children())
+    {
+        std::string nName = n.name();
+        if (nName == "properties")
+        {
+            if (!parseProperties(n,layer.get()))
+                return false;
+        }
+        else if (nName == "object")
+        {
+            Object::Ptr obj = std::shared_ptr<Object>(new Object(this));
+            Object::Type type = Object::Rectangle;
+
+            if (n.attribute("gid"))
+            {
+                type = Object::Tile;
+                obj->setGid(n.attribute("gid").as_int());
+            }
+            else
+            {
+                for (const pugi::xml_node& objSettings : n.children())
+                {
+                    if (objSettings.name() == "ellipse")
+                    {
+                        type = Object::Ellipse;
+                    }
+                    else if (objSettings.name() == "polygon")
+                    {
+                        type = Object::Polygon;
+                        obj->setPoints(objSettings.attribute("points").as_string());
+                    }
+                    else if (objSettings.name() == "polyline")
+                    {
+                        type = Object::Polyline;
+                        obj->setPoints(objSettings.attribute("points").as_string());
+                    }
+                    else if (objSettings.name() == "properties")
+                    {
+                        if (!parseProperties(objSettings,obj.get()))
+                            return false;
+                    }
+                }
+            }
+
+            obj->setType(type);
+
+            pugi::xml_attribute attribute_x = n.attribute("x");
+            pugi::xml_attribute attribute_y = n.attribute("y");
+            pugi::xml_attribute attribute_width = n.attribute("width");
+            pugi::xml_attribute attribute_height = n.attribute("height");
+
+            if (attribute_x) obj->setX(attribute_x.as_int());
+            if (attribute_y) obj->setY(attribute_y.as_int());
+            if (attribute_width) obj->setWidth(attribute_width.as_int());
+            if (attribute_height) obj->setHeight(attribute_height.as_int());
+
+            layer->setObject(obj);
+        }
+    }
+
+    setObjectGroup(layer);
+    return true;
+}
+
+////////////////////////////////////////////////////////////
 bool Map::saveMap(std::string const& filename)
 {
     std::ofstream file(filename);

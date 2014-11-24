@@ -69,6 +69,10 @@ void ObjectGroup::setObject(Object::Ptr object)
 {
     if (object != nullptr)
     {
+        sf::Color color = Image::getColor(mColor);
+        color.a = 255.f * mOpacity;
+        object->applyColor(color);
+
         mObjects.push_back(object);
     }
 }
