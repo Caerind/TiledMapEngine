@@ -12,8 +12,12 @@
 #include <SFML/Graphics/Vertex.hpp>
 
 #include "Properties.hpp"
+#include "Tileset.hpp"
 
 class Map;
+
+namespace tme
+{
 
 class Object : public Properties, public sf::Drawable, public sf::Transformable
 {
@@ -34,10 +38,8 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
 
         std::string getName() const;
         Type getType() const;
-        int getX() const;
-        int getY() const;
-        int getWidth() const;
-        int getHeight() const;
+        sf::Vector2i getPosition() const;
+        sf::Vector2i getSize() const;
         float getRotation() const;
         int getGid() const;
         bool isVisible() const;
@@ -47,10 +49,8 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
 
         void setName(std::string const& name);
         void setType(Type type);
-        void setX(int x);
-        void setY(int y);
-        void setWidth(int width);
-        void setHeight(int height);
+        void setPosition(sf::Vector2i position);
+        void setSize(sf::Vector2i size);
         void setRotation(float rotation);
         void setGid(int gid);
         void setVisible(bool visible);
@@ -68,16 +68,17 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
 
         std::string mName; // The name of the object. An arbitrary string.
         Type mType; // The type of the object. An arbitrary string.
-        int mX; // The x coordinate of the object in pixels.
-        int mY; // The y coordinate of the object in pixels.
-        int mWidth; // The width of the object in pixels (defaults to 0).
-        int mHeight; // The height of the object in pixels (defaults to 0).
+        sf::Vector2i mPosition; // Coordinate
+        sf::Vector2i mSize; // Size
         float mRotation; // The rotation of the object in degrees clockwise (defaults to 0). (on git master)
         int mGid; // An reference to a tile (optional).
         bool mVisible; // Whether the object is shown (1) or hidden (0). Defaults to 1. (since 0.9.0)
 
         std::string mPoints;
         std::vector<sf::Vertex> mVertices;
+        Tileset::Ptr mTileset;
 };
+
+} // namespace tme
 
 #endif // OBJECT_HPP
