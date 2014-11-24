@@ -10,7 +10,10 @@
 
 #include "Properties.hpp"
 
-class ILayer : public tme::Properties, public sf::Transformable
+namespace tme
+{
+
+class ILayer : public Properties, public sf::Transformable
 {
     public:
         typedef std::shared_ptr<ILayer> Ptr;
@@ -53,5 +56,7 @@ class ILayer : public tme::Properties, public sf::Transformable
         float mOpacity;
         bool mVisible;
 };
+
+} // namespace tme
 
 #endif // ILAYER_HPP

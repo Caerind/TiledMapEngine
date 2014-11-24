@@ -1,5 +1,8 @@
 #include "../include/ILayer.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 ILayer::ILayer() : mType(ILayer::I), mName(""), mPosition(0,0), mSize(0,0), mOpacity(1.f), mVisible(true)
 {
@@ -80,3 +83,5 @@ void ILayer::setVisible(bool visible)
 {
     mVisible = visible;
 }
+
+} // namespace tme
