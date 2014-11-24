@@ -1,6 +1,9 @@
 #include "../include/ObjectGroup.hpp"
 #include "../include/Map.hpp"
 
+namespace tme
+{
+
 ////////////////////////////////////////////////////////////
 ObjectGroup::ObjectGroup(Map* map) : mMap(map)
 {
@@ -53,7 +56,7 @@ int ObjectGroup::getObjectCount() const
 }
 
 ////////////////////////////////////////////////////////////
-Object::Ptr ObjectGroup::getObject(std::string const& name)
+tme::Object::Ptr ObjectGroup::getObject(std::string const& name)
 {
     for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
     {
@@ -66,7 +69,7 @@ Object::Ptr ObjectGroup::getObject(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
-Object::Ptr ObjectGroup::getObject(int id)
+tme::Object::Ptr ObjectGroup::getObject(int id)
 {
     if (id >= 0 && id < static_cast<int>(mObjects.size()))
     {
@@ -76,7 +79,7 @@ Object::Ptr ObjectGroup::getObject(int id)
 }
 
 ////////////////////////////////////////////////////////////
-void ObjectGroup::setObject(Object::Ptr object)
+void ObjectGroup::setObject(tme::Object::Ptr object)
 {
     if (object != nullptr)
     {
@@ -88,26 +91,4 @@ void ObjectGroup::setObject(Object::Ptr object)
     }
 }
 
-////////////////////////////////////////////////////////////
-int ObjectGroup::getWidth() const
-{
-    return mWidth;
-}
-
-////////////////////////////////////////////////////////////
-int ObjectGroup::getHeight() const
-{
-    return mHeight;
-}
-
-////////////////////////////////////////////////////////////
-void ObjectGroup::setWidth(int width)
-{
-    mWidth = width;
-}
-
-////////////////////////////////////////////////////////////
-void ObjectGroup::setHeight(int height)
-{
-    mHeight = height;
-}
+} // namespace tme

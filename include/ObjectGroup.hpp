@@ -1,5 +1,5 @@
-#ifndef OBJECTGROUP_HPP
-#define OBJECTGROUP_HPP
+#ifndef TME_OBJECTGROUP_HPP
+#define TME_OBJECTGROUP_HPP
 
 #include <vector>
 
@@ -8,6 +8,9 @@
 #include "Object.hpp"
 
 class Map;
+
+namespace tme
+{
 
 class ObjectGroup : public ILayer
 {
@@ -28,19 +31,14 @@ class ObjectGroup : public ILayer
         Object::Ptr getObject(int id);
         void setObject(Object::Ptr object);
 
-        int getWidth() const;
-        int getHeight() const;
-        void setWidth(int width);
-        void setHeight(int height);
-
     private:
         Map* mMap;
 
         std::string mColor; // The color used to display the objects in this group.
-        int mWidth; //...
-        int mHeight; //...
 
         std::vector<Object::Ptr> mObjects;
 };
 
-#endif // OBJECTGROUP_HPP
+} // namespace tme
+
+#endif // TME_OBJECTGROUP_HPP
