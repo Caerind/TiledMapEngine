@@ -857,7 +857,37 @@ void Map::saveImageLayer(std::ofstream& stream, std::string const& name)
     ImageLayer::Ptr layer = getImageLayer(name);
     if (layer != nullptr)
     {
+        stream << " <imagelayer name=\"" << layer->getName() << "\"";
+        if (layer->getX() != 0)
+        {
+            stream << " x=\"" << layer->getX() << "\"";
+        }
+        if (layer->getY() != 0)
+        {
+            stream << " y=\"" << layer->getY() << "\"";
+        }
+        stream << " width=\"" << layer->getWidth() << "\"";
+        stream << " height=\"" << layer->getHeight() << "\"";
+        if (layer->getOpacity() != 1.f)
+        {
+            stream << " opacity=\"" << layer->getOpacity() << "\"";
+        }
+        if (!layer->isVisible())
+        {
+            stream << " visible=\"" << layer->isVisible() << "\"";
+        }
+        stream << ">" << std::endl;
 
+        // Write Image
+        stream << "  <image source=\"" << layer->getSource();
+        stream << "\" trans=\"" << layer->getTrans();
+        stream << "\" width=\"" << layer->getWidth();
+        stream << "\" height=\"" << layer->getHeight();
+        stream << "\"/>" << std::endl;
+
+        saveProperties(stream,layer.get(),2);
+
+        stream << " </imagelayer>" << std::endl;
     }
 }
 
