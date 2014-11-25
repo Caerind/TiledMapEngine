@@ -53,13 +53,13 @@ void Tile::setId(int id)
 }
 
 ////////////////////////////////////////////////////////////
-tme::Tileset::Ptr Tile::getTileset() const
+Tileset::Ptr Tile::getTileset() const
 {
     return mTileset;
 }
 
 ////////////////////////////////////////////////////////////
-void Tile::setTileset(tme::Tileset::Ptr tileset)
+void Tile::setTileset(Tileset::Ptr tileset)
 {
     mTileset = tileset;
 }

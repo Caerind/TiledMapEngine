@@ -13,10 +13,10 @@
 #include "Properties.hpp"
 #include "TileData.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class Tileset : public Image, public Properties
 {

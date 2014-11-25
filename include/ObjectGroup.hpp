@@ -7,10 +7,10 @@
 #include "Image.hpp"
 #include "Object.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class ObjectGroup : public ILayer
 {

@@ -5,7 +5,7 @@ namespace tme
 {
 
 ////////////////////////////////////////////////////////////
-Tileset::Tileset(Map* map) : Image(map), mSpacing(0), mMargin(0)
+Tileset::Tileset(Map* map) : Image(map), mFilename(""), mSpacing(0), mMargin(0)
 {
 }
 
@@ -69,6 +69,12 @@ int Tileset::getFirstGid() const
 }
 
 ////////////////////////////////////////////////////////////
+std::string Tileset::getFilename() const
+{
+    return mFilename;
+}
+
+////////////////////////////////////////////////////////////
 std::string Tileset::getName() const
 {
     return mName;
@@ -127,6 +133,12 @@ sf::IntRect Tileset::getTextureRect(int id) const
 void Tileset::setFirstGid(int first)
 {
     mFirstGid = first;
+}
+
+////////////////////////////////////////////////////////////
+void Tileset::setFilename(std::string const& filename)
+{
+    mFilename = filename;
 }
 
 ////////////////////////////////////////////////////////////

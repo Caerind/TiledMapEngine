@@ -6,10 +6,10 @@
 #include "ILayer.hpp"
 #include "Image.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class ImageLayer : public ILayer, public Image
 {

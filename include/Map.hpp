@@ -23,14 +23,8 @@
 #include "Properties.hpp"
 #include "Tileset.hpp"
 
-/*
-
-To Do :
-
--Parse Objects & ObjectGroups
--Save
-
-*/
+namespace tme
+{
 
 class Manager;
 
@@ -51,12 +45,11 @@ class Map : public Properties, public sf::Transformable
 
         float getVersion() const;
         std::string getOrientation() const;
-        int getWidth() const;
-        int getHeight() const;
-        int getTileWidth() const;
-        int getTileHeight() const;
+        sf::Vector2i getSize() const;
+        sf::Vector2i getTileSize() const;
         std::string getBackgroundColor() const;
         std::string getRenderOrder() const;
+
         Tileset::Ptr getTileset(int gid);
         Tileset::Ptr getTileset(std::string const& name);
         Layer::Ptr getLayer(int id);
@@ -76,10 +69,8 @@ class Map : public Properties, public sf::Transformable
 
         void setVersion(float version);
         void setOrientation(std::string const& orientation);
-        void setWidth(int width);
-        void setHeight(int height);
-        void setTileWidth(int tileWidth);
-        void setTileHeight(int tileHeight);
+        void setSize(sf::Vector2i size);
+        void setTileSize(sf::Vector2i tileSize);
         void setBackgroundColor(std::string const& backgroundColor);
         void setRenderOrder(std::string const& renderOrder);
         void setTileset(Tileset::Ptr tileset);
@@ -87,17 +78,17 @@ class Map : public Properties, public sf::Transformable
         void setImageLayer(ImageLayer::Ptr image);
         void setObjectGroup(ObjectGroup::Ptr group);
 
+        static void saveProperties(std::ofstream& stream, Properties* properies, int indent);
+
     private:
-        bool parseMap(pugi::xml_node node);
         bool parseProperties(pugi::xml_node node, Properties* properties);
         bool parseTileset(pugi::xml_node node); // Including Image
+        bool parseILayer(pugi::xml_node node, ILayer::Ptr layer);
         bool parseLayer(pugi::xml_node node); // Including Tiles
         bool parseImageLayer(pugi::xml_node node); // Including Image
         bool parseObjectGroup(pugi::xml_node node); // Including Objects
 
     private:
-        bool saveMap(std::string const& filename);
-        void saveProperties(std::ofstream& stream, Properties* properies, int indent);
         void saveTilesets(std::ofstream& stream);
         void saveLayers(std::ofstream& stream);
         void saveLayer(std::ofstream& stream, std::string const& name);
@@ -105,7 +96,6 @@ class Map : public Properties, public sf::Transformable
         void saveObjectGroup(std::ofstream& stream, std::string const& name);
 
     private:
-        static void addIndent(std::ofstream& stream, int indent);
         static std::string getDirectory(std::string const& filename);
 
     private:
@@ -114,10 +104,8 @@ class Map : public Properties, public sf::Transformable
 
         float mVersion; // The TMX format version, generally 1.0.
         std::string mOrientation; // Map orientation. Tiled supports "orthogonal", "isometric" and "staggered" (since 0.9) at the moment.
-        int mWidth; // The map width in tiles.
-        int mHeight; // The map height in tiles.
-        int mTileWidth; // The width of a tile.
-        int mTileHeight; // The height of a tile.
+        sf::Vector2i mSize; // Map Size in tiles
+        sf::Vector2i mTileSize; // Tile Size in pixels
         std::string mBackgroundColor; // The background color of the map. (since 0.9, optional)
         std::string mRenderOrder; // The order in which tiles on tile layers are rendered. Valid values are right-down (the default), right-up, left-down and left-up. In all cases, the map is drawn row-by-row. (since 0.10, but only supported for orthogonal maps at the moment)
 
@@ -125,8 +113,9 @@ class Map : public Properties, public sf::Transformable
         std::map<std::string,Layer::Ptr> mLayers;
         std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
         std::map<std::string,ImageLayer::Ptr> mImageLayers;
-
         std::vector<ILayer::Ptr> mILayers;
 };
+
+} // namespace tme
 
 #endif // TME_MAP_HPP

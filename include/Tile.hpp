@@ -7,10 +7,10 @@
 
 #include "Tileset.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class Tile: public sf::Drawable, public sf::Transformable
 {

@@ -14,10 +14,10 @@
 #include "Properties.hpp"
 #include "Tileset.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class Object : public Properties, public sf::Drawable, public sf::Transformable
 {

@@ -56,7 +56,7 @@ int ObjectGroup::getObjectCount() const
 }
 
 ////////////////////////////////////////////////////////////
-tme::Object::Ptr ObjectGroup::getObject(std::string const& name)
+Object::Ptr ObjectGroup::getObject(std::string const& name)
 {
     for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
     {
@@ -69,7 +69,7 @@ tme::Object::Ptr ObjectGroup::getObject(std::string const& name)
 }
 
 ////////////////////////////////////////////////////////////
-tme::Object::Ptr ObjectGroup::getObject(int id)
+Object::Ptr ObjectGroup::getObject(int id)
 {
     if (id >= 0 && id < static_cast<int>(mObjects.size()))
     {
@@ -79,7 +79,7 @@ tme::Object::Ptr ObjectGroup::getObject(int id)
 }
 
 ////////////////////////////////////////////////////////////
-void ObjectGroup::setObject(tme::Object::Ptr object)
+void ObjectGroup::setObject(Object::Ptr object)
 {
     if (object != nullptr)
     {

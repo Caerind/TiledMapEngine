@@ -10,10 +10,10 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class Image
 {

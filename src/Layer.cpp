@@ -39,8 +39,8 @@ void Layer::setTileId(int x, int y, int id)
         {
             if(tile.getTileset() != nullptr && mMap != nullptr)
             {
-                int mapTileWidth = mMap->getTileWidth();
-                int mapTileHeight = mMap->getTileHeight();
+                int mapTileWidth = mMap->getTileSize().x;
+                int mapTileHeight = mMap->getTileSize().y;
                 int width = tile.getTileset()->getTileSize().x;
                 int height = tile.getTileset()->getTileSize().y;
 

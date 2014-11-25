@@ -11,10 +11,10 @@
 #include "Tileset.hpp"
 #include "Tile.hpp"
 
-class Map;
-
 namespace tme
 {
+
+class Map;
 
 class Layer : public ILayer
 {
