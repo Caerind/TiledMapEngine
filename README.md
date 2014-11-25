@@ -1,43 +1,12 @@
 TiledMapEngine
 ==============
 
-The goals of this engine are :
+Features :
 
-- Load Tiled maps (orthogonnal, isometric or staggered)
-- Internally manage & share texture
-- Allow the internal modification of maps
-- Use renderer system to easily render your game
-- Allow maps to handle collisions & triggers
-- Use QuadTree system to improve rendering & collisions
+- Support all types of Tiled Map (orthogonnal, isometric & staggered)
+- Resource System to easily share Image/Texture
+- Loading/Saving .tmx & .tsx files
 
-
-18/11/14
---------
-
-Feature :
-- You can load customized Tileset
-- You can render Orthogonnal, Isometric or Staggered map
-- You can load ImageLayer
-
-Working on:
-- Object & ObjectGroup
-- Image Sharing (Texture) for both Tileset & ImageLayer
-- Saving
-
-
-21/11/14
---------
-
-Added since the 18/11/14 :
-- You can save Tilesets (into .tmx only (at the moment))
-- You can save Tile Layer (Layer class)
-
-24/11/14
---------
-
-Added since the 21/11/14 :
-- You can load/render/save Object & Groups !
-- You can save all layers (Few properties are actually missing)
-- Image Sharing system done !
-
+Todo :
+- QuadTree System for collisions & rendering
 
