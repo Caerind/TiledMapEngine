@@ -55,11 +55,11 @@ bool Object::isVisible() const
 std::string Object::getPoints() const
 {
     std::ostringstream oss;
-    for (int i = 0; i < static_cast<int>(mVertices.size()); i++)
+    for (unsigned int i = 0; i < getVertexCount(); i++)
     {
         oss << mVertices[i].position.x << "," << mVertices[i].position.y << " ";
 
-        if (i == static_cast<int>(mVertices.size()) - 2 && (mType == Object::Polygon || mType == Object::Rectangle))
+        if (i == getVertexCount() - 2 && (mType == Object::Polygon || mType == Object::Rectangle))
         {
             break;
         }
@@ -196,6 +196,12 @@ void Object::applyColor(sf::Color color)
     {
         mVertices[i].color = color;
     }
+}
+
+////////////////////////////////////////////////////////////
+sf::FloatRect Object::getBounds() const
+{
+    return Shape::getBounds();
 }
 
 ////////////////////////////////////////////////////////////

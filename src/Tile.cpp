@@ -7,6 +7,8 @@ namespace tme
 ////////////////////////////////////////////////////////////
 Tile::Tile() : mId(0), mTileset(nullptr)
 {
+    mType = sf::Quads;
+    mVertices.resize(4);
 }
 
 ////////////////////////////////////////////////////////////
@@ -74,6 +76,12 @@ void Tile::setOpacity(float opacity)
 }
 
 ////////////////////////////////////////////////////////////
+sf::FloatRect Tile::getBounds() const
+{
+    return sf::FloatRect(getPosition() + mVertices[0].position, mVertices[2].position - mVertices[0].position);
+}
+
+////////////////////////////////////////////////////////////
 void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     if (mTileset != nullptr)
@@ -81,7 +89,7 @@ void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
         states.transform *= getTransform();
         if (mTileset->getTexture() != nullptr)
             states.texture = mTileset->getTexture().get();
-        target.draw(mVertices, 4, sf::Quads, states);
+        target.draw(&mVertices[0], getVertexCount(), mType, states);
     }
 }
 

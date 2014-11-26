@@ -41,7 +41,8 @@ class Map : public Properties, public sf::Transformable
         bool loadFromFile(std::string const& filename);
         bool saveToFile(std::string const& filename = "");
 
-        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
+        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates(), sf::FloatRect rect = sf::FloatRect(0,0,0,0));
+        void render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states = sf::RenderStates());
 
         float getVersion() const;
         std::string getOrientation() const;

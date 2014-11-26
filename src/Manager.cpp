@@ -37,7 +37,7 @@ void Manager::render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf
     for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
     {
         if (itr->second->getBounds().intersects(rect))
-            itr->second->render(layer,target,states);
+            itr->second->render(layer,target,rect,states);
     }
 }
 

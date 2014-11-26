@@ -25,12 +25,14 @@ class Layer : public ILayer
     public:
         Layer(Map* map);
 
-        void render(sf::RenderTarget& target, sf::RenderStates states);
+        void render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMapRect = sf::FloatRect(0,0,0,0));
 
         int getTileId(int x, int y);
         void setTileId(int x, int y, int id);
 
         void setOpacity(float opacity);
+
+        sf::FloatRect getBounds() const;
 
     private:
         Map* mMap;

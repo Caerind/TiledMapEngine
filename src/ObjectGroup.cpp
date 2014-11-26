@@ -15,7 +15,6 @@ void ObjectGroup::render(sf::RenderTarget& target, sf::RenderStates states)
 {
     if (mVisible)
     {
-        states.transform *= getTransform();
         for (int i = 0; i < static_cast<int>(mObjects.size()); i++)
         {
             target.draw(*mObjects[i],states);

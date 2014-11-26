@@ -102,9 +102,10 @@ bool Map::saveToFile(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
+void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect rect)
 {
     states.transform *= getTransform();
+
     if (layer == 0 && mBackgroundColor != "")
     {
         sf::RectangleShape background;
@@ -112,8 +113,37 @@ void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
         background.setFillColor(Image::getColor(mBackgroundColor));
         target.draw(background,states);
     }
-    if (layer >= 0 && layer < getILayerCount() && mILayers[layer] != nullptr)
-        mILayers[layer]->render(target,states);
+
+    if (rect == sf::FloatRect(0,0,0,0))
+    {
+        if (layer >= 0 && layer < getILayerCount() && mILayers[layer] != nullptr)
+        {
+            // Rect is now relative to map pos
+            rect.left -= getPosition().x;
+            rect.top -= getPosition().y;
+            mILayers[layer]->render(target,states,rect);
+        }
+    }
+    else
+        render(layer,target,rect,states);
+}
+
+////////////////////////////////////////////////////////////
+void Map::render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states)
+{
+    if (layer >= 0 && layer < getILayerCount())
+    {
+        if (mILayers[layer] != nullptr)
+        {
+            if (mILayers[layer]->getBounds().intersects(rect))
+            {
+                // Rect is now relative to map pos
+                rect.left -= getPosition().x;
+                rect.top -= getPosition().y;
+                mILayers[layer]->render(target,states,rect);
+            }
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -343,7 +373,7 @@ void Map::setObjectGroup(ObjectGroup::Ptr group)
 ////////////////////////////////////////////////////////////
 sf::FloatRect Map::getBounds() const
 {
-    return sf::FloatRect(getPosition().x,getPosition().y,getSize().x,getSize().y);
+    return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x, getSize().y * getTileSize().y));
 }
 
 ////////////////////////////////////////////////////////////

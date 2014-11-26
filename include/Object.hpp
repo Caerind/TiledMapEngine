@@ -5,21 +5,17 @@
 #include <string>
 
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/Transformable.hpp>
-#include <SFML/Graphics/Vertex.hpp>
 
 #include "Properties.hpp"
 #include "Tileset.hpp"
+#include "Shape.hpp"
 
 namespace tme
 {
 
 class Map;
 
-class Object : public Properties, public sf::Drawable, public sf::Transformable
+class Object : public Properties, public Shape
 {
     public:
         typedef std::shared_ptr<Object> Ptr;
@@ -60,6 +56,8 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
 
         void applyColor(sf::Color color);
 
+        sf::FloatRect getBounds() const;
+
     private:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -75,7 +73,6 @@ class Object : public Properties, public sf::Drawable, public sf::Transformable
         bool mVisible; // Whether the object is shown (1) or hidden (0). Defaults to 1. (since 0.9.0)
 
         std::string mPoints;
-        std::vector<sf::Vertex> mVertices;
         Tileset::Ptr mTileset;
 };
 

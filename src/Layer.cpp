@@ -11,14 +11,24 @@ Layer::Layer(Map* map) : mMap(map)
 }
 
 ////////////////////////////////////////////////////////////
-void Layer::render(sf::RenderTarget& target, sf::RenderStates states)
+void Layer::render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMapRect)
 {
     if (mVisible)
     {
         states.transform *= getTransform();
-        for (int j = 0; j < mSize.y; j++)
-            for (int i = 0; i < mSize.x; i++)
-                target.draw(mTiles[Layer::Pos(i,j)]);
+        if (relativeToMapRect == sf::FloatRect(0,0,0,0))
+        {
+            for (int j = 0; j < mSize.y; j++)
+                for (int i = 0; i < mSize.x; i++)
+                    target.draw(mTiles[Layer::Pos(i,j)]);
+        }
+        else
+        {
+           for (int j = 0; j < mSize.y; j++)
+                for (int i = 0; i < mSize.x; i++)
+                    if (mTiles[Layer::Pos(i,j)].getBounds().intersects(relativeToMapRect))
+                        target.draw(mTiles[Layer::Pos(i,j)]);
+        }
     }
 }
 
@@ -69,6 +79,18 @@ void Layer::setOpacity(float opacity)
     mOpacity = opacity;
     for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
         itr->second.setOpacity(opacity);
+}
+
+////////////////////////////////////////////////////////////
+sf::FloatRect Layer::getBounds() const
+{
+    sf::FloatRect r = ILayer::getBounds();
+    if (mMap != nullptr)
+    {
+        r.width *= mMap->getTileSize().x;
+        r.height *= mMap->getTileSize().y;
+    }
+    return r;
 }
 
 } // namespace tme

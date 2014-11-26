@@ -7,6 +7,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 #include "Properties.hpp"
 
@@ -29,7 +30,7 @@ class ILayer : public Properties, public sf::Transformable
     public:
         ILayer();
 
-        virtual void render(sf::RenderTarget& target, sf::RenderStates states);
+        virtual void render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMapRect = sf::FloatRect(0,0,0,0));
 
         virtual LayerType getLayerType() const;
 
@@ -47,6 +48,8 @@ class ILayer : public Properties, public sf::Transformable
 
         virtual bool isVisible() const;
         virtual void setVisible(bool visible);
+
+        virtual sf::FloatRect getBounds() const;
 
     protected:
         LayerType mType;

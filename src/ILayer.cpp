@@ -9,7 +9,7 @@ ILayer::ILayer() : mType(ILayer::I), mName(""), mPosition(0,0), mSize(0,0), mOpa
 }
 
 ////////////////////////////////////////////////////////////
-void ILayer::render(sf::RenderTarget& target, sf::RenderStates states)
+void ILayer::render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMapRect)
 {
     if (mVisible)
     {
@@ -82,6 +82,12 @@ bool ILayer::isVisible() const
 void ILayer::setVisible(bool visible)
 {
     mVisible = visible;
+}
+
+////////////////////////////////////////////////////////////
+sf::FloatRect ILayer::getBounds() const
+{
+    return sf::FloatRect(static_cast<sf::Vector2f>(getPosition() + mPosition), static_cast<sf::Vector2f>(mSize));
 }
 
 } // namespace tme

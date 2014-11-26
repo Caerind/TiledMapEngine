@@ -1,18 +1,15 @@
 #ifndef TME_TILE_HPP
 #define TME_TILE_HPP
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Transformable.hpp>
-#include <SFML/Graphics/Vertex.hpp>
-
 #include "Tileset.hpp"
+#include "Shape.hpp"
 
 namespace tme
 {
 
 class Map;
 
-class Tile: public sf::Drawable, public sf::Transformable
+class Tile: public Shape
 {
     public:
         Tile();
@@ -28,13 +25,13 @@ class Tile: public sf::Drawable, public sf::Transformable
 
         void setOpacity(float opacity);
 
+        sf::FloatRect getBounds() const;
+
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     private:
         int mId; // The global tile ID.
-
-        sf::Vertex mVertices[4];
 
         Tileset::Ptr mTileset;
 };
