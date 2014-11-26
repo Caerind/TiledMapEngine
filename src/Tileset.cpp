@@ -181,16 +181,12 @@ void Tileset::addTile(TileData const& tile)
 TileData Tileset::getTileInContainer(int id) const
 {
     if (id < 0 || id >= getTileCount())
-    {
         return TileData();
-    }
     int i = 0;
     for (auto itr = mTiles.begin(); itr != mTiles.end(); itr++)
     {
         if (i == id)
-        {
             return itr->second;
-        }
         i++;
     }
     return TileData();
@@ -207,7 +203,7 @@ int Tileset::getTilesPerRow() const
 {
     if (mTileSize.x == 0)
         return 0;
-    int width = mTileSize.x - (mMargin * 2);
+    int width = mSize.x - (mMargin * 2);
     int finalWidth = 0;
     if (mSpacing != 0)
     {
@@ -218,9 +214,7 @@ int Tileset::getTilesPerRow() const
         }
     }
     else
-    {
         finalWidth = width;
-    }
     return (finalWidth / mTileSize.x);
 }
 
@@ -229,7 +223,7 @@ int Tileset::getTilesPerCol() const
 {
     if (mTileSize.y == 0)
         return 0;
-    int height = mTileSize.y - (mMargin * 2);
+    int height = mSize.y - (mMargin * 2);
     int finalHeight = 0;
     if (mSpacing != 0)
     {
@@ -240,9 +234,7 @@ int Tileset::getTilesPerCol() const
         }
     }
     else
-    {
         finalHeight = height;
-    }
     return (finalHeight / mTileSize.y);
 }
 
