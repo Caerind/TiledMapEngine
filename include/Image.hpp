@@ -13,7 +13,7 @@
 namespace tme
 {
 
-class Map;
+class Manager;
 
 class Image
 {
@@ -22,7 +22,7 @@ class Image
         typedef std::shared_ptr<sf::Texture> TexturePtr;
 
     public:
-        Image(Map* map);
+        Image(Manager* manager);
 
         bool load(std::string const& filename = "");
         bool loadFromManager();
@@ -45,7 +45,7 @@ class Image
         static std::string getString(sf::Color rgbColor);
 
     protected:
-        Map* mMap;
+        Manager* mMgr;
 
         TexturePtr mTexture;
 

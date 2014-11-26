@@ -1,11 +1,11 @@
 #include "../include/ImageLayer.hpp"
-#include "../include/Map.hpp"
+#include "../include/Manager.hpp"
 
 namespace tme
 {
 
 ////////////////////////////////////////////////////////////
-ImageLayer::ImageLayer(Map* map) : Image(map)
+ImageLayer::ImageLayer(Manager* mgr) : Image(mgr)
 {
     mType = LayerType::ImageLayer;
 }

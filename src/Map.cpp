@@ -10,13 +10,22 @@ Map::Map() : mManager(nullptr), mVersion(1.0f), mOrientation(""), mSize(0,0), mT
 }
 
 ////////////////////////////////////////////////////////////
-Map::Map(Manager* manager) : mManager(manager)
+Map::Map(Manager* manager) : mManager(manager), mVersion(1.0f), mOrientation(""), mSize(0,0), mTileSize(0,0)
+, mBackgroundColor(""), mRenderOrder("")
 {
 }
 
 ////////////////////////////////////////////////////////////
 Map::~Map()
 {
+    /*
+    if (mSaveOnDestroy)
+    {
+        //
+        //
+        //
+    }
+    */
 }
 
 ////////////////////////////////////////////////////////////
@@ -332,6 +341,12 @@ void Map::setObjectGroup(ObjectGroup::Ptr group)
 }
 
 ////////////////////////////////////////////////////////////
+sf::FloatRect Map::getBounds() const
+{
+    return sf::FloatRect(getPosition().x,getPosition().y,getSize().x,getSize().y);
+}
+
+////////////////////////////////////////////////////////////
 bool Map::parseProperties(pugi::xml_node node, Properties* properties)
 {
     if (properties == nullptr)
@@ -346,7 +361,7 @@ bool Map::parseProperties(pugi::xml_node node, Properties* properties)
 ////////////////////////////////////////////////////////////
 bool Map::parseTileset(pugi::xml_node node)
 {
-    Tileset::Ptr tileset = std::shared_ptr<Tileset>(new Tileset(this));
+    Tileset::Ptr tileset = std::shared_ptr<Tileset>(new Tileset(this->getManager()));
     tileset->setFirstGid(node.attribute("firstgid").as_int());
 
     pugi::xml_attribute source = node.attribute("source");
@@ -548,7 +563,7 @@ bool Map::parseLayer(pugi::xml_node node)
 ////////////////////////////////////////////////////////////
 bool Map::parseImageLayer(pugi::xml_node node)
 {
-    ImageLayer::Ptr layer = std::shared_ptr<ImageLayer>(new ImageLayer(this));
+    ImageLayer::Ptr layer = std::shared_ptr<ImageLayer>(new ImageLayer(this->getManager()));
 
     parseILayer(node,layer);
 

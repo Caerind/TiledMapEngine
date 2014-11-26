@@ -11,15 +11,33 @@ Manager::Manager()
 ////////////////////////////////////////////////////////////
 Manager::~Manager()
 {
+    //TODO : Fix a bug here ...
 }
 
 ////////////////////////////////////////////////////////////
-void Manager::render(int layer, sf::RenderTarget& target, sf::RenderStates states)
+void Manager::render(int layer, sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect rect)
 {
     states.transform *= getTransform();
+    if (rect == sf::FloatRect(0,0,0,0))
+    {
+        for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
+        {
+            itr->second->render(layer,target,states);
+        }
+    }
+    else
+    {
+        render(layer,target,rect,states);
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Manager::render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states)
+{
     for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
     {
-        itr->second->render(layer,target,states);
+        if (itr->second->getBounds().intersects(rect))
+            itr->second->render(layer,target,states);
     }
 }
 

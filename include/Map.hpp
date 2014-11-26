@@ -78,6 +78,8 @@ class Map : public Properties, public sf::Transformable
         void setImageLayer(ImageLayer::Ptr image);
         void setObjectGroup(ObjectGroup::Ptr group);
 
+        sf::FloatRect getBounds() const;
+
         static void saveProperties(std::ofstream& stream, Properties* properies, int indent);
 
     private:

@@ -9,7 +9,7 @@
 namespace tme
 {
 
-class Map;
+class Manager;
 
 class ImageLayer : public ILayer, public Image
 {
@@ -17,7 +17,7 @@ class ImageLayer : public ILayer, public Image
         typedef std::shared_ptr<ImageLayer> Ptr;
 
     public:
-        ImageLayer(Map* map);
+        ImageLayer(Manager* mgr);
 
         bool loadFromFile(std::string const& filename);
 

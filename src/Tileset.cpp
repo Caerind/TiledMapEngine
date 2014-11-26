@@ -1,11 +1,11 @@
 #include "../include/Tileset.hpp"
-#include "../include/Map.hpp"
+#include "../include/Manager.hpp"
 
 namespace tme
 {
 
 ////////////////////////////////////////////////////////////
-Tileset::Tileset(Map* map) : Image(map), mFilename(""), mSpacing(0), mMargin(0)
+Tileset::Tileset(Manager* mgr) : Image(mgr), mFilename(""), mSpacing(0), mMargin(0)
 {
 }
 

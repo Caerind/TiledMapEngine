@@ -8,6 +8,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 #include "Map.hpp"
 
@@ -20,7 +21,8 @@ class Manager : public sf::Transformable
         Manager();
         ~Manager();
 
-        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates());
+        void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates(), sf::FloatRect rect = sf::FloatRect(0,0,0,0));
+        void render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states = sf::RenderStates());
 
         bool loadMap(std::string const& filename);
         Map::Ptr getMap(std::string const& filename);

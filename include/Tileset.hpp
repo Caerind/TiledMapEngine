@@ -16,7 +16,7 @@
 namespace tme
 {
 
-class Map;
+class Manager;
 
 class Tileset : public Image, public Properties
 {
@@ -24,7 +24,7 @@ class Tileset : public Image, public Properties
         typedef std::shared_ptr<Tileset> Ptr;
 
     public:
-        Tileset(Map* map);
+        Tileset(Manager* manager);
 
         bool saveToFile(std::string const& filename = "");
 

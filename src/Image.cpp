@@ -1,12 +1,11 @@
 #include "../include/Image.hpp"
-#include "../include/Map.hpp"
 #include "../include/Manager.hpp"
 
 namespace tme
 {
 
 ////////////////////////////////////////////////////////////
-Image::Image(Map* map) : mMap(map), mTexture(nullptr), mTrans("")
+Image::Image(Manager* mgr) : mMgr(mgr), mTexture(nullptr), mTrans("")
 {
 }
 
@@ -38,9 +37,8 @@ bool Image::load(std::string const& filename)
             return false;
 
         // Add image to sharing system
-        if (mMap != nullptr)
-            if (mMap->getManager() != nullptr)
-                mMap->getManager()->addImage(std::shared_ptr<Image>(this));
+        if (mMgr != nullptr)
+            mMgr->addImage(std::shared_ptr<Image>(this));
     }
     return true;
 }
@@ -48,20 +46,17 @@ bool Image::load(std::string const& filename)
 ////////////////////////////////////////////////////////////
 bool Image::loadFromManager()
 {
-    if (mMap != nullptr)
+    if (mMgr != nullptr)
     {
-        if (mMap->getManager() != nullptr)
+        Image::Ptr img = mMgr->getImage(mSource);
+        if (img != nullptr)
         {
-            Image::Ptr img = mMap->getManager()->getImage(mSource);
-            if (img != nullptr)
-            {
-                setTexture(img->getTexture());
-                setFormat(img->getFormat());
-                setSource(img->getSource());
-                setTrans(img->getTrans());
-                setSize(img->getSize());
-                return true;
-            }
+            setTexture(img->getTexture());
+            setFormat(img->getFormat());
+            setSource(img->getSource());
+            setTrans(img->getTrans());
+            setSize(img->getSize());
+            return true;
         }
     }
     return false;
