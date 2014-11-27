@@ -21,7 +21,7 @@ class ImageLayer : public ILayer, public Image
 
         bool loadFromFile(std::string const& filename);
 
-        void render(sf::RenderTarget& target, sf::RenderStates states);
+        void render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMap);
 
         sf::FloatRect getBounds() const;
 

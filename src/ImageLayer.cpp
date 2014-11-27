@@ -40,7 +40,7 @@ bool ImageLayer::loadFromFile(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
-void ImageLayer::render(sf::RenderTarget& target, sf::RenderStates states)
+void ImageLayer::render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMap)
 {
     if (mVisible)
     {
