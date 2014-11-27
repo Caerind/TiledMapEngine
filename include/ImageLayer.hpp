@@ -23,6 +23,8 @@ class ImageLayer : public ILayer, public Image
 
         void render(sf::RenderTarget& target, sf::RenderStates states);
 
+        sf::FloatRect getBounds() const;
+
     private:
         sf::Vertex mVertices[4];
 };

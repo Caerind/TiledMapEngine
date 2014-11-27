@@ -53,4 +53,10 @@ void ImageLayer::render(sf::RenderTarget& target, sf::RenderStates states)
     }
 }
 
+////////////////////////////////////////////////////////////
+sf::FloatRect ImageLayer::getBounds() const
+{
+    return sf::FloatRect(mPosition.x,mPosition.y,Image::mSize.x,Image::mSize.y);
+}
+
 } // namespace tme
