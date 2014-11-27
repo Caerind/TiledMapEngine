@@ -135,7 +135,7 @@ void Map::render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::Re
     {
         if (mILayers[layer] != nullptr)
         {
-            if (mILayers[layer]->getBounds().intersects(rect))
+            if (mILayers[layer]->getBounds().intersects(rect) || mILayers[layer]->getLayerType() == ILayer::ObjectGroup)
             {
                 // Rect is now relative to map pos
                 rect.left -= getPosition().x;

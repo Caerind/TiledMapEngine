@@ -20,7 +20,7 @@ class ObjectGroup : public ILayer
     public:
         ObjectGroup(Map* map);
 
-        void render(sf::RenderTarget& target, sf::RenderStates states);
+        void render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMap);
 
         std::string getColor() const;
         void setColor(std::string const& color);

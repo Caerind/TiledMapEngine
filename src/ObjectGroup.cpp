@@ -11,7 +11,7 @@ ObjectGroup::ObjectGroup(Map* map) : mMap(map)
 }
 
 ////////////////////////////////////////////////////////////
-void ObjectGroup::render(sf::RenderTarget& target, sf::RenderStates states)
+void ObjectGroup::render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect relativeToMap)
 {
     if (mVisible)
     {
