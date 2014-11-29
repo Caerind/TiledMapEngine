@@ -31,6 +31,9 @@ class ObjectGroup : public ILayer
         Object::Ptr getObject(int id);
         void setObject(Object::Ptr object);
 
+        std::vector<Object::Ptr> objectIntersects(sf::FloatRect rect);
+        std::vector<Object::Ptr> objectContains(sf::Vector2f dot);
+
     private:
         Map* mMap;
 

@@ -7,8 +7,24 @@ Shape::Shape()
 {
 }
 
+bool Shape::intersects(sf::FloatRect rect) const
+{
+    for (float x = rect.left; x <= rect.left + rect.width; x++)
+    {
+        if (contains(sf::Vector2f(x,rect.top)) || contains(sf::Vector2f(x,rect.top + rect.height)))
+            return true;
+    }
+    for (float y = rect.top; y <= rect.top + rect.height; y++)
+    {
+        if (contains(sf::Vector2f(rect.left,y)) || contains(sf::Vector2f(rect.left + rect.width,y)))
+            return true;
+    }
+    return false;
+}
+
 bool Shape::contains(sf::Vector2f dot) const
 {
+    dot -= getPosition();
     for (unsigned int i = 0; i < mVertices.size(); i++)
     {
         sf::Vector2f a = mVertices[i].position, b;

@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -29,6 +30,9 @@ class Manager : public sf::Transformable
 
         Image::Ptr getImage(std::string const& sourceName);
         void addImage(Image::Ptr img);
+
+        std::vector<Object::Ptr> objectIntersects(sf::FloatRect rect);
+        std::vector<Object::Ptr> objectContains(sf::Vector2f dot);
 
     private:
         std::map<std::string,Map::Ptr> mMaps;

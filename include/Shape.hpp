@@ -19,6 +19,7 @@ class Shape : public sf::Drawable, public sf::Transformable
     public:
         Shape();
 
+        bool intersects(sf::FloatRect rect) const;
         bool contains(sf::Vector2f dot) const;
         sf::FloatRect getBounds(sf::Vector2f pos = sf::Vector2f(0,0)) const;
         void setPrimitiveType(sf::PrimitiveType type);

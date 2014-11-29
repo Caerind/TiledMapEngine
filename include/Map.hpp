@@ -81,6 +81,9 @@ class Map : public Properties, public sf::Transformable
 
         sf::FloatRect getBounds() const;
 
+        std::vector<Object::Ptr> objectIntersects(sf::FloatRect rect);
+        std::vector<Object::Ptr> objectContains(sf::Vector2f dot);
+
         static void saveProperties(std::ofstream& stream, Properties* properies, int indent);
 
     private:

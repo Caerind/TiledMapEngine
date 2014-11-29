@@ -377,6 +377,36 @@ sf::FloatRect Map::getBounds() const
 }
 
 ////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> Map::objectIntersects(sf::FloatRect rect)
+{
+    rect.left -= getPosition().x;
+    rect.width -= getPosition().y;
+
+    std::vector<Object::Ptr> objects;
+    for (auto itr = mObjectGroups.begin(); itr != mObjectGroups.end(); itr++)
+    {
+        std::vector<Object::Ptr> objectsIntersects = itr->second->objectIntersects(rect);
+        for (unsigned int i = 0; i < objectsIntersects.size(); i++)
+            objects.push_back(objectsIntersects[i]);
+    }
+    return objects;
+}
+
+////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> Map::objectContains(sf::Vector2f dot)
+{
+    dot -= getPosition();
+    std::vector<Object::Ptr> objects;
+    for (auto itr = mObjectGroups.begin(); itr != mObjectGroups.end(); itr++)
+    {
+        std::vector<Object::Ptr> objectsContains = itr->second->objectContains(dot);
+        for (unsigned int i = 0; i < objectsContains.size(); i++)
+            objects.push_back(objectsContains[i]);
+    }
+    return objects;
+}
+
+////////////////////////////////////////////////////////////
 bool Map::parseProperties(pugi::xml_node node, Properties* properties)
 {
     if (properties == nullptr)

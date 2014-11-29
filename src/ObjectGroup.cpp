@@ -90,4 +90,28 @@ void ObjectGroup::setObject(Object::Ptr object)
     }
 }
 
+////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> ObjectGroup::objectIntersects(sf::FloatRect rect)
+{
+    std::vector<Object::Ptr> objects;
+    for (unsigned int i = 0; i < mObjects.size(); i++)
+    {
+        if (mObjects[i]->intersects(rect))
+            objects.push_back(mObjects[i]);
+    }
+    return objects;
+}
+
+////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> ObjectGroup::objectContains(sf::Vector2f dot)
+{
+    std::vector<Object::Ptr> objects;
+    for (unsigned int i = 0; i < mObjects.size(); i++)
+    {
+        if (mObjects[i]->contains(dot))
+            objects.push_back(mObjects[i]);
+    }
+    return objects;
+}
+
 } // namespace tme

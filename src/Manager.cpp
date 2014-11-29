@@ -95,4 +95,36 @@ void Manager::addImage(Image::Ptr img)
     }
 }
 
+////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> Manager::objectIntersects(sf::FloatRect rect)
+{
+    std::vector<Object::Ptr> objects;
+    for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
+    {
+        if (itr->second->getBounds().intersects(rect))
+        {
+            std::vector<Object::Ptr> objectsIntersects = itr->second->objectIntersects(rect);
+            for (unsigned int i = 0; i < objectsIntersects.size(); i++)
+                objects.push_back(objectsIntersects[i]);
+        }
+    }
+    return objects;
+}
+
+////////////////////////////////////////////////////////////
+std::vector<Object::Ptr> Manager::objectContains(sf::Vector2f dot)
+{
+    std::vector<Object::Ptr> objects;
+    for (auto itr = mMaps.begin(); itr != mMaps.end(); itr++)
+    {
+        if (itr->second->getBounds().intersects(sf::FloatRect(dot.x-1,dot.y-1,2,2)))
+        {
+            std::vector<Object::Ptr> objectsContains = itr->second->objectContains(dot);
+            for (unsigned int i = 0; i < objectsContains.size(); i++)
+                objects.push_back(objectsContains[i]);
+        }
+    }
+    return objects;
+}
+
 } // namespace tme
