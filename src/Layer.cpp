@@ -74,6 +74,21 @@ void Layer::setTileId(int x, int y, int id)
 }
 
 ////////////////////////////////////////////////////////////
+TileData Layer::getTileData(int x, int y)
+{
+    int id = getTileId(x,y);
+    if (mMap != nullptr)
+    {
+        Tileset::Ptr tileset = mMap->getTileset(id);
+        if (tileset != nullptr)
+        {
+            return tileset->getTile(id-1);
+        }
+    }
+    return TileData();
+}
+
+////////////////////////////////////////////////////////////
 void Layer::setOpacity(float opacity)
 {
     mOpacity = opacity;

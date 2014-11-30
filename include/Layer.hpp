@@ -29,6 +29,7 @@ class Layer : public ILayer
 
         int getTileId(int x, int y);
         void setTileId(int x, int y, int id);
+        TileData getTileData(int x, int y);
 
         void setOpacity(float opacity);
 
