@@ -1,5 +1,5 @@
-#include "../include/Tileset.hpp"
-#include "../include/Manager.hpp"
+#include "Tileset.hpp"
+#include "Manager.hpp"
 
 namespace tme
 {

@@ -1,5 +1,5 @@
-#include "../include/Layer.hpp"
-#include "../include/Map.hpp"
+#include "Layer.hpp"
+#include "Map.hpp"
 
 namespace tme
 {
@@ -106,6 +106,12 @@ sf::FloatRect Layer::getBounds() const
         r.height *= mMap->getTileSize().y;
     }
     return r;
+}
+
+////////////////////////////////////////////////////////////
+std::map<std::pair<int,int>,Tile> Layer::getTiles()
+{
+    return mTiles;
 }
 
 } // namespace tme

@@ -1,5 +1,5 @@
-#include "../include/ImageLayer.hpp"
-#include "../include/Manager.hpp"
+#include "ImageLayer.hpp"
+#include "Manager.hpp"
 
 namespace tme
 {

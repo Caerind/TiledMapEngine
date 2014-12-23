@@ -1,4 +1,4 @@
-#include "../include/ILayer.hpp"
+#include "ILayer.hpp"
 
 namespace tme
 {

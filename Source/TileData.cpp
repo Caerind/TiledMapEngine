@@ -1,4 +1,4 @@
-#include "../include/TileData.hpp"
+#include "TileData.hpp"
 
 namespace tme
 {

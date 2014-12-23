@@ -1,4 +1,4 @@
-#include "../include/Manager.hpp"
+#include "Manager.hpp"
 
 namespace tme
 {

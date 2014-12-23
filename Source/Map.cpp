@@ -1,31 +1,27 @@
-#include "../include/Map.hpp"
+#include "Map.hpp"
 
 namespace tme
 {
 
 ////////////////////////////////////////////////////////////
 Map::Map() : mManager(nullptr), mVersion(1.0f), mOrientation(""), mSize(0,0), mTileSize(0,0)
-, mBackgroundColor(""), mRenderOrder("")
+, mBackgroundColor(""), mRenderOrder(""), mSaveOnDestroy(false)
 {
 }
 
 ////////////////////////////////////////////////////////////
 Map::Map(Manager* manager) : mManager(manager), mVersion(1.0f), mOrientation(""), mSize(0,0), mTileSize(0,0)
-, mBackgroundColor(""), mRenderOrder("")
+, mBackgroundColor(""), mRenderOrder(""), mSaveOnDestroy(false)
 {
 }
 
 ////////////////////////////////////////////////////////////
 Map::~Map()
 {
-    /*
-    if (mSaveOnDestroy)
+    if (mSaveOnDestroy && mFilename != "")
     {
-        //
-        //
-        //
+        saveToFile(mFilename);
     }
-    */
 }
 
 ////////////////////////////////////////////////////////////
@@ -99,6 +95,12 @@ bool Map::saveToFile(std::string const& filename)
     file << "</map>" << std::endl;
     file.close();
     return true;
+}
+
+////////////////////////////////////////////////////////////
+void Map::saveOnDestroy()
+{
+    mSaveOnDestroy = true;
 }
 
 ////////////////////////////////////////////////////////////
@@ -288,6 +290,33 @@ int Map::getObjectGroupCount() const
 int Map::getILayerCount() const
 {
     return mILayers.size();
+}
+
+////////////////////////////////////////////////////////////
+TileData Map::getTileData(int x, int y, int z)
+{
+    if (z < getLayerCount())
+    {
+        Layer::Ptr l = getLayer(z);
+        if (l != nullptr)
+        {
+            return l->getTileData(x,y);
+        }
+    }
+    return TileData();
+}
+
+////////////////////////////////////////////////////////////
+void Map::setTileId(int x, int y, int z, int id)
+{
+    if (z < getLayerCount())
+    {
+        Layer::Ptr l = getLayer(z);
+        if (l != nullptr)
+        {
+            return l->setTileId(x,y,id);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////

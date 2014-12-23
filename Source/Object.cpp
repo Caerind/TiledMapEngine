@@ -1,5 +1,5 @@
-#include "../include/Object.hpp"
-#include "../include/Map.hpp"
+#include "Object.hpp"
+#include "Map.hpp"
 
 namespace tme
 {

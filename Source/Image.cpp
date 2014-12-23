@@ -1,5 +1,5 @@
-#include "../include/Image.hpp"
-#include "../include/Manager.hpp"
+#include "Image.hpp"
+#include "Manager.hpp"
 
 namespace tme
 {

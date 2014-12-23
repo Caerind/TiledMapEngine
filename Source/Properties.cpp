@@ -1,4 +1,4 @@
-#include "../include/Properties.hpp"
+#include "Properties.hpp"
 
 namespace tme
 {

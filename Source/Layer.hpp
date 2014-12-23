@@ -35,6 +35,8 @@ class Layer : public ILayer
 
         sf::FloatRect getBounds() const;
 
+        std::map<Pos,Tile> getTiles();
+
     private:
         Map* mMap;
 

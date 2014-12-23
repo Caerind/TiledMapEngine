@@ -12,7 +12,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
-#include "../extlibs/pugixml/pugixml.hpp"
+#include "../ExtLibs/pugixml.hpp"
 
 #include "ILayer.hpp"
 #include "ImageLayer.hpp"
@@ -41,6 +41,8 @@ class Map : public Properties, public sf::Transformable
         bool loadFromFile(std::string const& filename);
         bool saveToFile(std::string const& filename = "");
 
+        void saveOnDestroy();
+
         void render(int layer, sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates(), sf::FloatRect rect = sf::FloatRect(0,0,0,0));
         void render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states = sf::RenderStates());
 
@@ -65,6 +67,9 @@ class Map : public Properties, public sf::Transformable
         int getImageLayerCount() const;
         int getObjectGroupCount() const;
         int getILayerCount() const;
+
+        TileData getTileData(int x, int y, int z);
+        void setTileId(int x, int y, int z, int id);
 
         Manager* getManager() const;
 
@@ -120,6 +125,8 @@ class Map : public Properties, public sf::Transformable
         std::map<std::string,ObjectGroup::Ptr> mObjectGroups;
         std::map<std::string,ImageLayer::Ptr> mImageLayers;
         std::vector<ILayer::Ptr> mILayers;
+
+        bool mSaveOnDestroy;
 };
 
 } // namespace tme

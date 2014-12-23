@@ -1,4 +1,4 @@
-#include "../include/Shape.hpp"
+#include "Shape.hpp"
 
 namespace tme
 {

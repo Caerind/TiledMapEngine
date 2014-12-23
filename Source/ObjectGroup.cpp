@@ -1,5 +1,5 @@
-#include "../include/ObjectGroup.hpp"
-#include "../include/Map.hpp"
+#include "ObjectGroup.hpp"
+#include "Map.hpp"
 
 namespace tme
 {
