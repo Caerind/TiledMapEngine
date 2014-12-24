@@ -405,17 +405,17 @@ void Map::setObjectGroup(ObjectGroup::Ptr group)
 ////////////////////////////////////////////////////////////
 sf::FloatRect Map::getBounds() const
 {
-    if (mOrientation == "orthogonnal")
+    if (mOrientation == "orthogonal")
     {
         return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x, getSize().y * getTileSize().y));
-    }
-    else if (mOrientation == "isometric")
-    {
-        return sf::FloatRect(0,0,0,0);
     }
     else if (mOrientation == "staggered")
     {
         return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x + getTileSize().x/2, getSize().y * (getTileSize().y/2)));
+    }
+    else
+    {
+        return sf::FloatRect(0,0,0,0);
     }
 }
 
