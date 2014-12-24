@@ -20,14 +20,14 @@ void Layer::render(sf::RenderTarget& target, sf::RenderStates states, sf::FloatR
         {
             for (int j = 0; j < mSize.y; j++)
                 for (int i = 0; i < mSize.x; i++)
-                    target.draw(mTiles[Layer::Pos(i,j)]);
+                    target.draw(mTiles[Layer::Pos(i,j)],states);
         }
         else
         {
            for (int j = 0; j < mSize.y; j++)
                 for (int i = 0; i < mSize.x; i++)
                     if (mTiles[Layer::Pos(i,j)].getBounds().intersects(relativeToMapRect))
-                        target.draw(mTiles[Layer::Pos(i,j)]);
+                        target.draw(mTiles[Layer::Pos(i,j)],states);
         }
     }
 }

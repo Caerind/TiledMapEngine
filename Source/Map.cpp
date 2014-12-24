@@ -106,10 +106,10 @@ void Map::saveOnDestroy()
 ////////////////////////////////////////////////////////////
 void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states, sf::FloatRect rect)
 {
-    states.transform *= getTransform();
-
     if (layer == 0 && mBackgroundColor != "")
     {
+        states.transform *= getTransform();
+
         sf::RectangleShape background;
         background.setSize(sf::Vector2f(mSize.x * mTileSize.x, mSize.y * mTileSize.y));
         background.setFillColor(Image::getColor(mBackgroundColor));
@@ -120,6 +120,8 @@ void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states, s
     {
         if (layer >= 0 && layer < getILayerCount() && mILayers[layer] != nullptr)
         {
+            states.transform *= getTransform();
+
             // Rect is now relative to map pos
             rect.left -= getPosition().x;
             rect.top -= getPosition().y;
@@ -133,6 +135,7 @@ void Map::render(int layer, sf::RenderTarget& target, sf::RenderStates states, s
 ////////////////////////////////////////////////////////////
 void Map::render(int layer, sf::RenderTarget& target, sf::FloatRect rect, sf::RenderStates states)
 {
+    states.transform *= getTransform();
     if (layer >= 0 && layer < getILayerCount())
     {
         if (mILayers[layer] != nullptr)
