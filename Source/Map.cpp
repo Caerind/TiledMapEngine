@@ -402,7 +402,18 @@ void Map::setObjectGroup(ObjectGroup::Ptr group)
 ////////////////////////////////////////////////////////////
 sf::FloatRect Map::getBounds() const
 {
-    return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x, getSize().y * getTileSize().y));
+    if (mOrientation == "orthogonnal")
+    {
+        return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x, getSize().y * getTileSize().y));
+    }
+    else if (mOrientation == "isometric")
+    {
+        return sf::FloatRect(0,0,0,0);
+    }
+    else if (mOrientation == "staggered")
+    {
+        return sf::FloatRect(getPosition(), sf::Vector2f(getSize().x * getTileSize().x + getTileSize().x/2, getSize().y * (getTileSize().y/2)));
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -433,6 +444,12 @@ std::vector<Object::Ptr> Map::objectContains(sf::Vector2f dot)
             objects.push_back(objectsContains[i]);
     }
     return objects;
+}
+
+////////////////////////////////////////////////////////////
+std::string Map::getFilename() const
+{
+    return mFilename;
 }
 
 ////////////////////////////////////////////////////////////

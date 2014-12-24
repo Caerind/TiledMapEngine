@@ -27,6 +27,8 @@ class Manager : public sf::Transformable
 
         bool loadMap(std::string const& filename);
         Map::Ptr getMap(std::string const& filename);
+        void unloadMap(std::string const& filename);
+        void unloadAllMaps();
 
         Image::Ptr getImage(std::string const& sourceName);
         void addImage(Image::Ptr img);

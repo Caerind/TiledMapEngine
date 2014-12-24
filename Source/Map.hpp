@@ -91,6 +91,8 @@ class Map : public Properties, public sf::Transformable
 
         static void saveProperties(std::ofstream& stream, Properties* properies, int indent);
 
+        std::string getFilename() const;
+
     private:
         bool parseProperties(pugi::xml_node node, Properties* properties);
         bool parseTileset(pugi::xml_node node); // Including Image

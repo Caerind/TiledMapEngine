@@ -74,6 +74,21 @@ Map::Ptr Manager::getMap(std::string const& filename)
 }
 
 ////////////////////////////////////////////////////////////
+void Manager::unloadMap(std::string const& filename)
+{
+    if (mMaps.find(filename) != mMaps.end())
+    {
+        mMaps.erase(mMaps.find(filename));
+    }
+}
+
+////////////////////////////////////////////////////////////
+void Manager::unloadAllMaps()
+{
+    mMaps.clear();
+}
+
+////////////////////////////////////////////////////////////
 Image::Ptr Manager::getImage(std::string const& sourceName)
 {
     if (mImages.find(sourceName) != mImages.end())
